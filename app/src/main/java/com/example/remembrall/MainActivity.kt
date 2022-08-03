@@ -1,11 +1,11 @@
-package com.example.remebrall
+package com.example.remembrall
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.remebrall.databinding.ActivityMainBinding
-import com.example.remebrall.mypage.MyPageFragment
-import com.example.remebrall.read.ReadDiaryFragment
-import com.example.remebrall.write.WriteDiaryFragment
+import com.example.remembrall.databinding.ActivityMainBinding
+import com.example.remembrall.mypage.MyPageFragment
+import com.example.remembrall.read.ReadDiaryFragment
+import com.example.remembrall.write.WriteDiaryFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding : ActivityMainBinding
