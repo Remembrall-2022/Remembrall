@@ -7,8 +7,10 @@ import com.example.remembrall.mypage.MyPageFragment
 import com.example.remembrall.read.ReadDiaryFragment
 import com.example.remembrall.write.WriteDiaryFragment
 
+
 class MainActivity : AppCompatActivity() {
     private lateinit var binding : ActivityMainBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
