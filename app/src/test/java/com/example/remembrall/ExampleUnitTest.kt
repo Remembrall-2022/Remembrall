@@ -1,4 +1,4 @@
-package com.example.remebrall
+package com.example.remembrall
 
 import org.junit.Test
 
