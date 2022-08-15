@@ -1,12 +1,15 @@
 package com.example.remembrall
 
+import android.content.ContentValues.TAG
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.example.remembrall.databinding.ActivityMainBinding
 import com.example.remembrall.map.MapSearchFragment
 import com.example.remembrall.mypage.MyPageFragment
 import com.example.remembrall.read.ReadDiaryFragment
 import com.example.remembrall.write.WriteDiaryFragment
+import com.kakao.sdk.user.UserApiClient
 
 
 class MainActivity : AppCompatActivity() {
