@@ -1,14 +1,20 @@
 package com.example.remembrall
 
+import android.content.ContentValues.TAG
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.example.remembrall.databinding.ActivityMainBinding
+import com.example.remembrall.map.MapSearchFragment
 import com.example.remembrall.mypage.MyPageFragment
 import com.example.remembrall.read.ReadDiaryFragment
 import com.example.remembrall.write.WriteDiaryFragment
+import com.kakao.sdk.user.UserApiClient
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding : ActivityMainBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,9 +34,10 @@ class MainActivity : AppCompatActivity() {
                         .replace(R.id.framelayout_main, readDiaryFragment).commit()
                 }
                 R.id.bottomnavigation_main_mypage -> {
-                    var mypageFragment = MyPageFragment()
+//                    var mypageFragment = MyPageFragment()
+                    var mapSearchFragment = MapSearchFragment()
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.framelayout_main, mypageFragment).commit()
+                        .replace(R.id.framelayout_main, mapSearchFragment).commit()
                 }
             }
             true
