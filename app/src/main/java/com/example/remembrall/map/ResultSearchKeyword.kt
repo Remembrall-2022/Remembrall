@@ -31,5 +31,5 @@ data class Place(
     var x: String,                      // X 좌표값 혹은 longitude
     var y: String,                      // Y 좌표값 혹은 latitude
     var place_url: String,              // 장소 상세페이지 URL
-    var distanc: String                 // 중심좌표까지의 거리. 단, x,y 파라미터를 준 경우에만 존재. 단위는 meter
+    var distance: String                 // 중심좌표까지의 거리. 단, x,y 파라미터를 준 경우에만 존재. 단위는 meter
 )
