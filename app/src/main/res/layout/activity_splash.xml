@@ -7,7 +7,6 @@
     tools:context=".login.SplashActivity">
 
     <ImageView
-        android:id="@+id/imageView3"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
@@ -16,67 +15,52 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/splash" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
-        android:gravity="center"
-        android:layout_marginHorizontal="50dp"
-        android:layout_marginBottom="40dp">
-
-        <Button
-            android:id="@+id/btnLogin_email"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@drawable/semi_round_border"
-            android:drawableLeft="@drawable/email_resize"
-            android:paddingLeft="10dp"
-            android:text="이메일로 로그인"
-            android:textColor="#353535"
-            android:textSize="14dp"
-            android:layout_marginBottom="10dp"
-            android:textStyle="bold"/>
-
-        <Button
-            android:id="@+id/btnLogin_kakao"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/semi_round_border_kakao"
-            android:drawableLeft="@drawable/message_resize"
-            android:paddingLeft="14dp"
-            android:text="카카오 로그인"
-            android:textColor="#353535"
-            android:textSize="14dp"
-            android:textStyle="bold"/>
-
-        <Button
-            android:id="@+id/btnLogin_sign_up"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/semi_round_border_signup"
-            android:drawableLeft="@drawable/signup_resize"
-            android:paddingLeft="14dp"
-            android:text="회원가입"
-            android:textColor="#FFFFFF"
-            android:textSize="14dp" />
-
-
-    </LinearLayout>
-
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btnLogin_email"
+        android:layout_width="275dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/semi_round_border"
+        android:drawableLeft="@drawable/email_resize"
+        android:paddingLeft="10dp"
+        android:text="이메일로 로그인"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="#353535"
+        android:textSize="13dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnLogin_kakao"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/btnLogin_kakao"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="pass"
-        tools:layout_editor_absoluteX="172dp"
-        tools:layout_editor_absoluteY="468dp"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.838"
+        app:srcCompat="@drawable/kakao_login" />
 
+    <Button
+        android:id="@+id/btnLogin_sign_up"
+        android:layout_width="275dp"
+        android:layout_height="40dp"
+        android:background="@drawable/semi_round_border"
+        android:drawableLeft="@drawable/signup_resize"
+        android:paddingLeft="10dp"
+        android:text="회원가입"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="#353535"
+        android:textSize="13dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnLogin_kakao"
+        app:layout_constraintVertical_bias="0.223" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
