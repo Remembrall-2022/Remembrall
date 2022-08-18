@@ -65,7 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:background="@drawable/round_border"
+            android:background="@drawable/login_round_button"
             />
     </LinearLayout>
 </LinearLayout>

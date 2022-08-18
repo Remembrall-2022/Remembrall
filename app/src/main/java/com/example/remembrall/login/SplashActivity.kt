@@ -78,5 +78,10 @@ class SplashActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
+        binding.button.setOnClickListener{
+            startActivity(intent)
+            finish()
+        }
     }
 }
