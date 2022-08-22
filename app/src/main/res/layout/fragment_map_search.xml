@@ -86,7 +86,7 @@
                 tools:layout_editor_absoluteX="18dp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     <LinearLayout
-        android:id="@+id/bottomsheet_map_search_view"
+        android:id="@+id/ll_bottomsheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:maxHeight="450dp"
@@ -98,6 +98,8 @@
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="30dp">
-        <include layout="@layout/fragment_map_search_bottomsheet" />
+        <include
+            android:id="@+id/bottomsheet_map_search_view"
+            layout="@layout/fragment_map_search_bottomsheet" />
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
