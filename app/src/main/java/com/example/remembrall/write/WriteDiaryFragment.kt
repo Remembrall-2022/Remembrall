@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.remebrall.databinding.FragmentWriteDiaryBinding
+import com.example.remembrall.databinding.FragmentWriteDiaryBinding
 
 class WriteDiaryFragment : Fragment() {
     private lateinit var binding: FragmentWriteDiaryBinding
