@@ -69,7 +69,7 @@ class MapSearchFragment : Fragment() {
         var binding = FragmentMapSearchBinding.inflate(inflater, container, false)
         // 팝업 생성 시 전체화면으로 띄우기
 
-        val mapView = MapView(mainActivity) // map view 연결
+            val mapView = MapView(mainActivity) // map view 연결
         binding.clKakaoMapView.addView(mapView)
 
         startTracking()
@@ -158,7 +158,7 @@ class MapSearchFragment : Fragment() {
         })
 
     }
-    
+
     @SuppressLint("MissingPermission") // 나중에 user 권한 받을 수 있으면 받기
     private fun startTracking() {
         mapView?.currentLocationTrackingMode =MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading  //이 부분

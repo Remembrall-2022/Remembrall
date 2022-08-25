@@ -1,4 +1,4 @@
-package com.example.remebrall.read
+package com.example.remembrall.read
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,15 +8,15 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.remembrall.R
 
-class ReadDiaryRecyclerViewAdapter (
+class ReadDiaryListRecyclerViewAdapter (
     private val context: Context,
-    private val datalist: ArrayList<ReadDiaryRecyclerViewData>
-    ): RecyclerView.Adapter<ReadDiaryRecyclerViewAdapter.ViewHolder>(){
+    private val datalist: ArrayList<ReadDiaryListRecyclerViewData>
+    ): RecyclerView.Adapter<ReadDiaryListRecyclerViewAdapter.ViewHolder>(){
 
         inner class ViewHolder(view: View): RecyclerView.ViewHolder(view){
             val name: TextView = itemView.findViewById(R.id.tv_readdiary_name)
 
-            fun bind(data: ReadDiaryRecyclerViewData){
+            fun bind(data: ReadDiaryListRecyclerViewData){
                 name.text=data.name
             }
         }

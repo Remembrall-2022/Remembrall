@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".write.ReadDiaryFragment"
+    android:background="@drawable/main_background"
+    android:paddingBottom="15dp">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_readdiary"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        tools:ignore="MissingConstraints">
+
+        <TextView
+            android:id="@+id/textview_readdiary_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="기록하기"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <LinearLayout
+        android:id="@+id/linear_readdiary_read"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/gradation_round"
+        android:layout_marginTop="?actionBarSize"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:padding="15dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cons_readdiary_diarytitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/writediary_borderline"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="12dp"
+            android:layout_gravity="top">
+
+            <TextView
+                android:id="@+id/tv_readdiary_diarytitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="창덕궁 나들이"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="MissingConstraints" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2022.08.22"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:layout_gravity="end"
+            android:layout_marginVertical="10dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/readdiary_rectangle_white"
+            android:orientation="vertical"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="25dp"
+            android:layout_marginHorizontal="10dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Q. 오늘 하루는 어땠나요?"
+                android:textColor="@color/point"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="15dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="처음으로 창덕궁을 봐서 너무 신기했다!
+다음에는 가족들이랑 같이 오고 싶기도 하고,
+오늘은 사람들이 많았는데 한적할 때의 창덕궁은
+어떤 모습을 가지고 있을지 궁금하기도 하다."
+                android:textColor="#6867AC"/>
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>
