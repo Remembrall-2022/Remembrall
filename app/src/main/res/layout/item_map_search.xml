@@ -9,7 +9,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="100dp"
-        android:id="@+id/iv_rv_map_search"
+        android:id="@+id/iv_map_search"
         android:scaleType="fitXY"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,38 +24,38 @@
         android:text="국립중앙박물관"
         android:textSize="17dp"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/iv_rv_map_search"
+        app:layout_constraintTop_toBottomOf="@+id/iv_map_search"
         tools:layout_editor_absoluteX="0dp" />
-<!--    <LinearLayout-->
-<!--        android:id="@+id/linearlayout_1"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:orientation="horizontal"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/tv_place_name_map_search">-->
-<!--        <TextView-->
-<!--            android:id="@+id/tv_category_group_name_map_search"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="박물관"-->
-<!--            android:textSize="12dp"-->
-<!--            android:textStyle="bold"-->
-<!--            android:layout_marginTop="5dp"/>-->
-<!--        <TextView-->
-<!--            android:id="@+id/textView"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="주소주소"-->
-<!--            android:textSize="12dp"-->
-<!--            android:textStyle="bold"-->
-<!--            android:layout_marginTop="5dp"-->
-<!--            android:layout_marginLeft="10dp"/>-->
-<!--    </LinearLayout>-->
+    <LinearLayout
+        android:id="@+id/linearlayout_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/tv_place_name_map_search">
+        <TextView
+            android:id="@+id/tv_category_map_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="박물관"
+            android:textSize="12dp"
+            android:textStyle="bold"
+            android:layout_marginTop="5dp"/>
+        <TextView
+            android:id="@+id/tv_address_map_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="주소주소"
+            android:textSize="12dp"
+            android:textStyle="bold"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"/>
+    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="5dp"
-        app:layout_constraintTop_toBottomOf="@+id/tv_place_name_map_search">
+        app:layout_constraintTop_toBottomOf="@+id/linearlayout_1">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="20dp"
