@@ -12,9 +12,11 @@
         android:theme="@style/Theme.Remembrall"
         android:usesCleartextTraffic="true">
         <activity
-            android:name="com.example.remembrall.write.WriteDiaryActivity"
+            android:name=".ReadDiaryActivity"
             android:exported="false" />
-        <!-- android:networkSecurityConfig="@xml/network_security_config" -->
+        <activity
+            android:name="com.example.remembrall.write.WriteDiaryActivity"
+            android:exported="false" /> <!-- android:networkSecurityConfig="@xml/network_security_config" -->
         <activity
             android:name="com.example.remembrall.login.SplashActivity"
             android:exported="true">
@@ -26,10 +28,10 @@
         </activity>
         <activity
             android:name="com.example.remembrall.signup.SignUpActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name="com.example.remembrall.login.LoginActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name="com.example.remembrall.MainActivity"
             android:exported="true" />
@@ -52,12 +54,11 @@
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/NATIVE_APP_KEY" />
     </application>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 갤러리에서 사진 가져오기 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-<!--    갤러리에서 사진 가져오기-->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
 </manifest>

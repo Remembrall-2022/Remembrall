@@ -33,9 +33,8 @@
         android:layout_height="match_parent"
         android:background="@drawable/gradation_round"
         android:layout_marginTop="?actionBarSize"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:padding="15dp">
+        android:layout_marginHorizontal="15dp"
+        android:padding="20dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cons_readdiary_diarytitle"
@@ -92,7 +91,7 @@
 다음에는 가족들이랑 같이 오고 싶기도 하고,
 오늘은 사람들이 많았는데 한적할 때의 창덕궁은
 어떤 모습을 가지고 있을지 궁금하기도 하다."
-                android:textColor="#6867AC"/>
+                android:textColor="#333333"/>
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>

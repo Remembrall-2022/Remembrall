@@ -33,6 +33,8 @@ import com.example.remembrall.databinding.ActivityWriteDiaryBinding
 import com.example.remembrall.read.ReadTodayDiaryFragment
 import java.io.File
 import java.time.LocalDate
+import java.util.*
+import kotlin.collections.ArrayList
 
 class WriteDiaryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWriteDiaryBinding
@@ -124,8 +126,15 @@ class WriteDiaryActivity : AppCompatActivity() {
 //                    .replace(mainView.findViewById<FrameLayout>(R.id.framelayout_main), ReadTodayDiaryFragment()).commit()
 
         }
+        clickRecyclerViewItem()
+        binding.linearWritediaryDate.setOnClickListener {
+            datePick()
+        }
+        //앨범에서 사진 불러오기
 
-//      리사이클러뷰 아이템 클릭
+    }
+    private fun clickRecyclerViewItem(){
+        //리사이클러뷰 아이템 클릭
         writeDiaryRecyclerViewAdapter.setItemClickListener(object: WriteDiaryRecyclerViewAdapter.OnItemClickListener{
             override fun imageViewOnClick(v: View, position: Int) {
                 pos=position
@@ -166,12 +175,15 @@ class WriteDiaryActivity : AppCompatActivity() {
 //                Toast.makeText(v.context, "${writeDiaryRecyclerViewData[position].place}", Toast.LENGTH_SHORT).show()
 //            }
         })
-        //앨범에서 사진 불러오기
-
     }
+
     private fun initalize() {
         writeDiaryRecyclerViewData = arrayListOf()
-//        writeDiaryRecyclerViewData.add(WriteDiaryRecyclerViewData("장소1", "", ""))
+        var today=Calendar.getInstance()
+        var year=today.get(Calendar.YEAR)
+        var month= today.get(Calendar.MONTH)+1
+        var day=today.get(Calendar.DAY_OF_MONTH)
+        binding.tvWritediaryDate.text="$year.$month.$day"
     }
 
     private fun initReadDiaryRecyclerView() {
@@ -227,6 +239,29 @@ class WriteDiaryActivity : AppCompatActivity() {
 
     fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
         touchHelper.startDrag(viewHolder)
+    }
+
+    private fun datePick() {
+        val datePicker=binding.datePickerWritediary
+        binding.consWritediaryDatepicker.visibility=View.VISIBLE
+        binding.btnWritediaryComplete.visibility=View.GONE
+        val today= Calendar.getInstance()
+        var date=binding.tvWritediaryDate.text.toString().split(".")
+        datePicker.init(date[0].toInt(), date[1].toInt()-1, date[2].toInt()){
+                view, year, month, day ->
+            val month = month + 1
+            
+            binding.tvWritediaryOk.setOnClickListener {
+                binding.tvWritediaryDate.text="$year.$month.$day"
+                binding.consWritediaryDatepicker.visibility=View.GONE
+                binding.btnWritediaryComplete.visibility=View.VISIBLE
+            }
+            binding.tvWritediaryCancel.setOnClickListener {
+                binding.consWritediaryDatepicker.visibility=View.GONE
+                binding.btnWritediaryComplete.visibility=View.VISIBLE
+            }
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
