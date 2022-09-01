@@ -4,7 +4,7 @@ import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface TourPhotoAPI {
+interface TourPhotoApi {
     @GET("/galleryList")
     fun getGalleryList(
         @Query("MobileOS") MobileOS: String,

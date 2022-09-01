@@ -1,16 +1,20 @@
 package com.example.remembrall.constellation
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.graphics.Point
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import android.widget.ImageView
 import com.example.remembrall.R
 import com.example.remembrall.databinding.ActivityConstellationBinding
-import com.example.remembrall.databinding.ActivityMainBinding
 import com.ssomai.android.scalablelayout.ScalableLayout
+import java.lang.Math.sin
+import java.lang.Math.sqrt
+import kotlin.math.pow
 
 class ConstellationActivity : AppCompatActivity() {
     private lateinit var binding : ActivityConstellationBinding
@@ -27,15 +31,7 @@ class ConstellationActivity : AppCompatActivity() {
 
         mapConstellation = binding.mapConstellation
 
-//        binding.mapConstellation.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-//            override fun onGlobalLayout() {
-//                constellationMapWidth = mapConstellation!!.width // ScalableLayout width 구하기
-//
-//                // 다 쓰고 리스너 삭제
-//                binding.mapConstellation.viewTreeObserver.removeOnGlobalLayoutListener(this)
-//            }
-//        })
-
+        // TODO : display, size deprecated
         val display = windowManager.defaultDisplay
         val size = Point()
         display.getRealSize(size) // or getSize(size)
@@ -67,10 +63,8 @@ class ConstellationActivity : AppCompatActivity() {
             xList.add(destination.x)
             yList.add(destination.y)
         }
-
         val constellationWidth = xList.max()-xList.min()
         val constellationHeight = yList.max()-yList.min()
-
         returnList.add(yList.min()) // 시작 좌표 계산을 위한 min(y)
         returnList.add(xList.min())  // 시작 좌표 계산을 위한 min(x)
 
@@ -82,17 +76,67 @@ class ConstellationActivity : AppCompatActivity() {
         }
         return returnList // min(y), min(x), square width
     }
+
+    // 별자리지도 그리기
     fun drawStar(constellationMapWidth: Int, touristDestinationList: ArrayList<TouristDestination>, mappingRatio: ArrayList<Double>){
+        var xList = ArrayList<Float>()
+        var yList = ArrayList<Float>()
+        var idx = -1
         for (i in 0..(touristDestinationList.size-1)){
             var iv_item = ImageView(this)
             iv.add(iv_item)
             iv[i].layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             iv[i].setImageResource(R.drawable.star)
-            val ratioY = (touristDestinationList[i].y - mappingRatio[0])/mappingRatio[2]
-            val ratioX = (touristDestinationList[i].x - mappingRatio[1])/mappingRatio[2]
+
+            val ratioX = 50f+((touristDestinationList[i].x - mappingRatio[1]) / mappingRatio[2]).toFloat()*300f
+            val ratioY = ((1-(touristDestinationList[i].y - mappingRatio[0]) / mappingRatio[2]).toFloat())*300f
+
+            xList.add(ratioX)
+            yList.add(ratioY)
+
+            idx += 1
             Log.e("ratioY:", (ratioY).toInt().toString())
             Log.e("ratioX:", (ratioX).toInt().toString())
-            mapConstellation!!.addView(iv[i], 50f+(ratioX).toFloat()*300f, (1-(ratioY).toFloat())*300f, 30f, 30f)
+
+            mapConstellation!!.addView(iv[i], ratioX, ratioY, 30f, 30f)
         }
+        for (i in 0..(touristDestinationList.size-2)){
+            val angle = angleOf(xList[i], yList[i], xList[i+1], yList[i+1])
+            val length = getDistance(xList[idx], xList[idx], xList[i+1], yList[i+1])
+            var iv_line = ImageView(this)
+            iv_line.setImageResource(R.drawable.square)
+            iv_line.scaleType = ImageView.ScaleType.FIT_XY
+            iv_line.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+//                iv_line.rotation = angle
+//                iv_line.setImageBitmap(rotateImage(BitmapFactory.decodeResource(getResources(), R.drawable.square), angle))
+            Log.e("angle", angle.toString())
+            Log.e("length", length.toString())
+            mapConstellation!!.addView(iv_line, xList[i]+15f, yList[i]+15f, length-15f, 5f)
+        }
+
+    }
+
+    //회전 실행
+    fun rotateImage(src : Bitmap , degree : Float):Bitmap {
+        var matrix = Matrix()
+        matrix.postRotate(degree)
+        return Bitmap.createBitmap(src,0,0,src.getWidth(),src.getHeight(),matrix,true)
+    }
+
+    // 각도 구하기
+    fun angleOf(p1x : Float, p1y : Float, p2x : Float , p2y : Float) : Float{
+        val deltaY = p1y - p2y
+        val deltaX = p2x - p1x
+        val result = Math.toDegrees(Math.atan2(deltaY.toDouble(), deltaX.toDouble()))
+        if (result<0){
+            return (360+result).toFloat()
+        }
+        return result.toFloat()
+    }
+    // 거리 구하기
+    fun getDistance(p1x : Float, p1y : Float, p2x : Float , p2y : Float): Float {
+        val deltaY = (p1y - p2y).pow(2)
+        val deltaX = (p2x - p1x).pow(2)
+        return sqrt((deltaY + deltaX).toDouble()).toFloat()
     }
 }
