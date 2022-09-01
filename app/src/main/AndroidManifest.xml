@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.remembrall">
+    package="com.example.remembrall" >
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:name=".GlobalApplication"
@@ -14,10 +14,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Remebrall"
-        android:usesCleartextTraffic="true">
-<!--        android:networkSecurityConfig="@xml/network_security_config"-->
+        android:usesCleartextTraffic="true" >
         <activity
-            android:name="com.example.remembrall.login.SplashActivity"
+            android:name=".constellation.ConstellationActivity"
+            android:exported="false" /> <!-- android:networkSecurityConfig="@xml/network_security_config" -->
+        <activity
+            android:name=".login.SplashActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,20 +28,17 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.remembrall.signup.SignUpActivity"
-            android:exported="true">
-
-        </activity>
+            android:name=".login.SignUpActivity"
+            android:exported="true" />
         <activity
-            android:name="com.example.remembrall.login.LoginActivity"
-            android:exported="false">
-        </activity>
+            android:name=".login.LoginActivity"
+            android:exported="false" />
         <activity
-            android:name="com.example.remembrall.MainActivity"
+            android:name=".MainActivity"
             android:exported="true" />
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -51,6 +50,7 @@
                     android:scheme="@string/MANIFEST_NATIVE_APP_KEY" />
             </intent-filter>
         </activity>
+
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/NATIVE_APP_KEY" />

@@ -109,9 +109,6 @@ class MapSearchFragment() : Fragment() {
         // 드래그해도 팝업이 종료되지 않도록
         behavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
-//                if (newState == BottomSheetBehavior.STATE_DRAGGING) {
-//                    behavior.state = BottomSheetBehavior.STATE_EXPANDED
-//                }
                 when(newState) {
                     BottomSheetBehavior.STATE_COLLAPSED-> {
                         Toast.makeText(mainActivity,"최소화",Toast.LENGTH_LONG).show()
@@ -124,6 +121,7 @@ class MapSearchFragment() : Fragment() {
                     BottomSheetBehavior.STATE_HIDDEN-> {
                     }
                     BottomSheetBehavior.STATE_SETTLING-> {
+                        Toast.makeText(mainActivity, "중간", Toast.LENGTH_LONG).show()
                     }
                 }
             }

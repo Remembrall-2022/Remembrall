@@ -69,14 +69,31 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="pass"
-        tools:layout_editor_absoluteX="172dp"
-        tools:layout_editor_absoluteY="468dp"
-        tools:ignore="MissingConstraints" />
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="pass"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="172dp"
+            tools:layout_editor_absoluteY="468dp" />
+
+        <Button
+            android:id="@+id/button_Constellation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Constellation"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="172dp"
+            tools:layout_editor_absoluteY="468dp" />
+    </LinearLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
