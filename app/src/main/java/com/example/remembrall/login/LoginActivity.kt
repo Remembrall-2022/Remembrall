@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.remembrall.MainActivity
 import com.example.remembrall.R
 import com.example.remembrall.databinding.ActivityLoginBinding
 import com.example.remembrall.login.req.LoginRequest
@@ -67,12 +68,13 @@ class LoginActivity : AppCompatActivity() {
                             refreshToken = loginData.refreshToken
                         )
                         sharedManager.loginCurrentUser(currentUser)
+                        intent =  Intent(this@LoginActivity, MainActivity::class.java)
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
                         startActivity(intent)
                         finish()
                     }
                     else{
-                        Toast.makeText(applicationContext, login?.error?.errorMessage.toString(), Toast.LENGTH_SHORT)
+                        Toast.makeText(applicationContext, login?.error?.errorMessage.toString(), Toast.LENGTH_SHORT).show()
                     }
                 }
             })
