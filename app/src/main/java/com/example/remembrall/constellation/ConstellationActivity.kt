@@ -81,7 +81,7 @@ class ConstellationActivity : AppCompatActivity() {
     fun drawStar(constellationMapWidth: Int, touristDestinationList: ArrayList<TouristDestination>, mappingRatio: ArrayList<Double>){
         var xList = ArrayList<Float>()
         var yList = ArrayList<Float>()
-        var idx = -1
+
         for (i in 0..(touristDestinationList.size-1)){
             var iv_item = ImageView(this)
             iv.add(iv_item)
@@ -94,7 +94,6 @@ class ConstellationActivity : AppCompatActivity() {
             xList.add(ratioX)
             yList.add(ratioY)
 
-            idx += 1
             Log.e("ratioY:", (ratioY).toInt().toString())
             Log.e("ratioX:", (ratioX).toInt().toString())
 
@@ -102,13 +101,13 @@ class ConstellationActivity : AppCompatActivity() {
         }
         for (i in 0..(touristDestinationList.size-2)){
             val angle = angleOf(xList[i], yList[i], xList[i+1], yList[i+1])
-            val length = getDistance(xList[idx], xList[idx], xList[i+1], yList[i+1])
+            val length = getDistance(xList[i], xList[i], xList[i+1], yList[i+1])
             var iv_line = ImageView(this)
             iv_line.setImageResource(R.drawable.square)
             iv_line.scaleType = ImageView.ScaleType.FIT_XY
             iv_line.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
 //                iv_line.rotation = angle
-//                iv_line.setImageBitmap(rotateImage(BitmapFactory.decodeResource(getResources(), R.drawable.square), angle))
+            iv_line.setImageBitmap(rotateImage(BitmapFactory.decodeResource(getResources(), R.drawable.square), angle))
             Log.e("angle", angle.toString())
             Log.e("length", length.toString())
             mapConstellation!!.addView(iv_line, xList[i]+15f, yList[i]+15f, length-15f, 5f)
