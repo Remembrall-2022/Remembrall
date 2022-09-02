@@ -14,3 +14,4 @@ data class AuthCodeRequest(
     val email: String,
     val authCode : String
 )
+

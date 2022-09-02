@@ -3,17 +3,17 @@ package com.example.remembrall.login
 import com.example.remembrall.login.req.AuthCodeRequest
 import com.example.remembrall.login.req.LoginRequest
 import com.example.remembrall.login.req.SignUpRequest
-import com.example.remembrall.login.res.AuthCodeResponse
 import com.example.remembrall.login.res.AuthResponse
 import com.example.remembrall.login.res.LoginResponse
-import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.http.*
 
 interface UserService {
+
     @POST("/login/email")
+    @Headers("Content-Type: application/json")
     fun loginEmail(
-        @Body loginRequest: JsonObject
+        @Body loginRequest: LoginRequest
     ) : Call<LoginResponse>
 
     @POST("/signup/email")
@@ -26,10 +26,9 @@ interface UserService {
         @Body email : String
     ) : Call <AuthResponse>
 
-    @GET("/signup/email/authcode")
+    @POST("/signup/email/authcode")
     fun receiveAuthCode(
-        @Query("email") email: String,
-        @Query("authCode") authCode: String
+        @Body authCodeRequest : AuthCodeRequest
     ) : Call <AuthResponse>
 
 

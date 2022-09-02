@@ -49,6 +49,7 @@ class ConstellationActivity : AppCompatActivity() {
         // 별자리 지도 비율
         var mappingRatio = mappingRatio(touristDestinationList)
 
+
         // 별 그리기
         drawStar(width-80, touristDestinationList, mappingRatio)
 
