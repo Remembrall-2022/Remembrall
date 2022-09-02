@@ -1,5 +1,7 @@
-package com.example.remebrall.read
+package com.example.remembrall.read
 
-class ReadDiaryRecyclerViewData (
-    val name: String
+data class ReadDiaryRecyclerViewData(
+    val place: String,
+    val image: String,
+    val content: String,
 )
