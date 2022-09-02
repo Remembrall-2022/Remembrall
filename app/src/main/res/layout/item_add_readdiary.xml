@@ -21,7 +21,6 @@
         tools:ignore="MissingConstraints">
 
         <ImageView
-            android:id="@+id/img_adddiary_heart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"

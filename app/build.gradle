@@ -7,7 +7,7 @@ android {
     compileSdk 31
 
     defaultConfig {
-        applicationId "com.example.remembrall"
+        applicationId "com.example.remebrall"
         minSdk 21
         targetSdk 31
         versionCode 1
@@ -16,11 +16,11 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    buildFeatures{
-        viewBinding true
-    }
-
     buildTypes {
+        buildFeatures{
+            viewBinding true
+        }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
