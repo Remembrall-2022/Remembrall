@@ -1,4 +1,4 @@
-package com.example.remembrall.read
+package com.example.remembrall.write
 
 import android.content.Context
 import android.graphics.Canvas
@@ -6,7 +6,7 @@ import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 
-class DividerItemDecoration (
+class WriteDividerItemDecoration (
     context: Context,
     resId: Int,
     val paddingLeft: Int,
