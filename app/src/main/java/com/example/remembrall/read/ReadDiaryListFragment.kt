@@ -64,16 +64,10 @@ class ReadDiaryListFragment : Fragment() {
     }
 
     private fun initReadDiaryRecyclerView() {
-        binding.recyclerviewReaddiarylist.apply {
-            layoutManager =
-                GridLayoutManager(requireContext(), 3, GridLayoutManager.VERTICAL, false)
-            adapter = ReadDiaryListRecyclerViewAdapter(
-                requireContext(),
-                readDiaryRecyclerViewData
-            )
-        }
-        readDiaryListRecyclerViewAdapter=
-            ReadDiaryListRecyclerViewAdapter(requireContext(), readDiaryRecyclerViewData)
+        val recyclerViewDiaryList = binding.recyclerviewReaddiarylist
+        recyclerViewDiaryList.layoutManager = GridLayoutManager(requireContext(), 3, GridLayoutManager.VERTICAL, false)
+        readDiaryListRecyclerViewAdapter= ReadDiaryListRecyclerViewAdapter(mainActivity, readDiaryRecyclerViewData)
+        recyclerViewDiaryList.adapter = readDiaryListRecyclerViewAdapter
 
     }
 
