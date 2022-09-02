@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="#FAFAFAFF"/>
+    <solid android:color="@color/rememberall_pink"/>
     <!--배경색을 의미, 이미지의 중간 중간이 투명한 색상이라면 여기서 지정한 색이 보이게 된다.-->
     <!--동일하게 투명하게는 @null을 입력해 주면 된다.-->
 
