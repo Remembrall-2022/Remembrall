@@ -9,6 +9,8 @@ import com.example.remembrall.R
 import com.example.remembrall.databinding.ActivityLoginBinding
 import com.example.remembrall.login.req.LoginRequest
 import com.example.remembrall.login.res.LoginResponse
+import com.example.remembrall.login.userinfo.LoginData
+import com.example.remembrall.login.userinfo.SharedManager
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -41,50 +43,37 @@ class LoginActivity : AppCompatActivity() {
         // 로그인 서비스 올리기
         var loginService: UserService = retrofit.create(UserService::class.java)
 
-        binding.btnJoin.setOnClickListener {
-//            val email = binding.etEmail.text.toString().trim()
-//            val password = binding.etPassword.text.toString().trim()
-            var email = "minpearl0826@gmail.com"
-            var password = "newly"
+        // 현재 유저 정보
+        val sharedManager = SharedManager(this)
 
-//            val loginRequest = JsonObject().apply {
-//                addProperty("email", email)
-//                addProperty("password", password)
-//            }
+        binding.btnJoin.setOnClickListener {
+            val email = binding.etEmail.text.toString().trim()
+            val password = binding.etPassword.text.toString().trim()
+
             loginService.loginEmail(LoginRequest(email, password)).enqueue(object: Callback<LoginResponse> {
                 override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                     Log.e("Login", t.toString())
                     Toast.makeText(applicationContext,"error : 로그인 실패", Toast.LENGTH_SHORT)
                 }
                 override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
-                    val login = response
+                    val login = response.body()
                     Log.d("Login:", "login success : "+login?.toString())
-                    Log.d("Login:", "login success : "+login?.body().toString())
 
-//                    if(login?.success.toString() == "true"){
-//                        var loginData = login!!.response
-//                        // 현재 유저 정보 저장
-////                        val currentUser = LoginData(
-////                            id = loginData.id,
-////                            isActive = loginData.isActive,
-////                            name = loginData.name,
-////                            password = loginData.password,
-////                            budget = loginData.budget,
-////                            iskakao = loginData.iskakao,
-////                            defState = loginData.defState,
-////                            defArea = loginData.defArea,
-////                            defTown = loginData.defTown,
-////                        )
-////                        sharedManager.saveCurrentUser(currentUser)
-////                        UserApplication.setUserId(loginData.id)
-////                        UserApplication.setUserBudget(loginData.budget.toInt())
-//                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-//                        startActivity(intent)
-//                        finish()
-//                    }
-//                    else{
-////                        Toast.makeText(applicationContext, login?.statusMsg.toString(), Toast.LENGTH_SHORT)
-//                    }
+                    if(login?.success.toString() == "true"){
+                        var loginData = login!!.response
+                        val currentUser = LoginData(
+                            grantType = loginData.grantType,
+                            accessToken = loginData.accessToken,
+                            refreshToken = loginData.refreshToken
+                        )
+                        sharedManager.loginCurrentUser(currentUser)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                        startActivity(intent)
+                        finish()
+                    }
+                    else{
+                        Toast.makeText(applicationContext, login?.error?.errorMessage.toString(), Toast.LENGTH_SHORT)
+                    }
                 }
             })
         }
@@ -98,7 +87,7 @@ class LoginActivity : AppCompatActivity() {
     private fun httpLoggingInterceptor(): HttpLoggingInterceptor? {
         val interceptor = HttpLoggingInterceptor { message ->
             Log.e(
-                "MyGitHubData :",
+                "HttpLogging:",
                 message + ""
             )
         }

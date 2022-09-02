@@ -12,6 +12,8 @@ import com.example.remembrall.login.req.AuthCodeRequest
 import com.example.remembrall.login.req.SignUpRequest
 import com.example.remembrall.login.res.AuthResponse
 import com.google.gson.JsonObject
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -31,10 +33,13 @@ class SignUpActivity : AppCompatActivity() {
             finish()
         }
 
+        val client = OkHttpClient.Builder().addInterceptor(httpLoggingInterceptor()).build()
+
         // 레트로핏 객체 생성.
         var retrofit = Retrofit.Builder()
             .baseUrl(getString(R.string.SERVER))
             .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
             .build()
 
         // 로그인 서비스 올리기
@@ -64,20 +69,17 @@ class SignUpActivity : AppCompatActivity() {
         }
 
         binding.btnSignUp.setOnClickListener {
-            val email ="parkyena01@sookmyung.ac.kr"
-            val name = "박예나"
-            val password = "1234"
+            val email = binding.etEmail.text.toString().trim()
+            val name = binding.etName.text.toString().trim()
+            val password = binding.etPassword.text.toString().trim()
             val authCode = binding.etAuthNum.text.toString().trim()
             Log.e("authCode", authCode)
-            userService.receiveAuthCode(email, authCode).enqueue(object: Callback<AuthResponse>{
+            userService.receiveAuthCode(AuthCodeRequest(email, authCode)).enqueue(object: Callback<AuthResponse>{
                 override fun onResponse(
                     call: Call<AuthResponse>,
                     response: Response<AuthResponse>
                 ) {
                     val authRes = response.body()
-                    Log.d("ReceiveAuthCode", response.body().toString())
-                    Log.e("ReceiveAuthCode", response.toString())
-                    Log.d("ReceiveAuthCode", authRes?.response?.message.toString())
                     if (authRes?.success.toString() == "true"){
                         userService.signUpEmail(SignUpRequest(email, password, name)).enqueue(object: Callback<AuthResponse>{
                             override fun onResponse(
@@ -87,7 +89,7 @@ class SignUpActivity : AppCompatActivity() {
                                 val signUpEmailRes = response.body()
                                 Log.d("SignUpEmail", signUpEmailRes.toString())
                                 if(signUpEmailRes?.success.toString() == "true"){
-                                    intent =  Intent(this@SignUpActivity, MainActivity::class.java)
+                                    intent =  Intent(this@SignUpActivity, LoginActivity::class.java)
                                     startActivity(intent)
                                     finish()
                                 }
@@ -107,6 +109,15 @@ class SignUpActivity : AppCompatActivity() {
                 }
             })
         }
+    }
+    private fun httpLoggingInterceptor(): HttpLoggingInterceptor? {
+        val interceptor = HttpLoggingInterceptor { message ->
+            Log.e(
+                "HttpLogging :",
+                message + ""
+            )
+        }
+        return interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
     }
 
     override fun onDestroy() {
