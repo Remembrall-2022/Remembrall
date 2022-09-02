@@ -3,8 +3,6 @@ package com.example.remembrall.signup
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.remembrall.R
-import com.example.remembrall.databinding.ActivityLoginBinding
 import com.example.remembrall.databinding.ActivitySignUpBinding
 import com.example.remembrall.login.SplashActivity
 

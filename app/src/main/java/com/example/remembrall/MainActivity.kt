@@ -10,12 +10,10 @@ import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.remembrall.databinding.ActivityMainBinding
-import com.example.remembrall.map.MapSearchFragment
 import com.example.remembrall.read.ReadDiaryListFragment
 import com.example.remembrall.read.ReadTodayDiaryFragment
 import com.example.remembrall.write.ReadDiaryFragment
-import com.example.remembrall.write.WriteDiaryActivity
-
+import com.example.remembrall.map.MapSearchFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding : ActivityMainBinding

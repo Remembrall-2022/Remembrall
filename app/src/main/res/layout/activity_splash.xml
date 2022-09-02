@@ -25,58 +25,72 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="@+id/imageView3"
         android:gravity="center"
-        android:layout_marginHorizontal="50dp"
+        android:layout_marginHorizontal="40dp"
         android:layout_marginBottom="40dp">
 
         <Button
             android:id="@+id/btnLogin_email"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@drawable/semi_round_border"
+            android:layout_height="50dp"
+            android:background="@drawable/btn_login_round_border"
             android:drawableLeft="@drawable/email_resize"
             android:paddingLeft="10dp"
-            android:text="이메일로 로그인"
-            android:textColor="#353535"
-            android:textSize="14dp"
+            android:text="이메일로 계속하기"
+            android:textColor="@color/white"
             android:layout_marginBottom="10dp"
             android:textStyle="bold"/>
 
         <Button
             android:id="@+id/btnLogin_kakao"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/semi_round_border_kakao"
+            android:background="@drawable/btn_kakao_round_border"
             android:drawableLeft="@drawable/message_resize"
             android:paddingLeft="14dp"
-            android:text="카카오 로그인"
+            android:text="카카오로 계속하기"
             android:textColor="#353535"
-            android:textSize="14dp"
             android:textStyle="bold"/>
 
         <Button
             android:id="@+id/btnLogin_sign_up"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/semi_round_border_signup"
+            android:background="@drawable/btn_sign_up_round_border"
             android:drawableLeft="@drawable/signup_resize"
             android:paddingLeft="14dp"
             android:text="회원가입"
-            android:textColor="#FFFFFF"
-            android:textSize="14dp" />
+            android:textColor="#FFFFFF" />
 
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="pass"
-        tools:layout_editor_absoluteX="172dp"
-        tools:layout_editor_absoluteY="468dp"
-        tools:ignore="MissingConstraints" />
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="pass"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="172dp"
+            tools:layout_editor_absoluteY="468dp" />
+
+        <Button
+            android:id="@+id/button_Constellation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Constellation"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="172dp"
+            tools:layout_editor_absoluteY="468dp" />
+    </LinearLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

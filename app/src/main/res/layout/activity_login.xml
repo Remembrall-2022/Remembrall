@@ -4,53 +4,85 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.remembrall.signup.SignUpActivity"
-    android:orientation="vertical"
-    android:layout_margin="20dp">
+    tools:context="com.example.remembrall.login.SignUpActivity"
+
+    android:background="@drawable/login_background"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView
+        android:layout_height="match_parent"
+        android:layout_margin="20dp"
+        android:orientation="vertical">
+
+        <LinearLayout
             android:id="@+id/btn_back"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/back"
-            android:layout_margin="10dp"
-            />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="center"
-        android:layout_marginHorizontal="30dp"
-        android:layout_marginTop="130dp">
+            android:layout_width="match_parent"
+            android:layout_height="84dp">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginBottom="30dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="30dp"
+                android:src="@drawable/back" />
+        </LinearLayout>
 
-        <EditText
-            android:id="@+id/et_email"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="email"
-            android:layout_margin="10dp"/>
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="30dp"
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/et_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="password"
-            android:layout_margin="10dp"
-            android:inputType="textPassword"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="Login"
+                android:textColor="@color/rememberall_navy"
+                android:textSize="24dp"
+                android:textStyle="bold" />
 
-        <android.widget.Button
-            android:id="@+id/btn_join"
-            android:text="로그인"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:background="@drawable/login_round_button"
-            />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:text="여행의 모든 순간을 담다"
+                android:textColor="@color/rememberall_mauve"
+                android:textSize="16dp" />
+
+            <EditText
+                android:id="@+id/et_email"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/et_round_border"
+                android:hint="email"
+                android:inputType="textWebEmailAddress"
+                android:layout_marginVertical="10dp"
+                android:paddingLeft="10dp" />
+
+            <EditText
+                android:id="@+id/et_password"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/et_round_border"
+                android:hint="password"
+                android:inputType="textPassword"
+                android:paddingLeft="10dp" />
+
+            <android.widget.Button
+                android:id="@+id/btn_join"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:background="@drawable/btn_round_border"
+                android:text="로그인"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+        </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>

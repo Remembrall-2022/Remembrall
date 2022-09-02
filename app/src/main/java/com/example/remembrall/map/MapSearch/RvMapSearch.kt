@@ -1,4 +1,4 @@
-package com.example.remembrall.map
+package com.example.remembrall.map.MapSearch
 
 class RvMapSearch (
     val place_name: String,

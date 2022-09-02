@@ -1,12 +1,10 @@
-package com.example.remembrall.map
+package com.example.remembrall.map.MapSearch
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ListAdapter
 import android.widget.TextView
-import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.remembrall.*
 
@@ -18,7 +16,7 @@ class RvMapSearchAdapter(val context: Context): RecyclerView.Adapter<RvMapSearch
         this.itemList = mapSearchResultList
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RvMapSearchAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.item_map_search,
             parent,
             false)
@@ -29,7 +27,7 @@ class RvMapSearchAdapter(val context: Context): RecyclerView.Adapter<RvMapSearch
         return itemList.size
     }
 
-    override fun onBindViewHolder(holder: RvMapSearchAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.name.text = itemList[position].place_name
         holder.category.text = itemList[position].category
         holder.address.text = itemList[position].address

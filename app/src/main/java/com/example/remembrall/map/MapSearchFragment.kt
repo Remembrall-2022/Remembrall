@@ -14,10 +14,12 @@ import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.remembrall.MainActivity
-import com.example.remembrall.R
 import com.example.remembrall.databinding.FragmentMapSearchBinding
+import com.example.remembrall.map.MapSearch.KakaoMapApi
+import com.example.remembrall.map.MapSearch.ResultSearchKeyword
+import com.example.remembrall.map.MapSearch.RvMapSearch
+import com.example.remembrall.map.MapSearch.RvMapSearchAdapter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
@@ -48,6 +50,7 @@ class MapSearchFragment() : Fragment() {
 
     companion object {
         const val BASE_URL = "https://dapi.kakao.com/"
+//        const val GALLERY_API_URL = "http://apis.data.go.kr/B551011/PhotoGalleryService"
         const val API_KEY = "KakaoAK 6bc1728a7e229d952ece08fa28b0bdab"   // REST API 키
     }
 
@@ -91,6 +94,11 @@ class MapSearchFragment() : Fragment() {
         rvMapSearchAdapter = RvMapSearchAdapter(mainActivity)
         rv?.adapter = rvMapSearchAdapter
 
+        //TODO : Tour api 붙이기
+//        val retrofit_gallery = Retrofit.Builder()   // Retrofit 구성
+//            .baseUrl(GALLERY_API_URL)
+//            .addConverterFactory(GsonConverterFactory.create())
+//            .build()
 
         val searchItem = RvMapSearch(
             "이름",
@@ -109,21 +117,19 @@ class MapSearchFragment() : Fragment() {
         // 드래그해도 팝업이 종료되지 않도록
         behavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
-//                if (newState == BottomSheetBehavior.STATE_DRAGGING) {
-//                    behavior.state = BottomSheetBehavior.STATE_EXPANDED
-//                }
                 when(newState) {
                     BottomSheetBehavior.STATE_COLLAPSED-> {
-                        Toast.makeText(mainActivity,"최소화",Toast.LENGTH_LONG).show()
+//                        Toast.makeText(mainActivity,"최소화",Toast.LENGTH_LONG).show()
                     }
                     BottomSheetBehavior.STATE_DRAGGING-> {
                     }
                     BottomSheetBehavior.STATE_EXPANDED-> {
-                        Toast.makeText(mainActivity,"확장",Toast.LENGTH_LONG).show()
+//                        Toast.makeText(mainActivity,"확장",Toast.LENGTH_LONG).show()
                     }
                     BottomSheetBehavior.STATE_HIDDEN-> {
                     }
                     BottomSheetBehavior.STATE_SETTLING-> {
+//                        Toast.makeText(mainActivity, "중간", Toast.LENGTH_LONG).show()
                     }
                 }
             }
@@ -134,7 +140,6 @@ class MapSearchFragment() : Fragment() {
         // 검색 결과 처리 함수
         fun addItemsAndMarkers(searchResult: ResultSearchKeyword?){
             if(!searchResult?.documents.isNullOrEmpty()){
-                Log.e("실행됐나?","ㅇㅇ")
                 mapSearchItemList.clear()
                 mapView.removeAllPOIItems()
                 for (document in searchResult!!.documents){
@@ -168,11 +173,11 @@ class MapSearchFragment() : Fragment() {
 
         // 키워드 검색 함수
         fun searchKeyword(keyword: String){
-            val retrofit = Retrofit.Builder()   // Retrofit 구성
+            val retrofit_map = Retrofit.Builder()   // Retrofit 구성
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-            val api = retrofit.create(KakaoMapApi::class.java)   // 통신 인터페이스를 객체로 생성
+            val api = retrofit_map.create(KakaoMapApi::class.java)   // 통신 인터페이스를 객체로 생성
             val call = api.getSearchKeyword(API_KEY, keyword)   // 검색 조건 입력
             // API 서버에 요청
             call.enqueue(object: Callback<ResultSearchKeyword> {
@@ -203,8 +208,6 @@ class MapSearchFragment() : Fragment() {
                 return false
             }
         })
-
-
         return binding!!.root
     }
 
@@ -219,7 +222,6 @@ class MapSearchFragment() : Fragment() {
         //위도 , 경도
         uLatitude = userNowLocation?.latitude
         uLongitude = userNowLocation?.longitude
-
     }
 
     // 위치추적 중지

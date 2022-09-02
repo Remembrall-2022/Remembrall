@@ -12,7 +12,7 @@
         android:theme="@style/Theme.Remembrall"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".ReadDiaryActivity"
+            android:name="com.example.remembrall.read.ReadDiaryActivity"
             android:exported="false" />
         <activity
             android:name="com.example.remembrall.write.WriteDiaryActivity"

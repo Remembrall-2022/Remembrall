@@ -1,4 +1,4 @@
-package com.example.remembrall.map
+package com.example.remembrall.map.MapSearch
 
 import retrofit2.Call
 import retrofit2.http.GET

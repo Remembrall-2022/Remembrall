@@ -6,10 +6,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.example.remembrall.MainActivity
-import com.example.remembrall.R
+import com.example.remembrall.constellation.ConstellationActivity
 import com.example.remembrall.databinding.ActivityLoginBinding
 import com.example.remembrall.databinding.ActivitySplashBinding
-import com.example.remembrall.signup.SignUpActivity
+import com.example.remembrall.login.SignUpActivity
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
@@ -79,9 +79,18 @@ class SplashActivity : AppCompatActivity() {
             finish()
         }
 
+        // 로그인 스킵
         binding.button.setOnClickListener{
             startActivity(intent)
             finish()
         }
+
+        // 별자리 지도 만들기
+        binding.buttonConstellation.setOnClickListener {
+            intent = Intent(this, ConstellationActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
     }
 }
