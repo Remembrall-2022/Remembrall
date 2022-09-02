@@ -7,7 +7,7 @@ android {
     compileSdk 31
 
     defaultConfig {
-        applicationId "com.example.remembrall"
+        applicationId "com.example.remebrall"
         minSdk 21
         targetSdk 31
         versionCode 1
@@ -16,11 +16,11 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    buildFeatures{
-        viewBinding true
-    }
-
     buildTypes {
+        buildFeatures{
+            viewBinding true
+        }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -56,5 +56,6 @@ dependencies {
     implementation 'androidx.preference:preference-ktx:1.1.1' //sharedPrefernces
     implementation 'com.squareup.retrofit2:retrofit:2.9.0' //Retrofit
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.google.android.material:material:1.4.0-alpha01'//BottomsheetDialog
 
 }
