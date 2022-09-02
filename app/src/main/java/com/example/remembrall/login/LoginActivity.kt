@@ -28,12 +28,7 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
-//
-//        val intent = Intent(this, MainActivity::class.java)
-//        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-
-
-        }
+    }
 
     override fun onBackPressed() {
         super.onBackPressed()

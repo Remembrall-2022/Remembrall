@@ -35,25 +35,31 @@
         <EditText
             android:id="@+id/et_name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:hint="name"
-            android:layout_margin="10dp"/>
+            android:layout_margin="10dp"
+            android:paddingLeft="10dp"
+            android:background="@drawable/et_round_border"/>
 
         <EditText
             android:id="@+id/et_email"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:hint="email"
-            android:layout_margin="10dp"/>
+            android:layout_margin="10dp"
+            android:paddingLeft="10dp"
+            android:background="@drawable/et_round_border"/>
 
 
         <EditText
             android:id="@+id/et_password"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:hint="password"
             android:layout_margin="10dp"
-            android:inputType="textPassword"/>
+            android:inputType="textPassword"
+            android:paddingLeft="10dp"
+            android:background="@drawable/et_round_border"/>
 
 
 

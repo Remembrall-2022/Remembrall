@@ -119,17 +119,17 @@ class MapSearchFragment() : Fragment() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 when(newState) {
                     BottomSheetBehavior.STATE_COLLAPSED-> {
-                        Toast.makeText(mainActivity,"최소화",Toast.LENGTH_LONG).show()
+//                        Toast.makeText(mainActivity,"최소화",Toast.LENGTH_LONG).show()
                     }
                     BottomSheetBehavior.STATE_DRAGGING-> {
                     }
                     BottomSheetBehavior.STATE_EXPANDED-> {
-                        Toast.makeText(mainActivity,"확장",Toast.LENGTH_LONG).show()
+//                        Toast.makeText(mainActivity,"확장",Toast.LENGTH_LONG).show()
                     }
                     BottomSheetBehavior.STATE_HIDDEN-> {
                     }
                     BottomSheetBehavior.STATE_SETTLING-> {
-                        Toast.makeText(mainActivity, "중간", Toast.LENGTH_LONG).show()
+//                        Toast.makeText(mainActivity, "중간", Toast.LENGTH_LONG).show()
                     }
                 }
             }

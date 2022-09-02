@@ -8,4 +8,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="point">#525078</color>
+    <color name="rememberall_purple">#6867AC</color>
+    <color name="rememberall_pink">#FF94E1</color>
+    <color name="rememberall_navy">#525078</color>
+    <color name="rememberall_mauve">#C28FEF</color>
+
 </resources>
