@@ -48,7 +48,8 @@ class ConstellationActivity : AppCompatActivity() {
 
         // 별자리 지도 비율
         var mappingRatio = mappingRatio(touristDestinationList)
-        
+
+
         // 별 그리기
         drawStar(width-80, touristDestinationList, mappingRatio)
 
@@ -63,16 +64,18 @@ class ConstellationActivity : AppCompatActivity() {
             xList.add(destination.x)
             yList.add(destination.y)
         }
-        val constellationWidth = xList.max()-xList.min()
-        val constellationHeight = yList.max()-yList.min()
-        returnList.add(yList.min()) // 시작 좌표 계산을 위한 min(y)
-        returnList.add(xList.min())  // 시작 좌표 계산을 위한 min(x)
+        val constellationWidth = xList.maxOrNull()?.minus(xList.minOrNull()!!)
+        val constellationHeight = yList.maxOrNull()?.minus(yList.minOrNull()!!)
+        returnList.add(yList.minOrNull()!!) // 시작 좌표 계산을 위한 min(y)
+        returnList.add(xList.minOrNull()!!)  // 시작 좌표 계산을 위한 min(x)
 
-        if (constellationWidth>constellationHeight){
-            returnList.add(constellationWidth) // 정사각형 가로
-        }
-        else {
-            returnList.add(constellationHeight) // 정사각형 가로
+        if (constellationWidth != null) {
+            if (constellationWidth > constellationHeight!!){
+                returnList.add(constellationWidth) // 정사각형 가로
+            }
+            else {
+                returnList.add(constellationHeight) // 정사각형 가로
+            }
         }
         return returnList // min(y), min(x), square width
     }

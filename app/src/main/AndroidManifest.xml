@@ -14,10 +14,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Remebrall"
-        android:usesCleartextTraffic="true" >
+        android:usesCleartextTraffic="true">
+<!--        android:networkSecurityConfig="@xml/network_security_config"-->
         <activity
-            android:name=".constellation.ConstellationActivity"
-            android:exported="false" /> <!-- android:networkSecurityConfig="@xml/network_security_config" -->
+            android:name="com.example.remembrall.read.ReadDiaryActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.remembrall.write.WriteDiaryActivity"
+            android:exported="false" />
         <activity
             android:name=".login.SplashActivity"
             android:exported="true" >
@@ -38,7 +42,7 @@
             android:exported="true" />
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -50,10 +54,15 @@
                     android:scheme="@string/MANIFEST_NATIVE_APP_KEY" />
             </intent-filter>
         </activity>
-
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/NATIVE_APP_KEY" />
     </application>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 갤러리에서 사진 가져오기 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
 </manifest>
