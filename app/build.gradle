@@ -58,4 +58,5 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.google.android.material:material:1.4.0-alpha01'//BottomsheetDialog
     implementation 'com.ssomai:android.scalablelayout:2.1.6' // 별자리지도 scalablelayout
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1' // retrofit 로그 확인
 }

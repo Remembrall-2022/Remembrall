@@ -1,19 +1,22 @@
 package com.example.remembrall.login
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.remembrall.R
 import com.example.remembrall.databinding.ActivityLoginBinding
 import com.example.remembrall.login.req.LoginRequest
 import com.example.remembrall.login.res.LoginResponse
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding : ActivityLoginBinding
@@ -26,10 +29,13 @@ class LoginActivity : AppCompatActivity() {
         var intent =  Intent(this, SplashActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
 
+        val clientBuilder = OkHttpClient.Builder()
+        val client = OkHttpClient.Builder().addInterceptor(httpLoggingInterceptor()).build()
         // 레트로핏 객체 생성.
         var retrofit = Retrofit.Builder()
             .baseUrl(getString(R.string.SERVER))
             .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
             .build()
 
         // 로그인 서비스 올리기
@@ -38,8 +44,13 @@ class LoginActivity : AppCompatActivity() {
         binding.btnJoin.setOnClickListener {
 //            val email = binding.etEmail.text.toString().trim()
 //            val password = binding.etPassword.text.toString().trim()
-            var email = "minpearl@gmail.com"
+            var email = "minpearl0826@gmail.com"
             var password = "newly"
+
+//            val loginRequest = JsonObject().apply {
+//                addProperty("email", email)
+//                addProperty("password", password)
+//            }
             loginService.loginEmail(LoginRequest(email, password)).enqueue(object: Callback<LoginResponse> {
                 override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                     Log.e("Login", t.toString())
@@ -82,6 +93,16 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+    }
+
+    private fun httpLoggingInterceptor(): HttpLoggingInterceptor? {
+        val interceptor = HttpLoggingInterceptor { message ->
+            Log.e(
+                "MyGitHubData :",
+                message + ""
+            )
+        }
+        return interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
     }
 
     override fun onBackPressed() {

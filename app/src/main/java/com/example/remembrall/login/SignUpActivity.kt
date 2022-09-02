@@ -8,9 +8,10 @@ import android.widget.Toast
 import com.example.remembrall.MainActivity
 import com.example.remembrall.R
 import com.example.remembrall.databinding.ActivitySignUpBinding
+import com.example.remembrall.login.req.AuthCodeRequest
 import com.example.remembrall.login.req.SignUpRequest
-import com.example.remembrall.login.res.AuthCodeResponse
 import com.example.remembrall.login.res.AuthResponse
+import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -68,15 +69,16 @@ class SignUpActivity : AppCompatActivity() {
             val password = "1234"
             val authCode = binding.etAuthNum.text.toString().trim()
             Log.e("authCode", authCode)
-            userService.receiveAuthCode(authCode).enqueue(object: Callback<AuthResponse>{
+            userService.receiveAuthCode(email, authCode).enqueue(object: Callback<AuthResponse>{
                 override fun onResponse(
                     call: Call<AuthResponse>,
                     response: Response<AuthResponse>
                 ) {
                     val authRes = response.body()
                     Log.d("ReceiveAuthCode", response.body().toString())
+                    Log.e("ReceiveAuthCode", response.toString())
+                    Log.d("ReceiveAuthCode", authRes?.response?.message.toString())
                     if (authRes?.success.toString() == "true"){
-                        Log.d("ReceiveAuthCode", authRes?.response?.message.toString())
                         userService.signUpEmail(SignUpRequest(email, password, name)).enqueue(object: Callback<AuthResponse>{
                             override fun onResponse(
                                 call: Call<AuthResponse>,
