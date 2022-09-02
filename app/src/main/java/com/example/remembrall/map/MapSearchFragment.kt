@@ -50,7 +50,7 @@ class MapSearchFragment() : Fragment() {
 
     companion object {
         const val BASE_URL = "https://dapi.kakao.com/"
-        const val GALLERY_API_URL = "http://apis.data.go.kr/B551011/PhotoGalleryService"
+//        const val GALLERY_API_URL = "http://apis.data.go.kr/B551011/PhotoGalleryService"
         const val API_KEY = "KakaoAK 6bc1728a7e229d952ece08fa28b0bdab"   // REST API 키
     }
 
@@ -95,10 +95,10 @@ class MapSearchFragment() : Fragment() {
         rv?.adapter = rvMapSearchAdapter
 
         //TODO : Tour api 붙이기
-        val retrofit_gallery = Retrofit.Builder()   // Retrofit 구성
-            .baseUrl(GALLERY_API_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+//        val retrofit_gallery = Retrofit.Builder()   // Retrofit 구성
+//            .baseUrl(GALLERY_API_URL)
+//            .addConverterFactory(GsonConverterFactory.create())
+//            .build()
 
         val searchItem = RvMapSearch(
             "이름",
