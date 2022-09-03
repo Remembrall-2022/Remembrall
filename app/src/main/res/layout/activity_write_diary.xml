@@ -73,7 +73,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
-                        android:layout_marginVertical="10dp"
+                        android:layout_marginVertical="20dp"
                         android:gravity="center">
                         <ImageView
                             android:layout_width="wrap_content"
@@ -102,8 +102,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_marginTop="10dp"
-                        android:paddingVertical="5dp">
+                        android:layout_marginBottom="10dp">
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"

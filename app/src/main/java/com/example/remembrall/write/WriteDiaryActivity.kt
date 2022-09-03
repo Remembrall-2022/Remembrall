@@ -7,16 +7,11 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.text.Layout
+import android.util.DisplayMetrics
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.view.View.inflate
+import android.view.*
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.LayoutRes
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -28,13 +23,11 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.remembrall.MainActivity
 import com.example.remembrall.PreferenceUtil
 import com.example.remembrall.R
-import com.example.remembrall.databinding.ActivityLoginBinding.inflate
 import com.example.remembrall.databinding.ActivityWriteDiaryBinding
-import com.example.remembrall.read.ReadTodayDiaryFragment
 import java.io.File
 import java.time.LocalDate
 import java.util.*
-import kotlin.collections.ArrayList
+
 
 class WriteDiaryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWriteDiaryBinding
@@ -79,6 +72,8 @@ class WriteDiaryActivity : AppCompatActivity() {
                     .fitCenter()
                     .apply(RequestOptions().override(500,500))
                     .into(binding.recyclerviewWritediary[pos].findViewById(R.id.imageview_addpicture))
+
+                binding.recyclerviewWritediary[pos].findViewById<ImageView>(R.id.imageview_addpicture).adjustViewBounds=true
             }
         }
     }

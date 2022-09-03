@@ -114,9 +114,11 @@
 
                     <ImageView
                         android:id="@+id/imageview_addpicture"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_image"
+                        android:scaleType="centerInside"
+                        android:maxHeight="300dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
