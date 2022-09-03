@@ -4,11 +4,14 @@ import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface TourPhotoApi {
-    @GET("/galleryList")
-    fun getGalleryList(
+interface TourRecommendApi {
+    @GET("/B551011/KorService/locationBasedList")
+    fun getTourList(
         @Query("MobileOS") MobileOS: String,
         @Query("MobileApp") MobileApp: String,
         @Query("serviceKey") numOfRows: String,
-    ) : Call<GalleryResponse>
+        @Query("mapX") mapX: String,
+        @Query("mapY") mapY : String,
+        @Query("radius") radius: String,
+    ) : Call<TourRecommendResponse>
 }

@@ -22,7 +22,7 @@
             android:layout_gravity="center"
             android:text="책장"
             android:textColor="#FFFFFF"
-            android:textSize="20sp"
+            android:textSize="17sp"
             android:textStyle="bold" />
 
     </androidx.appcompat.widget.Toolbar>

@@ -1,11 +1,11 @@
 package com.example.remembrall.login
 
-import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.remembrall.MainActivity
 import com.example.remembrall.R
 import com.example.remembrall.databinding.ActivityLoginBinding
@@ -24,11 +24,15 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding : ActivityLoginBinding
-
+    var context: Context? = null
+    fun getLoginContext(): Context? {
+        return context
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        context = this@LoginActivity
 
         var intent =  Intent(this, SplashActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
@@ -58,15 +62,15 @@ class LoginActivity : AppCompatActivity() {
                     Toast.makeText(applicationContext,"error : 로그인 실패", Toast.LENGTH_SHORT)
                 }
                 override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
-                    val login = response.body()
-                    Log.d("Login:", "login success : "+login?.toString())
+                    val login = response
+                    Log.d("Login:", "login success : "+response.code())
 
-                    if(login?.success.toString() == "true"){
-                        var loginData = login!!.response
+                    if(login?.body()?.success.toString() == "true"){
+                        var loginData = login?.body()!!.response!!
                         val currentUser = LoginData(
-                            grantType = loginData.grantType,
-                            accessToken = loginData.accessToken,
-                            refreshToken = loginData.refreshToken
+                            grantType = loginData.grantType.toString(),
+                            accessToken = loginData.accessToken.toString(),
+                            refreshToken = loginData.refreshToken.toString()
                         )
                         sharedManager.loginCurrentUser(currentUser)
                         intent =  Intent(this@LoginActivity, MainActivity::class.java)
@@ -74,8 +78,10 @@ class LoginActivity : AppCompatActivity() {
                         startActivity(intent)
                         finish()
                     }
-                    else{
-                        Toast.makeText(applicationContext, login?.error?.errorMessage.toString(), Toast.LENGTH_SHORT).show()
+                    else if(login?.body()?.success.toString() == "false"){
+                        Log.e("false", login.body().toString())
+                        binding.tvLoginError.text = login?.body()?.error?.errorMessage.toString()
+                        Toast.makeText(applicationContext, login?.body()?.error?.errorMessage.toString(), Toast.LENGTH_SHORT).show()
                     }
                 }
             })

@@ -14,8 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.remembrall.MainActivity
 import com.example.remembrall.R
 import com.example.remembrall.databinding.FragmentReadDiaryListBinding
-import com.example.remembrall.write.WriteDiaryActivity
-import com.example.remembrall.write.WriteDiaryRecyclerViewAdapter
+import com.example.remembrall.read.Triplog.TriplogCreateDialog
 
 class ReadDiaryListFragment : Fragment() {
     private lateinit var binding: FragmentReadDiaryListBinding
@@ -42,8 +41,13 @@ class ReadDiaryListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initalize()
         initReadDiaryRecyclerView()
-        binding.recyclerviewReaddiarylist.addItemDecoration(DividerItemDecoration(binding.recyclerviewReaddiarylist.context, R.drawable.readdiary_line_divider, 0,0))
+        binding.recyclerviewReaddiarylist.addItemDecoration(
+            DividerItemDecoration(binding.recyclerviewReaddiarylist.context,
+                R.drawable.readdiary_line_divider, 0,0))
         clickRecyclerView()
+        binding.floatingReaddiarylist.setOnClickListener {
+            TriplogCreateDialog(mainActivity).show()
+        }
     }
 
     private fun initalize(){
@@ -51,16 +55,6 @@ class ReadDiaryListFragment : Fragment() {
         readDiaryRecyclerViewData.add(ReadDiaryListRecyclerViewData("창덕궁 나들이"))
         readDiaryRecyclerViewData.add(ReadDiaryListRecyclerViewData("일기장2"))
         readDiaryRecyclerViewData.add(ReadDiaryListRecyclerViewData("일기장3"))
-//        readDiaryRecyclerViewData.add(ReadDiaryListRecyclerViewData("일기장4"))
-//        readDiaryRecyclerViewData.add(ReadDiaryListRecyclerViewData("일기장5"))
-//        readDiaryRecyclerViewData.add(ReadDiaryListRecyclerViewData("일기장6"))
-//        readDiaryRecyclerViewData.add(ReadDiaryListRecyclerViewData("일기장7"))
-//        readDiaryRecyclerViewData.add(ReadDiaryListRecyclerViewData("일기장7"))
-//        readDiaryRecyclerViewData.add(ReadDiaryListRecyclerViewData("일기장7"))
-//        readDiaryRecyclerViewData.add(ReadDiaryListRecyclerViewData("일기장7"))
-//        readDiaryRecyclerViewData.add(ReadDiaryListRecyclerViewData("일기장7"))
-//        readDiaryRecyclerViewData.add(ReadDiaryListRecyclerViewData("일기장7"))
-//        readDiaryRecyclerViewData.add(ReadDiaryListRecyclerViewData("일기장7"))
     }
 
     private fun initReadDiaryRecyclerView() {

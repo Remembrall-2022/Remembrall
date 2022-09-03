@@ -31,7 +31,7 @@
                 android:layout_gravity="center"
                 android:text="관광지검색"
                 android:textColor="#FFFFFF"
-                android:textSize="14sp"
+                android:textSize="17sp"
                 android:textStyle="bold" />
 
         </androidx.appcompat.widget.Toolbar>
