@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingHorizontal="12dp"
+    android:paddingVertical="12dp">
+
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:background="@color/rememberall_dark_pink">-->
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="70dp"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:gravity="center">-->
+<!--            <ImageButton-->
+<!--                android:id="@+id/btn_triplog_close"-->
+<!--                android:layout_width="20dp"-->
+<!--                android:layout_height="20dp"-->
+<!--                android:background="@drawable/close" />-->
+
+
+<!--        </LinearLayout>-->
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginVertical="25dp"-->
+<!--            android:text="일기장 생성하기"-->
+<!--            android:textColor="@color/white"-->
+<!--            android:textSize="17sp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:gravity="center"-->
+<!--            android:textStyle="bold"/>-->
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="70dp"-->
+<!--            android:layout_height="match_parent">-->
+<!--        </LinearLayout>-->
+<!--    </LinearLayout>-->
+
+
+    <EditText
+        android:id="@+id/et_triplog_create_name"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:layout_marginHorizontal="10dp"
+        android:hint="일기장 제목"
+        android:importantForAutofill="no"
+        android:background="@drawable/et_round_border"
+        android:inputType="text"/>
+
+    <LinearLayout
+        android:id="@+id/ll_create_triplog_start_date"
+        android:background="@drawable/et_round_border"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="10dp"
+        android:paddingHorizontal="10dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_calendar_black"
+            android:layout_marginLeft="10dp"/>
+        <TextView
+            android:id="@+id/tv_start_date"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:layout_weight="1"
+            android:text="시작 날짜를 선택해 주세요"
+            android:textColor="@color/rememberall_navy"
+            android:textSize="14sp" />
+    </LinearLayout>
+    <LinearLayout
+        android:background="@drawable/et_round_border"
+        android:id="@+id/ll_create_triplog_end_date"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginVertical="4dp"
+        android:layout_marginHorizontal="10dp"
+        android:paddingHorizontal="10dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_calendar_black"
+            android:layout_marginLeft="10dp"/>
+        <TextView
+            android:id="@+id/tv_end_date"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:layout_weight="1"
+            android:text="마무리 날짜를 선택해 주세요"
+            android:textColor="@color/rememberall_navy"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_triplog_create"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="20dp"
+        android:background="@drawable/btn_round_border"
+        android:text="일기장 생성하기"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="15dp"
+        android:textStyle="bold" />
+</LinearLayout>

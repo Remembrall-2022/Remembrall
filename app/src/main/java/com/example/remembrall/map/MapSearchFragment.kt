@@ -15,20 +15,30 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.remembrall.MainActivity
+import com.example.remembrall.R
 import com.example.remembrall.databinding.FragmentMapSearchBinding
+import com.example.remembrall.map.Gallery.TourRecommendApi
+import com.example.remembrall.map.Gallery.TourRecommendResponse
 import com.example.remembrall.map.MapSearch.KakaoMapApi
 import com.example.remembrall.map.MapSearch.ResultSearchKeyword
 import com.example.remembrall.map.MapSearch.RvMapSearch
 import com.example.remembrall.map.MapSearch.RvMapSearchAdapter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.tickaroo.tikxml.TikXml
+import com.tickaroo.tikxml.retrofit.TikXmlConverterFactory
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import org.w3c.dom.Element
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.net.URL
+import javax.xml.parsers.DocumentBuilderFactory
 
 
 class MapSearchFragment() : Fragment() {
@@ -49,6 +59,7 @@ class MapSearchFragment() : Fragment() {
     var mapSearchItemList = ArrayList<RvMapSearch>()
 
     companion object {
+        // TODO : url key에서 들고오기
         const val BASE_URL = "https://dapi.kakao.com/"
 //        const val GALLERY_API_URL = "http://apis.data.go.kr/B551011/PhotoGalleryService"
         const val API_KEY = "KakaoAK 6bc1728a7e229d952ece08fa28b0bdab"   // REST API 키
@@ -76,6 +87,8 @@ class MapSearchFragment() : Fragment() {
         startTracking()
         mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(uLatitude!!, uLongitude!!), 7, true) // 중심점 변경 + 줌 레벨 변경
 
+        // TODO : java.lang.RuntimeException: DaumMap does not support that two or more net.daum.mf.map.api.MapView objects exists at the same time
+
         // 현 위치에 마커 찍기
         val uNowPosition = MapPoint.mapPointWithGeoCoord(uLatitude!!, uLongitude!!)
         val marker = MapPOIItem()
@@ -94,20 +107,50 @@ class MapSearchFragment() : Fragment() {
         rvMapSearchAdapter = RvMapSearchAdapter(mainActivity)
         rv?.adapter = rvMapSearchAdapter
 
-        //TODO : Tour api 붙이기
-//        val retrofit_gallery = Retrofit.Builder()   // Retrofit 구성
-//            .baseUrl(GALLERY_API_URL)
-//            .addConverterFactory(GsonConverterFactory.create())
-//            .build()
+        var thread = NetworkThread()
+        thread.start()
 
-        val searchItem = RvMapSearch(
-            "이름",
-            "카테고리",
-            "주소",
-            "url",
-            2.2,
-            2.2)
-        mapSearchItemList.add(searchItem)
+        val client = OkHttpClient.Builder().addInterceptor(httpLoggingInterceptor()).build()
+        val parser = TikXml.Builder().exceptionOnUnreadXml(false).build()
+
+        val retrofit_recommend = Retrofit.Builder()   // Retrofit 구성
+            .baseUrl(getString(R.string.TOUR_APY_URL))
+            .addConverterFactory(TikXmlConverterFactory.create(parser))
+            .client(client)
+            .build()
+
+        val recommendPlace = retrofit_recommend.create(TourRecommendApi::class.java)
+
+//        recommendPlace.getTourList("AND", "AppTest", getString(R.string.TOUR_API_DECODING_KEY),uLongitude.toString(), uLatitude.toString(), "20000")
+//            .enqueue(object : Callback<TourRecommendResponse>{
+//                override fun onResponse(
+//                    call: Call<TourRecommendResponse>,
+//                    response: Response<TourRecommendResponse>
+//                ) {
+//                    val responseRecommendPlace = response.body()?.body?.items
+//                    Log.e("responseRecommendPlace", response.toString())
+////                    for (item in responseRecommendPlace){
+////                        val searchItem = RvMapSearch(
+////                            "이름",
+////                            "카테고리",
+////                            "주소",
+////                            "url",
+////                            2.2,
+////                            2.2)
+////                        mapSearchItemList.add(searchItem)
+////                    }
+////
+////
+//
+//
+//                }
+//                override fun onFailure(call: Call<TourRecommendResponse>, t: Throwable) {
+//                   Log.e(tag, "관광지 추천 실패")
+//                }
+//
+//            })
+
+
         rvMapSearchAdapter.setDataList(mapSearchItemList)
 
         val bottomSheet : View = binding!!.llBottomsheet
@@ -224,6 +267,17 @@ class MapSearchFragment() : Fragment() {
         uLongitude = userNowLocation?.longitude
     }
 
+    private fun httpLoggingInterceptor(): HttpLoggingInterceptor? {
+        val interceptor = HttpLoggingInterceptor { message ->
+            Log.e(
+                "HttpLogging:",
+                message + ""
+            )
+        }
+        return interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+    }
+
+
     // 위치추적 중지
     private fun stopTracking() {
         mapView?.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOff
@@ -234,4 +288,68 @@ class MapSearchFragment() : Fragment() {
         binding = null
     }
 
+    inner class NetworkThread: Thread(){
+        override fun run() {
+            try {
+                // 접속할 페이지의 주소
+                var site = getString(R.string.TOUR_APY_URL)+"/B551011/KorService/locationBasedList"+"?MobileOS=AND&MobileApp=AppTest&serviceKey="+getString(R.string.TOUR_API_DECODING_KEY)+"&mapX="+uLongitude.toString()+"&mapY="+uLatitude+"&radius=20000"
+                var url = URL(site)
+                var conn = url.openConnection()
+                var input = conn.getInputStream()
+
+                var factory = DocumentBuilderFactory.newInstance()
+                var builder = factory.newDocumentBuilder()
+                // doc: xml문서를 모두 읽어와서 분석을 끝냄
+                var doc = builder.parse(input)
+
+                // root: xml 문서의 모든 데이터들을 갖고 있는 객체
+                var root = doc.documentElement
+
+                // xml 문서에서 태그 이름이 item인 태그들이 item_node_list에 리스트로 담김
+                var item_node_list = root.getElementsByTagName("item")
+
+                // item_node_list에 들어있는 태그 객체 수만큼 반복함
+                for(i in 0 until item_node_list.length){
+                    // i번째 태그 객체를 item_element에 넣음
+                    var item_element = item_node_list.item(i) as Element
+
+                    // item태그 객체에서 원하는 데이터를 태그이름을 이용해서 데이터를 가져옴
+                    // xml 문서는 태그 이름으로 데이터를 가져오면 무조건 리스트로 나옴
+                    var addr_list = item_element.getElementsByTagName("addr1")
+                    var firstImage_list = item_element.getElementsByTagName("firstImage")
+                    var mapX_list = item_element.getElementsByTagName("mapX")
+                    var mapY_list = item_element.getElementsByTagName("mapY")
+                    var title_list = item_element.getElementsByTagName("title")
+
+
+                    var addr_node = addr_list.item(0) as Element
+                    var firstImage_node = firstImage_list.item(0) as Element
+                    var mapX_node = mapX_list.item(0) as Element
+                    var mapY_node = mapY_list.item(0) as Element
+                    var title_node = title_list.item(0) as Element
+
+                    // 태그 사이에 있는 문자열을 가지고 오는 작업
+                    var addr = addr_node.textContent
+                    var firstImage = firstImage_node.textContent
+                    var mapX = mapX_node.textContent
+                    var mapY = mapY_node.textContent
+                    var title = title_node.textContent
+
+                    Log.e("TourAPI", title)
+                    // Ui에 데이터를 출력해주는 부분
+                    val searchItem = RvMapSearch(
+                            title,
+                            "카테고리",
+                            addr,
+                            firstImage,
+                            mapX.toDouble(),
+                            mapY.toDouble())
+                    mapSearchItemList.add(searchItem)
+                    rvMapSearchAdapter.notifyDataSetChanged()
+                }
+            }catch (e: Exception){
+                e.printStackTrace()
+            }
+        }
+}
 }

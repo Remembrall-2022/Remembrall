@@ -20,7 +20,7 @@
             android:layout_gravity="center"
             android:text="오늘의 일기"
             android:textColor="#FFFFFF"
-            android:textSize="20sp"
+            android:textSize="17sp"
             android:textStyle="bold" />
 
 
@@ -44,7 +44,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:padding="15dp">
+                    android:padding="15dp"
+                    android:layout_marginTop="10dp">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/cons_writediary_select"
@@ -68,6 +69,7 @@
 
                     <LinearLayout
                         android:id="@+id/linear_writediary_date"
+                        android:layout_marginTop="20dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
@@ -99,7 +101,9 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:layout_marginTop="10dp"
+                        android:paddingVertical="5dp">
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
@@ -112,7 +116,6 @@
                             android:textSize="16sp"
                             android:textStyle="bold"
                             android:paddingHorizontal="10dp"
-                            android:paddingVertical="15dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             tools:ignore="MissingConstraints" />
@@ -171,7 +174,7 @@
                             android:padding="15dp"
                             android:orientation="horizontal"
                             android:gravity="center_horizontal"
-                            android:background="@drawable/addplace_white_rectangle">
+                            android:background="@drawable/writediary_borderline">
 
                             <ImageView
                                 android:layout_width="wrap_content"
