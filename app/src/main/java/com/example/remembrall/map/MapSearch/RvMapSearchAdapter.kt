@@ -4,8 +4,10 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.remembrall.*
 
 
@@ -31,6 +33,19 @@ class RvMapSearchAdapter(val context: Context): RecyclerView.Adapter<RvMapSearch
         holder.name.text = itemList[position].place_name
         holder.category.text = itemList[position].category
         holder.address.text = itemList[position].address
+        if(itemList[position].category == ""){
+            holder.category.visibility = View.GONE
+        }
+        if(itemList[position].place_url!=null && itemList[position].place_url!=""){
+            Glide.with(context)
+                .load(itemList[position].place_url)
+                .centerCrop()
+                .into(holder.image)
+            holder.image.scaleType = ImageView.ScaleType.CENTER_CROP
+        }
+        else{
+            holder.image.visibility = View.GONE
+        }
 
         // 아이템 클릭 이벤트
         holder.itemView.setOnClickListener {
@@ -42,6 +57,7 @@ class RvMapSearchAdapter(val context: Context): RecyclerView.Adapter<RvMapSearch
         val name: TextView = itemView.findViewById(R.id.tv_place_name_map_search)
         val category: TextView = itemView.findViewById(R.id.tv_category_map_search)
         val address: TextView = itemView.findViewById(R.id.tv_address_map_search)
+        val image: ImageView = itemView.findViewById(R.id.iv_image_map_search)
     }
 
 

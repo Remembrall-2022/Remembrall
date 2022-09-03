@@ -173,7 +173,7 @@ class MapSearchActivity : AppCompatActivity() {
                         document.place_name,
                         document.category_group_name,
                         document.road_address_name,
-                        document.place_url,
+                        "",
                         document.x.toDouble(),
                         document.y.toDouble())
                     mapSearchItemList.add(searchItem)
