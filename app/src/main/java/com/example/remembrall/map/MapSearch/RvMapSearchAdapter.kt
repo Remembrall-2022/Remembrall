@@ -31,6 +31,7 @@ class RvMapSearchAdapter(val context: Context): RecyclerView.Adapter<RvMapSearch
         holder.name.text = itemList[position].place_name
         holder.category.text = itemList[position].category
         holder.address.text = itemList[position].address
+
         // 아이템 클릭 이벤트
         holder.itemView.setOnClickListener {
             itemClickListener.onClick(it, position)

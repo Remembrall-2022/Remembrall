@@ -1,23 +1,24 @@
 package com.example.remembrall.map
 
 import android.annotation.SuppressLint
-import android.content.ContentValues.TAG
+import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.location.Location
 import android.location.LocationManager
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.remembrall.MainActivity
 import com.example.remembrall.R
+import com.example.remembrall.constellation.ConstellationActivity
+import com.example.remembrall.databinding.ActivityMainBinding
+import com.example.remembrall.databinding.ActivityMapSearchBinding
 import com.example.remembrall.databinding.FragmentMapSearchBinding
-import com.example.remembrall.map.Gallery.Item
+import com.example.remembrall.login.SplashActivity
 import com.example.remembrall.map.Gallery.TourRecommendApi
 import com.example.remembrall.map.Gallery.TourRecommendResponse
 import com.example.remembrall.map.MapSearch.KakaoMapApi
@@ -32,29 +33,17 @@ import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.w3c.dom.Element
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.net.URL
-import javax.xml.parsers.DocumentBuilderFactory
 
-
-class MapSearchFragment() : Fragment() {
-    var mapView: MapView ?= null
+class MapSearchActivity : AppCompatActivity() {
+    var mapView: MapView?= null
     var uLatitude: Double ?= null
     var uLongitude: Double ?= null
-    lateinit var rvMapSearchAdapter : RvMapSearchAdapter
-    var binding: FragmentMapSearchBinding ?= null
-
-    // Context를 액티비티로 형변환해서 할당
-    lateinit var mainActivity: MainActivity
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mainActivity = context as MainActivity
-    }
+    private lateinit var binding : ActivityMapSearchBinding
 
     // 검색결과 recyclerView
     var mapSearchItemList = ArrayList<RvMapSearch>()
@@ -62,26 +51,19 @@ class MapSearchFragment() : Fragment() {
     companion object {
         // TODO : url key에서 들고오기
         const val BASE_URL = "https://dapi.kakao.com/"
-//        const val GALLERY_API_URL = "http://apis.data.go.kr/B551011/PhotoGalleryService"
+        //        const val GALLERY_API_URL = "http://apis.data.go.kr/B551011/PhotoGalleryService"
         const val API_KEY = "KakaoAK 6bc1728a7e229d952ece08fa28b0bdab"   // REST API 키
     }
 
+    lateinit var rvMapSearchAdapter : RvMapSearchAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-        }
-    }
 
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-
-        binding = FragmentMapSearchBinding.inflate(inflater, container, false)
+        binding = ActivityMapSearchBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         // map view 연결
-        val mapView = MapView(mainActivity)
+        val mapView = MapView(this@MapSearchActivity)
         binding!!.clKakaoMapView.addView(mapView)
         binding!!.clKakaoMapView.clipToOutline=true
 
@@ -103,9 +85,9 @@ class MapSearchFragment() : Fragment() {
         mapView.zoomOut(true) // 줌 아웃
 
         val rv = binding!!.bottomsheetMapSearchView.rvMapSearch
-        Log.e(TAG, rv.toString())
-        rv?.layoutManager = LinearLayoutManager(mainActivity)
-        rvMapSearchAdapter = RvMapSearchAdapter(mainActivity)
+        Log.e(ContentValues.TAG, rv.toString())
+        rv?.layoutManager = LinearLayoutManager(this@MapSearchActivity)
+        rvMapSearchAdapter = RvMapSearchAdapter(this@MapSearchActivity)
         rv?.adapter = rvMapSearchAdapter
 
 //        var thread = NetworkThread()
@@ -123,7 +105,7 @@ class MapSearchFragment() : Fragment() {
         val recommendPlace = retrofit_recommend.create(TourRecommendApi::class.java)
 
         recommendPlace.getTourList("AND", "AppTest", getString(R.string.TOUR_API_DECODING_KEY),uLongitude.toString(), uLatitude.toString(), "20000")
-            .enqueue(object : Callback<TourRecommendResponse>{
+            .enqueue(object : Callback<TourRecommendResponse> {
                 override fun onResponse(
                     call: Call<TourRecommendResponse>,
                     response: Response<TourRecommendResponse>
@@ -145,7 +127,7 @@ class MapSearchFragment() : Fragment() {
                     }
                 }
                 override fun onFailure(call: Call<TourRecommendResponse>, t: Throwable) {
-                   Log.e(tag, "관광지 추천 실패")
+                    Log.e("responseRecommendPlace", "관광지 추천 실패")
                 }
 
             })
@@ -210,18 +192,18 @@ class MapSearchFragment() : Fragment() {
                 mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(mapSearchItemList[0].y, mapSearchItemList[0].x), 7, true) // 중심점 변경 + 줌 레벨 변경
             }
             else{
-                Toast.makeText(mainActivity, "검색 결과가 없습니다",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MapSearchActivity, "검색 결과가 없습니다", Toast.LENGTH_SHORT).show()
             }
         }
 
         // 키워드 검색 함수
         fun searchKeyword(keyword: String){
             val retrofit_map = Retrofit.Builder()   // Retrofit 구성
-                .baseUrl(BASE_URL)
+                .baseUrl(MapSearchFragment.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
             val api = retrofit_map.create(KakaoMapApi::class.java)   // 통신 인터페이스를 객체로 생성
-            val call = api.getSearchKeyword(API_KEY, keyword)   // 검색 조건 입력
+            val call = api.getSearchKeyword(MapSearchFragment.API_KEY, keyword)   // 검색 조건 입력
             // API 서버에 요청
             call.enqueue(object: Callback<ResultSearchKeyword> {
                 override fun onResponse(
@@ -229,14 +211,14 @@ class MapSearchFragment() : Fragment() {
                     response: Response<ResultSearchKeyword>
                 ) {
                     // 통신 성공 (검색 결과는 response.body()에 담겨있음)
-                    Log.d("Test", "Raw: ${response.raw()}")
-                    Log.d("Test", "Body: ${response.body()}")
+                    Log.d("SearchKeyword", "Raw: ${response.raw()}")
+                    Log.d("SearchKeyword", "Body: ${response.body()}")
                     addItemsAndMarkers(response.body())
                 }
 
                 override fun onFailure(call: Call<ResultSearchKeyword>, t: Throwable) {
                     // 통신 실패
-                    Log.w("MainActivity", "통신 실패: ${t.message}")
+                    Log.w("SearchKeyword", "통신 실패: ${t.message}")
                 }
             })
         }
@@ -251,15 +233,13 @@ class MapSearchFragment() : Fragment() {
                 return false
             }
         })
-        return binding!!.root
     }
-
     //현재 유저 위치에 대한 정보
     @SuppressLint("MissingPermission") // 나중에 user 권한 받을 수 있으면 받기
     private fun startTracking() {
         mapView?.currentLocationTrackingMode =MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading  //이 부분
 
-        val lm: LocationManager = mainActivity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val lm: LocationManager = this@MapSearchActivity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val userNowLocation: Location? = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
 
         //위도 , 경도
@@ -283,74 +263,15 @@ class MapSearchFragment() : Fragment() {
         mapView?.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOff
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        mapView = null
+        var intent = Intent(this, SplashActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
     override fun onDestroy() {
         super.onDestroy()
         mapView = null
-        binding = null
     }
-
-//    inner class NetworkThread: Thread(){
-//        override fun run() {
-//            try {
-//                // 접속할 페이지의 주소
-//                var site = getString(R.string.TOUR_APY_URL)+"/B551011/KorService/locationBasedList"+"?MobileOS=AND&MobileApp=AppTest&serviceKey="+getString(R.string.TOUR_API_DECODING_KEY)+"&mapX="+uLongitude.toString()+"&mapY="+uLatitude+"&radius=20000"
-//                var url = URL(site)
-//                var conn = url.openConnection()
-//                var input = conn.getInputStream()
-//
-//                var factory = DocumentBuilderFactory.newInstance()
-//                var builder = factory.newDocumentBuilder()
-//                // doc: xml문서를 모두 읽어와서 분석을 끝냄
-//                var doc = builder.parse(input)
-//
-//                // root: xml 문서의 모든 데이터들을 갖고 있는 객체
-//                var root = doc.documentElement
-//
-//                // xml 문서에서 태그 이름이 item인 태그들이 item_node_list에 리스트로 담김
-//                var item_node_list = root.getElementsByTagName("item")
-//
-//                // item_node_list에 들어있는 태그 객체 수만큼 반복함
-//                for(i in 0 until item_node_list.length){
-//                    // i번째 태그 객체를 item_element에 넣음
-//                    var item_element = item_node_list.item(i) as Element
-//
-//                    // item태그 객체에서 원하는 데이터를 태그이름을 이용해서 데이터를 가져옴
-//                    // xml 문서는 태그 이름으로 데이터를 가져오면 무조건 리스트로 나옴
-//                    var addr_list = item_element.getElementsByTagName("addr1")
-//                    var firstImage_list = item_element.getElementsByTagName("firstImage")
-//                    var mapX_list = item_element.getElementsByTagName("mapX")
-//                    var mapY_list = item_element.getElementsByTagName("mapY")
-//                    var title_list = item_element.getElementsByTagName("title")
-//
-//
-//                    var addr_node = addr_list.item(0) as Element
-//                    var firstImage_node = firstImage_list.item(0) as Element
-//                    var mapX_node = mapX_list.item(0) as Element
-//                    var mapY_node = mapY_list.item(0) as Element
-//                    var title_node = title_list.item(0) as Element
-//
-//                    // 태그 사이에 있는 문자열을 가지고 오는 작업
-//                    var addr = addr_node.textContent
-//                    var firstImage = firstImage_node.textContent
-//                    var mapX = mapX_node.textContent
-//                    var mapY = mapY_node.textContent
-//                    var title = title_node.textContent
-//
-//                    Log.e("TourAPI", title)
-//                    // Ui에 데이터를 출력해주는 부분
-//                    val searchItem = RvMapSearch(
-//                            title,
-//                            "카테고리",
-//                            addr,
-//                            firstImage,
-//                            mapX.toDouble(),
-//                            mapY.toDouble())
-//                    mapSearchItemList.add(searchItem)
-//                    rvMapSearchAdapter.notifyDataSetChanged()
-//                }
-//            }catch (e: Exception){
-//                e.printStackTrace()
-//            }
-//        }
-//}
 }

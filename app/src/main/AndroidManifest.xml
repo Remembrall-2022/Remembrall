@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.remembrall" >
+    package="com.example.remembrall">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 갤러리에서 사진 가져오기 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:name=".GlobalApplication"
@@ -15,7 +20,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Remembrall"
         android:usesCleartextTraffic="true">
-<!--        android:networkSecurityConfig="@xml/network_security_config"-->
+        <activity
+            android:name="com.example.remembrall.map.MapSearchActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"
+            />
+        <!-- android:networkSecurityConfig="@xml/network_security_config" -->
         <activity
             android:name="com.example.remembrall.read.ReadDiaryActivity"
             android:exported="false" />
@@ -24,7 +34,7 @@
             android:exported="false" />
         <activity
             android:name=".login.SplashActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -54,15 +64,10 @@
                     android:scheme="@string/MANIFEST_NATIVE_APP_KEY" />
             </intent-filter>
         </activity>
+
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/NATIVE_APP_KEY" />
     </application>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET" /> <!-- 갤러리에서 사진 가져오기 -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
 </manifest>

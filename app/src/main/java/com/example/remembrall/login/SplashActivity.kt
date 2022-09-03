@@ -10,6 +10,7 @@ import com.example.remembrall.constellation.ConstellationActivity
 import com.example.remembrall.databinding.ActivityLoginBinding
 import com.example.remembrall.databinding.ActivitySplashBinding
 import com.example.remembrall.login.SignUpActivity
+import com.example.remembrall.map.MapSearchActivity
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
@@ -92,5 +93,11 @@ class SplashActivity : AppCompatActivity() {
             finish()
         }
 
+        // map search
+        binding.buttonMap.setOnClickListener {
+            intent = Intent(this, MapSearchActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
 }
