@@ -81,7 +81,7 @@ class ReadDiaryListFragment : Fragment() {
             }
 
             override fun heartOnClick(v: View, position: Int) { //북마크
-                binding.recyclerviewReaddiarylist[position].findViewById<ImageView>(R.id.img_adddiary_heart).setImageResource(R.drawable.ic_bookmark_heartfill)
+                binding.recyclerviewReaddiarylist[position].findViewById<ImageView>(R.id.img_adddiary_heart).setImageResource(R.drawable.ic_bookmark_fill)
 //                binding.recyclerviewReaddiarylist[position].findViewById<ImageView>(R.id.img_adddiary_heart).setImageResource(R.drawable.ic_bookmark_heart)
             }
         })

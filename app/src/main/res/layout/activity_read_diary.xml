@@ -37,8 +37,7 @@
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -74,17 +73,17 @@
                     android:textColor="@color/white"
                     android:textSize="14sp"
                     android:layout_gravity="end"
-                    android:layout_marginVertical="10dp"/>
+                    android:layout_marginVertical="15dp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/readdiary_rectangle_white"
                     android:orientation="vertical"
+                    android:background="@drawable/creatediary_border_white"
                     android:paddingHorizontal="20dp"
                     android:paddingVertical="25dp"
-                    android:layout_marginHorizontal="10dp">
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginBottom="15dp">
                     <TextView
                         android:id="@+id/tv_readdiary_question"
                         android:layout_width="match_parent"
@@ -102,14 +101,17 @@
 다음에는 가족들이랑 같이 오고 싶기도 하고,
 오늘은 사람들이 많았는데 한적할 때의 창덕궁은
 어떤 모습을 가지고 있을지 궁금하기도 하다."
-                        android:textColor="#333333"/>
+                        android:textColor="#333333"
+                        android:lineSpacingMultiplier="1.2"
+                        android:letterSpacing="0.01"/>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:orientation="vertical"
-                    android:layout_marginTop="10dp">
+                    android:paddingHorizontal="5dp"
+                    android:layout_marginHorizontal="10dp">
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyclerview_readdiary"

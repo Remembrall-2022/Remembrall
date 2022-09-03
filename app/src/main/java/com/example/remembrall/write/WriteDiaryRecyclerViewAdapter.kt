@@ -74,6 +74,13 @@ class WriteDiaryRecyclerViewAdapter(
 
             place.text=data.place
             coment.setText(data.coment)
+//            if(data.image==""){
+//                image.adjustViewBounds=false
+//            }
+//            else {
+//                image.adjustViewBounds = true
+//            }
+
         }
     }
 
