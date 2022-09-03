@@ -59,6 +59,7 @@ class MapSearchFragment() : Fragment() {
     var mapSearchItemList = ArrayList<RvMapSearch>()
 
     companion object {
+        // TODO : url key에서 들고오기
         const val BASE_URL = "https://dapi.kakao.com/"
 //        const val GALLERY_API_URL = "http://apis.data.go.kr/B551011/PhotoGalleryService"
         const val API_KEY = "KakaoAK 6bc1728a7e229d952ece08fa28b0bdab"   // REST API 키
