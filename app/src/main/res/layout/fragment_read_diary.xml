@@ -103,7 +103,7 @@
                     android:text="오늘은 점심으로 무엇을 드셨나요?"
                     android:textAlignment="center"
                     android:textColor="#333333"
-                    android:textSize="17sp"
+                    android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

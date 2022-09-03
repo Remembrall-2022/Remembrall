@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -60,5 +61,9 @@ dependencies {
     implementation 'com.ssomai:android.scalablelayout:2.1.6' // 별자리지도 scalablelayout
     implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1' // retrofit 로그 확인
     implementation 'androidx.preference:preference-ktx:1.1.1' // shared preference
+    implementation 'com.tickaroo.tikxml:annotation:0.8.13'//xml parser
+    implementation 'com.tickaroo.tikxml:core:0.8.13'
+    implementation 'com.tickaroo.tikxml:retrofit-converter:0.8.13'
+    kapt 'com.tickaroo.tikxml:processor:0.8.13'
 
 }
