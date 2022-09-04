@@ -28,6 +28,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 
 class SignUpActivity : AppCompatActivity() {
     private lateinit var binding : ActivitySignUpBinding
@@ -42,11 +43,18 @@ class SignUpActivity : AppCompatActivity() {
             finish()
         }
 
-        val client = OkHttpClient.Builder().addInterceptor(httpLoggingInterceptor()).build()
+        val client = OkHttpClient.Builder()
+            .addInterceptor(
+                HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC)
+                    .setLevel(HttpLoggingInterceptor.Level.BODY)
+                    .setLevel(HttpLoggingInterceptor.Level.HEADERS)
+            )
+            .build()
 
         // 레트로핏 객체 생성.
         var retrofit = Retrofit.Builder()
             .baseUrl(getString(R.string.SERVER))
+            .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
@@ -202,15 +210,6 @@ class SignUpActivity : AppCompatActivity() {
                 UserApiClient.instance.loginWithKakaoAccount(this@SignUpActivity, callback = callback)
             }
         }
-    }
-    private fun httpLoggingInterceptor(): HttpLoggingInterceptor? {
-        val interceptor = HttpLoggingInterceptor { message ->
-            Log.e(
-                "HttpLogging :",
-                message + ""
-            )
-        }
-        return interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
     }
 
     override fun onDestroy() {

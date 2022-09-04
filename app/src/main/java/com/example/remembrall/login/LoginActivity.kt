@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.remembrall.ApiClient
 import com.example.remembrall.MainActivity
 import com.example.remembrall.R
 import com.example.remembrall.databinding.ActivityLoginBinding
@@ -26,7 +27,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
-
+import retrofit2.converter.scalars.ScalarsConverterFactory
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding : ActivityLoginBinding
     var context: Context? = null
@@ -42,11 +43,18 @@ class LoginActivity : AppCompatActivity() {
         var intent =  Intent(this, SplashActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
 
-        val clientBuilder = OkHttpClient.Builder()
-        val client = OkHttpClient.Builder().addInterceptor(httpLoggingInterceptor()).build()
+        val client = OkHttpClient.Builder()
+            .addInterceptor(
+                HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC)
+                    .setLevel(HttpLoggingInterceptor.Level.BODY)
+                    .setLevel(HttpLoggingInterceptor.Level.HEADERS)
+            )
+            .build()
+
         // 레트로핏 객체 생성.
         var retrofit = Retrofit.Builder()
             .baseUrl(getString(R.string.SERVER))
+            .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
@@ -101,16 +109,6 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
-    }
-
-    private fun httpLoggingInterceptor(): HttpLoggingInterceptor? {
-        val interceptor = HttpLoggingInterceptor { message ->
-            Log.e(
-                "HttpLogging:",
-                message + ""
-            )
-        }
-        return interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
     }
 
     override fun onBackPressed() {
