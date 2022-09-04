@@ -24,23 +24,33 @@ import com.example.remembrall.MainActivity
 import com.example.remembrall.PreferenceUtil
 import com.example.remembrall.R
 import com.example.remembrall.databinding.ActivityWriteDiaryBinding
+import com.example.remembrall.login.userinfo.SharedManager
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
 import java.time.LocalDate
 import java.util.*
 
 
-class WriteDiaryActivity : AppCompatActivity() {
+class WriteDiaryActivity() : AppCompatActivity() {
     private lateinit var binding: ActivityWriteDiaryBinding
     private lateinit var writeDiaryRecyclerViewData: ArrayList<WriteDiaryRecyclerViewData>
     private lateinit var writeDiaryRecyclerViewAdapter: WriteDiaryRecyclerViewAdapter
+    private lateinit var questionRecyclerViewData: ArrayList<QuestionRecyclerViewData>
+    private lateinit var questionRecyclerViewAdapter: QuestionRecyclerViewAdapter
     private lateinit var touchHelper: ItemTouchHelper
     private var idx=1
     private lateinit var imageFile: File
     private lateinit var imagePath: String
     private var pos=0
     private lateinit var date: LocalDate
-    private lateinit var inflater: LayoutInflater
-    // Context를 액티비티로 형변환해서 할당
+
+    private var questionId=1
 
     companion object{
         lateinit var prefs: PreferenceUtil
@@ -60,6 +70,8 @@ class WriteDiaryActivity : AppCompatActivity() {
                 @RequiresApi(Build.VERSION_CODES.O)
                 date= LocalDate.now()
                 val renameFile= File(imageFile.parent,"${date}-${pos}.jpg")
+                writeDiaryRecyclerViewData[pos].image=renameFile.toString()
+                writeDiaryRecyclerViewData[pos].imgFile=renameFile
                 imagePath = getRealPathFromURI(it)
                 Log.d("imageFile", "${imageFile}")
                 Log.d("src", "${src}")
@@ -95,39 +107,100 @@ class WriteDiaryActivity : AppCompatActivity() {
 
         //장소 추가
         binding.linearWritediaryAddplace.setOnClickListener{
-            writeDiaryRecyclerViewData.add(WriteDiaryRecyclerViewData("장소${idx}", "", ""))
+            writeDiaryRecyclerViewData.add(WriteDiaryRecyclerViewData("장소${idx}", "", "", File("")))
             writeDiaryRecyclerViewAdapter.notifyItemInserted(writeDiaryRecyclerViewData.size)
             idx++
         }
 
-        binding.btnWritediaryComplete.setOnClickListener{
-            MainActivity.prefs.setString("writediary","true")
-            Log.d("writediary", MainActivity.prefs.getString("writediary","작성 실패"))
-            finish()
-//            val readDiaryView=View.inflate(this@WriteDiaryActivity, R.layout.fragment_read_diary, null)
-
-//            Log.e("mainView","${mainView.findViewById<View?>(R.id.bottomnavigation_main).visibility}")
-//            if(MainActivity.prefs.getString("writediary","작성 실패")=="true"){
-//                Log.e("readDiaryView write b", "${readDiaryView.findViewById<View?>(R.id.linear_readdiary_write).visibility}")
-//                Log.e("readDiaryView read b", "${readDiaryView.findViewById<View?>(R.id.linear_readdiary_read).visibility}")
-//                readDiaryView.findViewById<View?>(R.id.linear_readdiary_write).visibility=View.GONE
-//                Log.e("readDiaryView write a", "${readDiaryView.findViewById<View?>(R.id.linear_readdiary_write).visibility}")
-//                readDiaryView.findViewById<View?>(R.id.linear_readdiary_read).visibility=View.VISIBLE
-
-//                Log.e("readDiaryView read a", "${readDiaryView.findViewById<View?>(R.id.linear_readdiary_read).visibility}")
-//            }
-//            if(MainActivity.prefs.getString("writediary","작성 안됨")=="true")
-//                supportFragmentManager.beginTransaction()
-//                    .replace(mainView.findViewById<FrameLayout>(R.id.framelayout_main), ReadTodayDiaryFragment()).commit()
-
-        }
         clickRecyclerViewItem()
         binding.linearWritediaryDate.setOnClickListener {
             datePick()
         }
         //앨범에서 사진 불러오기
 
+        linkApi()
     }
+
+    private fun linkApi(){
+        binding.imgWritediaryRefresh.setOnClickListener {
+            val sharedManager : SharedManager by lazy { SharedManager(this@WriteDiaryActivity) }
+            var authToken = sharedManager.getCurrentUser().accessToken
+            WriteDiaryService.getRetrofitRefreshQuestion(authToken).enqueue(object: Callback<GetQuestionResponse>{
+                override fun onResponse(
+                    call: Call<GetQuestionResponse>,
+                    response: Response<GetQuestionResponse>
+                ) {
+                    Log.e("question", response.toString())
+                    Log.e("question", response.body().toString())
+
+                    questionId=response.body()!!.response.id
+                }
+                override fun onFailure(call: Call<GetQuestionResponse>, t: Throwable) {
+                    Log.e("TAG", "실패원인: {$t}")
+                }
+            })
+        }
+
+        binding.imgWritediaryMore.setOnClickListener {
+            val sharedManager : SharedManager by lazy { SharedManager(this@WriteDiaryActivity) }
+            var authToken = sharedManager.getCurrentUser().accessToken
+            WriteDiaryService.getRetrofitAllQuestion(authToken).enqueue(object: Callback<GetAllQuestionResponse>{
+                override fun onResponse(
+                    call: Call<GetAllQuestionResponse>,
+                    response: Response<GetAllQuestionResponse>
+                ) {
+                    Log.e("question", response.toString())
+                    Log.e("question", response.body().toString())
+                }
+
+                override fun onFailure(call: Call<GetAllQuestionResponse>, t: Throwable) {
+                    Log.e("TAG", "실패원인: {$t}")
+                }
+            })
+        }
+
+        //일기 작성 완료
+        binding.btnWritediaryComplete.setOnClickListener{
+            val sharedManager : SharedManager by lazy { SharedManager(this@WriteDiaryActivity) }
+            var authToken = sharedManager.getCurrentUser().accessToken
+            var date=binding.tvWritediaryDate.text.toString()
+            var answer=binding.edWritediaryAnswer.text.toString()
+            var weather=WriteDiaryRequest.Weather("맑음", 25)
+            lateinit var placeInfo: WriteDiaryRequest.PlaceLogList.PlaceInfo
+            var placeLogList: ArrayList<WriteDiaryRequest.PlaceLogList> = arrayListOf()
+            var imgList: ArrayList<File> = arrayListOf()
+            for(i in 0 until (writeDiaryRecyclerViewData.size-1)){
+                var name=binding.recyclerviewWritediary[i].findViewById<TextView>(R.id.tv_addplace_place).text.toString()
+                var address="주소"
+                var longitude=142.42324
+                var latitude=32.23
+                var comment=binding.recyclerviewWritediary[i].findViewById<EditText>(R.id.et_addplace_coment).text.toString()
+                placeInfo=WriteDiaryRequest.PlaceLogList.PlaceInfo(i, name, address, longitude, latitude)
+                placeLogList.add(WriteDiaryRequest.PlaceLogList(placeInfo, comment, writeDiaryRecyclerViewData[i].image))
+                imgList.add(writeDiaryRecyclerViewData[i].imgFile)
+            }
+            var writeDiaryRequest=WriteDiaryRequest(date,
+                weather,questionId, answer, placeLogList)
+            WriteDiaryService.getRetrofitSaveDiary(authToken, 1, writeDiaryRequest).enqueue(object: Callback<WriteDiaryResponse>{
+                override fun onResponse(
+                    call: Call<WriteDiaryResponse>,
+                    response: Response<WriteDiaryResponse>
+                ) {
+                    Log.e("question", response.toString())
+                    Log.e("question", response.body().toString())
+
+//                    MainActivity.prefs.setString("writediary","true")
+//                    Log.d("writediary", MainActivity.prefs.getString("writediary","작성 실패"))
+//                    finish()
+                }
+
+                override fun onFailure(call: Call<WriteDiaryResponse>, t: Throwable) {
+                    Log.e("TAG", "실패원인: {$t}")
+                }
+            })
+        }
+    }
+
     private fun clickRecyclerViewItem(){
         //리사이클러뷰 아이템 클릭
         writeDiaryRecyclerViewAdapter.setItemClickListener(object: WriteDiaryRecyclerViewAdapter.OnItemClickListener{
@@ -174,6 +247,7 @@ class WriteDiaryActivity : AppCompatActivity() {
 
     private fun initalize() {
         writeDiaryRecyclerViewData = arrayListOf()
+        questionRecyclerViewData= arrayListOf()
         var today=Calendar.getInstance()
         var year=today.get(Calendar.YEAR)
         var month= today.get(Calendar.MONTH)+1
@@ -197,6 +271,8 @@ class WriteDiaryActivity : AppCompatActivity() {
                 touchHelper.startDrag(viewHolder)
             }
         })
+
+//        var recyclerViewQuestion=find
     }
 
     fun getRealPathFromURI(uri: Uri): String{
@@ -241,13 +317,13 @@ class WriteDiaryActivity : AppCompatActivity() {
         binding.consWritediaryDatepicker.visibility=View.VISIBLE
         binding.btnWritediaryComplete.visibility=View.GONE
         val today= Calendar.getInstance()
-        var date=binding.tvWritediaryDate.text.toString().split(".")
+        var date=binding.tvWritediaryDate.text.toString().split("-")
         datePicker.init(date[0].toInt(), date[1].toInt()-1, date[2].toInt()){
                 view, year, month, day ->
             val month = month + 1
             
             binding.tvWritediaryOk.setOnClickListener {
-                binding.tvWritediaryDate.text="$year.$month.$day"
+                binding.tvWritediaryDate.text="$year-$month-$day"
                 binding.consWritediaryDatepicker.visibility=View.GONE
                 binding.btnWritediaryComplete.visibility=View.VISIBLE
             }
