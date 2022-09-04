@@ -9,12 +9,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.core.view.get
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.remembrall.MainActivity
 import com.example.remembrall.R
 import com.example.remembrall.databinding.FragmentReadDiaryListBinding
+import com.example.remembrall.login.userinfo.SharedManager
 import com.example.remembrall.read.Triplog.TriplogCreateDialog
+import com.example.remembrall.read.Triplog.TriplogService
+import com.example.remembrall.read.Triplog.req.TriplogRequest
+import com.example.remembrall.read.Triplog.res.CreateTriplogResponse
+import com.example.remembrall.read.Triplog.res.GetTriplogListResponse
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class ReadDiaryListFragment : Fragment() {
     private lateinit var binding: FragmentReadDiaryListBinding
@@ -23,6 +36,16 @@ class ReadDiaryListFragment : Fragment() {
     private var pos=0
 
     lateinit var mainActivity: MainActivity
+
+    val clientBuilder = OkHttpClient.Builder()
+    val client = OkHttpClient.Builder().addInterceptor(httpLoggingInterceptor()).build()
+    var retrofit = Retrofit.Builder()
+        .baseUrl("http://ec2-13-124-98-176.ap-northeast-2.compute.amazonaws.com:8080")
+        .addConverterFactory(GsonConverterFactory.create())
+        .client(client)
+        .build()
+    var triplogService : TriplogService = retrofit.create(TriplogService::class.java)
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainActivity = context as MainActivity
@@ -50,11 +73,44 @@ class ReadDiaryListFragment : Fragment() {
         }
     }
 
+    private fun httpLoggingInterceptor(): HttpLoggingInterceptor? {
+        val interceptor = HttpLoggingInterceptor { message ->
+            Log.e(
+                "HttpLogging:",
+                message + ""
+            )
+        }
+        return interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+    }
+
+
     private fun initalize(){
+        val sharedManager : SharedManager by lazy { SharedManager(mainActivity) }
+        var authToken = sharedManager.getCurrentUser().accessToken
         readDiaryRecyclerViewData= arrayListOf()
-        readDiaryRecyclerViewData.add(ReadDiaryListRecyclerViewData("창덕궁 나들이"))
-        readDiaryRecyclerViewData.add(ReadDiaryListRecyclerViewData("일기장2"))
-        readDiaryRecyclerViewData.add(ReadDiaryListRecyclerViewData("일기장3"))
+        triplogService.getTripLogList(authToken).enqueue(object :
+            Callback<GetTriplogListResponse> {
+            override fun onResponse(
+                call: Call<GetTriplogListResponse>,
+                response: Response<GetTriplogListResponse>
+            ) {
+                Log.e("CreateTripLog", response.body().toString())
+
+                if(response.body()?.success.toString() == "true"){
+                    var diaryList = response.body()?.response!!
+                    if(diaryList != null){
+                        for (diary in diaryList){
+                            readDiaryRecyclerViewData.add(ReadDiaryListRecyclerViewData(diary!!.title.toString()))
+                            readDiaryListRecyclerViewAdapter.notifyDataSetChanged()
+                        }
+                    }
+                }
+            }
+            override fun onFailure(call: Call<GetTriplogListResponse>, t: Throwable) {
+                Toast.makeText(context,"일기장 불러오기 실패", Toast.LENGTH_SHORT).show()
+            }
+
+        })
     }
 
     private fun initReadDiaryRecyclerView() {

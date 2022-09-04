@@ -9,7 +9,11 @@ import android.os.Bundle
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import com.example.remembrall.databinding.ActivityMainBinding
+import com.example.remembrall.dongdong.DongDongFragment
 import com.example.remembrall.read.ReadDiaryListFragment
 import com.example.remembrall.read.ReadTodayDiaryFragment
 import com.example.remembrall.write.ReadDiaryFragment
@@ -64,10 +68,9 @@ class MainActivity : AppCompatActivity() {
                         .replace(R.id.framelayout_main, readDiaryFragment).commit()
                 }
                 R.id.bottomnavigation_main_mypage -> {
-//                    var mypageFragment = MyPageFragment()
-                    var mapSearchFragment = MapSearchFragment()
+                    var dongdongFragment = DongDongFragment()
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.framelayout_main, mapSearchFragment).commit()
+                        .replace(R.id.framelayout_main, dongdongFragment).commit()
                 }
             }
             true
@@ -76,4 +79,11 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
-}
+
+    fun replaceFragment(fragment : Fragment) {
+        var fragmentManager = getSupportFragmentManager()
+        var fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.framelayout_main, fragment).commit()
+    }
+
+    }

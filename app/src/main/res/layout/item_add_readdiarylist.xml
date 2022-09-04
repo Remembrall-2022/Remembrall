@@ -11,8 +11,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintlayout_readdiary"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_marginTop="5dp"
         android:background="@drawable/readdiary_round_button"
         android:elevation="5dp"
@@ -37,6 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:text="새 일기장"
+        android:textSize="12dp"
         android:textColor="@color/white"
         android:textStyle="bold"
         android:maxLines="1"

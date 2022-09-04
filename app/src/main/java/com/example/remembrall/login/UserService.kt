@@ -31,5 +31,13 @@ interface UserService {
         @Body authCodeRequest : AuthCodeRequest
     ) : Call <AuthResponse>
 
+    @POST("/signup/kakao")
+    fun signUpKakao(
+        @Body kakaoToken : String
+    ) : Call <LoginResponse>
 
+    @POST("/login/kakao")
+    fun loginKakao(
+        @Body kakaoToken : String
+    ) : Call <LoginResponse>
 }

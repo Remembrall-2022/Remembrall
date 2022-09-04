@@ -32,7 +32,7 @@ data class Body(
     val totalCount: Int
 )
 
-@Xml(name= "items")
+@Xml
 data class Items(
     @Element(name="item")
     val item: List<Item>
@@ -41,16 +41,18 @@ data class Items(
 @Xml
 data class Item(
     @PropertyElement(name = "addr1")
-    val addr1: String,
+    val addr1: String?,
     @PropertyElement(name = "contentID")
-    val contentid: String,
+    val contentid: String?,
     @PropertyElement(name = "firstimage")
     val firstimage: String?,
     @PropertyElement(name = "mapx")
-    val mapx: String,
+    val latitude: Double?,
     @PropertyElement(name = "mapy")
-    val mapy: String,
+    val longitude: Double?,
     @PropertyElement(name = "title")
     val title: String?
-)
+){
+    constructor() : this(null,null,null,null,null,null)
+}
 
