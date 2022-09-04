@@ -93,7 +93,14 @@ class MapSearchActivity : AppCompatActivity() {
 //        var thread = NetworkThread()
 //        thread.start()
 
-        val client = OkHttpClient.Builder().addInterceptor(httpLoggingInterceptor()).build()
+        val client = OkHttpClient.Builder()
+            .addInterceptor(
+                HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC)
+                    .setLevel(HttpLoggingInterceptor.Level.BODY)
+                    .setLevel(HttpLoggingInterceptor.Level.HEADERS)
+            )
+            .build()
+
         val parser = TikXml.Builder().exceptionOnUnreadXml(false).build()
 
         val retrofit_recommend = Retrofit.Builder()   // Retrofit 구성

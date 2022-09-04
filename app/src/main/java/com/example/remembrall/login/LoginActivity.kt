@@ -27,7 +27,6 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
-import retrofit2.converter.scalars.ScalarsConverterFactory
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding : ActivityLoginBinding
     var context: Context? = null
@@ -54,7 +53,6 @@ class LoginActivity : AppCompatActivity() {
         // 레트로핏 객체 생성.
         var retrofit = Retrofit.Builder()
             .baseUrl(getString(R.string.SERVER))
-            .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()

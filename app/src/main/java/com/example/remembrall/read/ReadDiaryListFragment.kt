@@ -37,8 +37,14 @@ class ReadDiaryListFragment : Fragment() {
 
     lateinit var mainActivity: MainActivity
 
-    val clientBuilder = OkHttpClient.Builder()
-    val client = OkHttpClient.Builder().addInterceptor(httpLoggingInterceptor()).build()
+    val client = OkHttpClient.Builder()
+        .addInterceptor(
+            HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC)
+                .setLevel(HttpLoggingInterceptor.Level.BODY)
+                .setLevel(HttpLoggingInterceptor.Level.HEADERS)
+        )
+        .build()
+
     var retrofit = Retrofit.Builder()
         .baseUrl("http://ec2-13-124-98-176.ap-northeast-2.compute.amazonaws.com:8080")
         .addConverterFactory(GsonConverterFactory.create())

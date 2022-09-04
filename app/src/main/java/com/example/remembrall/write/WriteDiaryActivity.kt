@@ -181,7 +181,7 @@ class WriteDiaryActivity() : AppCompatActivity() {
             }
             var writeDiaryRequest=WriteDiaryRequest(date,
                 weather,questionId, answer, placeLogList)
-            WriteDiaryService.getRetrofitSaveDiary(authToken, 1, writeDiaryRequest).enqueue(object: Callback<WriteDiaryResponse>{
+            WriteDiaryService.getRetrofitSaveDiary(authToken, 14, writeDiaryRequest).enqueue(object: Callback<WriteDiaryResponse>{
                 override fun onResponse(
                     call: Call<WriteDiaryResponse>,
                     response: Response<WriteDiaryResponse>
