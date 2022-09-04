@@ -65,9 +65,9 @@ class TriplogCreateDialog(
                 ) {
                     Log.e("CreateTripLog", response.body().toString())
                     if(response.body()?.success.toString() == "true"){
-
                         Toast.makeText(context,"글을 업로드 했어요",Toast.LENGTH_SHORT).show()
                     }
+
                     dismiss()
                 }
                 override fun onFailure(call: Call<CreateTriplogResponse>, t: Throwable) {

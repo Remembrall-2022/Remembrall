@@ -46,7 +46,14 @@ class SplashActivity : AppCompatActivity() {
 
         val sharedManager = SharedManager(this)
 
-        val client = OkHttpClient.Builder().addInterceptor(httpLoggingInterceptor()).build()
+        val client = OkHttpClient.Builder()
+            .addInterceptor(
+                HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC)
+                    .setLevel(HttpLoggingInterceptor.Level.BODY)
+                    .setLevel(HttpLoggingInterceptor.Level.HEADERS)
+            )
+            .build()
+
         // 레트로핏 객체 생성.
         var retrofit = Retrofit.Builder()
             .baseUrl(getString(R.string.SERVER))

@@ -46,7 +46,6 @@
                 android:text="MY PAGE"
                 android:textColor="#FFFFFF"
                 android:textSize="17sp"
-                android:textStyle="bold"
                 android:layout_weight="1"/>
 
 
