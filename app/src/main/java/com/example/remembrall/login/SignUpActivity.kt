@@ -11,11 +11,13 @@ import com.example.remembrall.MainActivity
 import com.example.remembrall.R
 import com.example.remembrall.databinding.ActivitySignUpBinding
 import com.example.remembrall.login.req.AuthCodeRequest
+import com.example.remembrall.login.req.KakaoLoginRequest
 import com.example.remembrall.login.req.SignUpRequest
 import com.example.remembrall.login.res.AuthResponse
 import com.example.remembrall.login.res.LoginResponse
 import com.example.remembrall.login.userinfo.LoginData
 import com.example.remembrall.login.userinfo.SharedManager
+import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
@@ -28,7 +30,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.converter.scalars.ScalarsConverterFactory
+import java.io.IOException
 
 class SignUpActivity : AppCompatActivity() {
     private lateinit var binding : ActivitySignUpBinding
@@ -45,16 +47,13 @@ class SignUpActivity : AppCompatActivity() {
 
         val client = OkHttpClient.Builder()
             .addInterceptor(
-                HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC)
-                    .setLevel(HttpLoggingInterceptor.Level.BODY)
-                    .setLevel(HttpLoggingInterceptor.Level.HEADERS)
+                httpLoggingInterceptor()
             )
             .build()
 
         // 레트로핏 객체 생성.
         var retrofit = Retrofit.Builder()
             .baseUrl(getString(R.string.SERVER))
-            .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
@@ -136,7 +135,7 @@ class SignUpActivity : AppCompatActivity() {
                 Log.e(ContentValues.TAG, "카카오계정으로 로그인 실패", error)
             } else if (token != null) {
                 Log.i(ContentValues.TAG, "카카오계정으로 로그인 성공 ${token.accessToken}")
-                userService.signUpKakao(token.accessToken).enqueue(object:Callback<LoginResponse>{
+                userService.signUpKakao(KakaoLoginRequest(token.accessToken)).enqueue(object:Callback<LoginResponse>{
                     override fun onResponse(
                         call: Call<LoginResponse>,
                         response: Response<LoginResponse>
@@ -158,8 +157,8 @@ class SignUpActivity : AppCompatActivity() {
                     }
                     override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                         Log.e("SignUpKakao", "통신 실패")
-                    }
 
+                    }
                 })
             }
         }
@@ -179,7 +178,7 @@ class SignUpActivity : AppCompatActivity() {
                         UserApiClient.instance.loginWithKakaoAccount(this@SignUpActivity, callback = callback)
                     } else if (token != null) {
                         Log.i(ContentValues.TAG, "카카오톡으로 로그인 성공 ${token.accessToken}")
-                        userService.signUpKakao(token.accessToken).enqueue(object:Callback<LoginResponse>{
+                        userService.signUpKakao(KakaoLoginRequest(token.accessToken)).enqueue(object:Callback<LoginResponse>{
                             override fun onResponse(
                                 call: Call<LoginResponse>,
                                 response: Response<LoginResponse>
@@ -212,6 +211,15 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
+    private fun httpLoggingInterceptor(): HttpLoggingInterceptor {
+        val interceptor = HttpLoggingInterceptor { message ->
+            Log.e(
+                "HttpLogging:",
+                message + ""
+            )
+        }
+        return interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+    }
     override fun onDestroy() {
         super.onDestroy()
     }

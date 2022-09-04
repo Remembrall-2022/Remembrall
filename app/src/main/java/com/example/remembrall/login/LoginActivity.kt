@@ -43,12 +43,7 @@ class LoginActivity : AppCompatActivity() {
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
 
         val client = OkHttpClient.Builder()
-            .addInterceptor(
-                HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC)
-                    .setLevel(HttpLoggingInterceptor.Level.BODY)
-                    .setLevel(HttpLoggingInterceptor.Level.HEADERS)
-            )
-            .build()
+            .addInterceptor(httpLoggingInterceptor()).build()
 
         // 레트로핏 객체 생성.
         var retrofit = Retrofit.Builder()
@@ -108,7 +103,15 @@ class LoginActivity : AppCompatActivity() {
             finish()
         }
     }
-
+    private fun httpLoggingInterceptor(): HttpLoggingInterceptor {
+        val interceptor = HttpLoggingInterceptor { message ->
+            Log.e(
+                "HttpLogging:",
+                message + ""
+            )
+        }
+        return interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+    }
     override fun onBackPressed() {
         super.onBackPressed()
     }

@@ -76,6 +76,7 @@ class ReadDiaryListFragment : Fragment() {
         clickRecyclerView()
         binding.floatingReaddiarylist.setOnClickListener {
             TriplogCreateDialog(mainActivity).show()
+            readDiaryListRecyclerViewAdapter.notifyDataSetChanged()
         }
     }
 

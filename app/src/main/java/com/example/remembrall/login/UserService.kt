@@ -1,10 +1,7 @@
 package com.example.remembrall.login
 
-import com.example.remembrall.login.req.AuthCodeRequest
-import com.example.remembrall.login.req.LoginRequest
-import com.example.remembrall.login.req.SignUpRequest
-import com.example.remembrall.login.res.AuthResponse
-import com.example.remembrall.login.res.LoginResponse
+import com.example.remembrall.login.req.*
+import com.example.remembrall.login.res.*
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -33,11 +30,44 @@ interface UserService {
 
     @POST("/signup/kakao")
     fun signUpKakao(
-        @Body kakaoToken : String
+        @Body kakaoLoginRequest: KakaoLoginRequest
     ) : Call <LoginResponse>
 
     @POST("/login/kakao")
     fun loginKakao(
-        @Body kakaoToken : String
+        @Body kakaoLoginRequest: KakaoLoginRequest
     ) : Call <LoginResponse>
+
+    @GET("/user/info")
+    fun userInfo(
+        @Header("X-AUTH-TOKEN") authToken : String
+    ) : Call <UserInfoResponse>
+
+    @POST("/user/name")
+    fun changeUserName(
+        @Header("X-AUTH-TOKEN") authToken : String,
+        @Body name : String
+    ) : Call <UserNameResponse>
+
+    @POST("/user/password/request")
+    fun requestPassword(
+        @Body email : String
+    ) : Call <AuthResponse>
+
+    @POST("/user/password/valid")
+    fun validPassword(
+        @Body authCodeRequest: AuthCodeRequest
+    ) : Call <AuthResponse>
+
+    @POST("/user/password")
+    fun changePassword(
+        @Header("X-AUTH-TOKEN") authToken : String,
+        @Body name : String
+    ) : Call <UserNameResponse>
+
+    @DELETE("/user/signout")
+    fun signOut(
+        @Header("X-AUTH-TOKEN") authToken : String
+    ) : Call <AuthResponse>
+
 }

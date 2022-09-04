@@ -13,6 +13,7 @@ import com.example.remembrall.constellation.ConstellationActivity
 import com.example.remembrall.databinding.ActivityLoginBinding
 import com.example.remembrall.databinding.ActivitySplashBinding
 import com.example.remembrall.login.SignUpActivity
+import com.example.remembrall.login.req.KakaoLoginRequest
 import com.example.remembrall.login.res.LoginResponse
 import com.example.remembrall.login.userinfo.LoginData
 import com.example.remembrall.login.userinfo.SharedManager
@@ -47,12 +48,7 @@ class SplashActivity : AppCompatActivity() {
         val sharedManager = SharedManager(this)
 
         val client = OkHttpClient.Builder()
-            .addInterceptor(
-                HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC)
-                    .setLevel(HttpLoggingInterceptor.Level.BODY)
-                    .setLevel(HttpLoggingInterceptor.Level.HEADERS)
-            )
-            .build()
+            .addInterceptor(httpLoggingInterceptor()).build()
 
         // 레트로핏 객체 생성.
         var retrofit = Retrofit.Builder()
@@ -71,7 +67,7 @@ class SplashActivity : AppCompatActivity() {
                 Log.e(ContentValues.TAG, "카카오계정으로 로그인 실패", error)
             } else if (token != null) {
                 Log.i(ContentValues.TAG, "카카오계정으로 로그인 성공 ${token.accessToken}")
-                userService.loginKakao(token.accessToken).enqueue(object:
+                userService.loginKakao(KakaoLoginRequest(token.accessToken)).enqueue(object:
                     Callback<LoginResponse> {
                     override fun onResponse(
                         call: Call<LoginResponse>,
@@ -114,7 +110,7 @@ class SplashActivity : AppCompatActivity() {
                         UserApiClient.instance.loginWithKakaoAccount(this@SplashActivity, callback = callback)
                     } else if (token != null) {
                         Log.i(ContentValues.TAG, "카카오톡으로 로그인 성공 ${token.accessToken}")
-                        userService.loginKakao(token.accessToken).enqueue(object:
+                        userService.loginKakao(KakaoLoginRequest(token.accessToken)).enqueue(object:
                             Callback<LoginResponse> {
                             override fun onResponse(
                                 call: Call<LoginResponse>,
@@ -179,7 +175,7 @@ class SplashActivity : AppCompatActivity() {
             finish()
         }
     }
-    private fun httpLoggingInterceptor(): HttpLoggingInterceptor? {
+    private fun httpLoggingInterceptor(): HttpLoggingInterceptor {
         val interceptor = HttpLoggingInterceptor { message ->
             Log.e(
                 "HttpLogging:",
