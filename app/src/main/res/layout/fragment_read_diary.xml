@@ -21,7 +21,7 @@
             android:layout_gravity="center"
             android:text="기록하기"
             android:textColor="#FFFFFF"
-            android:textSize="20sp"
+            android:textSize="17sp"
             android:textStyle="bold" />
 
     </androidx.appcompat.widget.Toolbar>
