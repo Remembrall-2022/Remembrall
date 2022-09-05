@@ -9,6 +9,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.remembrall.R
 
 class ReadDiaryRecyclerViewAdapter (
@@ -31,9 +32,11 @@ class ReadDiaryRecyclerViewAdapter (
             else{
                 Glide.with(this.itemView)
                     .load(data.image) // 불러올 이미지 url
-                    .placeholder(R.drawable.test_image) // 이미지 로딩 시작하기 전 표시할 이미지
-                    .error(R.drawable.test_image) // 로딩 에러 발생 시 표시할 이미지
-                    .fallback(R.drawable.test_image) // 로드할 url 이 비어있을(null 등) 경우 표시할 이미지 // 동그랗게 자르기
+                    .fitCenter()
+//                    .placeholder(R.drawable.ic_image) // 이미지 로딩 시작하기 전 표시할 이미지
+//                    .error(R.drawable.ic_image) // 로딩 에러 발생 시 표시할 이미지
+//                    .fallback(R.drawable.ic_image) // 로드할 url 이 비어있을(null 등) 경우 표시할 이미지
+                    .apply(RequestOptions().override(500,500))
                     .into(imageView) // 이미지를 넣을 뷰
             }
         }

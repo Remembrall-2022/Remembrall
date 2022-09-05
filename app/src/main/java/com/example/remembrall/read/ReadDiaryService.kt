@@ -1,25 +1,31 @@
 package com.example.remembrall.read
 
 import com.example.remembrall.ApiClient
-import com.tickaroo.tikxml.annotation.Path
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Headers
+import retrofit2.http.*
 
 interface ReadDiaryService {
     @GET("/tripLog/{tripLogId}/dateLog/{dateLogId}")
     @Headers("Content-Type: application/json")
     fun getDateDiary(
         @Header("X-AUTH-TOKEN") authToken : String,
-        @Path("tripLogId") tripLogId:Int,
-        @Path("dateLogId") dateLogId: Int,
+        @Path("tripLogId") tripLogId:Long,
+        @Path("dateLogId") dateLogId: Long,
     ) : Call<ReadDiaryResponse>
 
+    @GET("/tripLog/{id}/onlyId")
+    fun getTripLog(
+        @Header("X-AUTH-TOKEN") authToken : String,
+        @Path("id") id: Long
+    ): Call<ReadTripLogResponse>
+
+
     companion object{
-        fun getRetrofitReadDateDiary(authToken: String, tripLogId: Int, dateLogId: Int): Call<ReadDiaryResponse>{
+        fun getRetrofitReadDateDiary(authToken: String, tripLogId: Long, dateLogId: Long): Call<ReadDiaryResponse>{
             return ApiClient.create(ReadDiaryService::class.java).getDateDiary(authToken, tripLogId, dateLogId)
+        }
+        fun getRetrofitReadTripLog(authToken: String, id: Long): Call<ReadTripLogResponse>{
+            return ApiClient.create(ReadDiaryService::class.java).getTripLog(authToken, id)
         }
     }
 }

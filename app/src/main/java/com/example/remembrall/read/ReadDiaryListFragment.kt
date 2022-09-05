@@ -1,5 +1,6 @@
 package com.example.remembrall.read
 
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -28,6 +29,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.IOException
 
 class ReadDiaryListFragment : Fragment() {
     private lateinit var binding: FragmentReadDiaryListBinding
@@ -106,8 +108,11 @@ class ReadDiaryListFragment : Fragment() {
                     var diaryList = response.body()?.response!!
                     if(diaryList != null){
                         for (diary in diaryList){
-                            readDiaryRecyclerViewData.add(ReadDiaryListRecyclerViewData(diary!!.title.toString()))
-                            readDiaryListRecyclerViewAdapter.notifyDataSetChanged()
+                            val title=diary!!.title.toString()
+                            val imgUrl=diary!!.tripLogImgUrl.toString()
+                            val triplogId=diary!!.triplogId!!.toLong()
+                            readDiaryRecyclerViewData.add(ReadDiaryListRecyclerViewData(title, imgUrl, triplogId))
+                            readDiaryListRecyclerViewAdapter.notifyItemInserted(readDiaryRecyclerViewData.size)
                         }
                     }
                 }
@@ -131,9 +136,43 @@ class ReadDiaryListFragment : Fragment() {
         readDiaryListRecyclerViewAdapter.setItemClickListener(object: ReadDiaryListRecyclerViewAdapter.OnItemClickListener{
             override fun diaryOnClick(v: View, position: Int) {  //일기 불러오기
                 Log.e("tag", "일기장 클릭")
+                val sharedManager : SharedManager by lazy { SharedManager(mainActivity) }
+                var authToken = sharedManager.getCurrentUser().accessToken
+
+                ReadDiaryService.getRetrofitReadTripLog(authToken, readDiaryRecyclerViewData[position].triplogId).enqueue(object: Callback<ReadTripLogResponse>{
+                    override fun onResponse(
+                        call: Call<ReadTripLogResponse>,
+                        response: Response<ReadTripLogResponse>
+                    ) {
+                        if(response.isSuccessful){
+                            Log.e("diaryInfo", response.toString())
+                            Log.e("diaryInfo", response.body().toString())
+
+                            val triplogId=response.body()!!.response.triplogId
+                            val datelogId=response.body()!!.response.placeLogIdList
+                            val title=response.body()!!.response.title
+                            val intent = Intent(mainActivity, ReadDiaryActivity::class.java)
+                            var array= datelogId.toLongArray()
+                            intent.putExtra("triplogId", triplogId)
+                            intent.putExtra("datelogId", array)
+                            intent.putExtra("title", title)
+                            startActivity(intent)
+                        }else {
+                            try {
+                                val body = response.errorBody()!!.string()
+                                Log.e(ContentValues.TAG, "body : $body")
+                            } catch (e: IOException) {
+                                e.printStackTrace()
+                            }
+                        }
+                    }
+
+                    override fun onFailure(call: Call<ReadTripLogResponse>, t: Throwable) {
+
+                    }
+                })
 //                binding.recyclerviewReaddiarylist[position]
-                val intent = Intent(mainActivity, ReadDiaryActivity::class.java)
-                startActivity(intent)
+
             }
 
             override fun heartOnClick(v: View, position: Int) { //북마크

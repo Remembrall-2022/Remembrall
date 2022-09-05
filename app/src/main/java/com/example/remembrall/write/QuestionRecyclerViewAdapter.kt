@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.remembrall.R
 import com.example.remembrall.read.ReadDiaryListRecyclerViewAdapter
@@ -14,16 +16,24 @@ class QuestionRecyclerViewAdapter(
     private val datalist: ArrayList<QuestionRecyclerViewData>
 ): RecyclerView.Adapter<QuestionRecyclerViewAdapter.ViewHolder>(){
     // (4) setItemClickListener로 설정한 함수 실행
-    private lateinit var itemClickListener : AdapterView.OnItemClickListener
+    private lateinit var itemClickListener : OnItemClickListener
 
     inner class ViewHolder(view: View): RecyclerView.ViewHolder(view){
-        fun bind(data: QuestionRecyclerViewData){
+        val question=itemView.findViewById<TextView>(R.id.tv_questionlist)
+        val questionList=itemView.findViewById<ConstraintLayout>(R.id.cons_questionlist)
 
+        init{
+            questionList.setOnClickListener{
+                itemClickListener.onClick(it,adapterPosition)
+            }
+        }
+        fun bind(data: QuestionRecyclerViewData){
+            question.text=data.questionName
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuestionRecyclerViewAdapter.ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.dialog_question_list,parent,false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_questionlist,parent,false)
         return ViewHolder(view)
     }
 
@@ -34,4 +44,13 @@ class QuestionRecyclerViewAdapter(
     override fun onBindViewHolder(holder: QuestionRecyclerViewAdapter.ViewHolder, position: Int) {
         holder.bind(datalist[position])
     }
+
+    interface OnItemClickListener {
+        fun onClick(v: View, position: Int)
+    }
+    // (3) 외부에서 클릭 시 이벤트 설정
+    fun setItemClickListener(onItemClickListener: OnItemClickListener) {
+        this.itemClickListener = onItemClickListener
+    }
+
 }

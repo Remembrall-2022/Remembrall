@@ -19,7 +19,7 @@ data class GetQuestionResponse(
     @SerializedName("error") val error: String
 ){
     data class Response(
-        @SerializedName("id") val id: Int,
+        @SerializedName("id") val id: Long,
         @SerializedName("questionName") val questionName: String
     )
 }
@@ -30,7 +30,7 @@ data class GetAllQuestionResponse(
     @SerializedName("error") val error: String
 ) {
     data class Response(
-        @SerializedName("id") val id: Int,
+        @SerializedName("id") val id: Long,
         @SerializedName("questionName") val questionName: String
     )
 }

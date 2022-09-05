@@ -111,6 +111,7 @@
                             android:layout_height="match_parent"
                             android:src="@drawable/ic_rocket_launch"/>
                         <TextView
+                            android:id="@+id/tv_writediary_question"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="오늘은 점심으로 무엇을 드셨나요?"
