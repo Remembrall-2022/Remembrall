@@ -1,18 +1,20 @@
 package com.example.remembrall.write
 
 import android.Manifest
+import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -24,15 +26,21 @@ import com.example.remembrall.MainActivity
 import com.example.remembrall.PreferenceUtil
 import com.example.remembrall.R
 import com.example.remembrall.databinding.ActivityWriteDiaryBinding
+import com.example.remembrall.login.res.LoginResponse
 import com.example.remembrall.login.userinfo.SharedManager
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
+import com.google.gson.Gson
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.*
 
@@ -50,8 +58,9 @@ class WriteDiaryActivity() : AppCompatActivity() {
     private var pos=0
     private lateinit var date: LocalDate
 
-    private var questionId=1
-
+    private lateinit var question: String
+    private var questionId: Long=1
+    private lateinit var formdata: MultipartBody.Part
     companion object{
         lateinit var prefs: PreferenceUtil
         const val REQ_GALLERY=1
@@ -65,17 +74,22 @@ class WriteDiaryActivity() : AppCompatActivity() {
             imageUri?.let{
                 imageFile= File(getRealPathFromURI(it))
 
-                val src=File("test.jpg")
+//                val src=File("test.jpg")
 
-                @RequiresApi(Build.VERSION_CODES.O)
-                date= LocalDate.now()
-                val renameFile= File(imageFile.parent,"${date}-${pos}.jpg")
-                writeDiaryRecyclerViewData[pos].image=renameFile.toString()
-                writeDiaryRecyclerViewData[pos].imgFile=renameFile
+//                @RequiresApi(Build.VERSION_CODES.O)
+//                date= LocalDate.now()
+                val now = Date()
+                val time: String = SimpleDateFormat("yyyyMMddHHmmss", Locale.ENGLISH).format(now)
+                val renameFile= File(imageFile.parent,"${time}.jpg")
+                val requestBody=imageFile.asRequestBody("img/*".toMediaTypeOrNull())
+
+                writeDiaryRecyclerViewData[pos].image=renameFile.name
+                writeDiaryRecyclerViewData[pos].imgFile=MultipartBody.Part.createFormData("file", renameFile.name, requestBody)
                 imagePath = getRealPathFromURI(it)
                 Log.d("imageFile", "${imageFile}")
-                Log.d("src", "${src}")
+//                Log.d("src", "${src}")
                 Log.d("renameFile", "${renameFile}")
+                Log.e("file name", "${renameFile.name}")
 //                Log.d("tag", "imagePath: ${imagePath}")
                 Log.d("tag", "imageUri: ${imageUri}")
 
@@ -101,13 +115,17 @@ class WriteDiaryActivity() : AppCompatActivity() {
         tb.setDisplayShowTitleEnabled(false)
         tb.setDisplayHomeAsUpEnabled(true)
 
+        question= intent.getStringExtra("question").toString()
+        questionId=intent.getLongExtra("questionId",1)
+        binding.tvWritediaryQuestion.text=question
+
         initalize()
         initReadDiaryRecyclerView()
         binding.recyclerviewWritediary.addItemDecoration(WriteDividerItemDecoration(binding.recyclerviewWritediary.context, R.drawable.creatediary_line_divider, 0, 0))
 
         //장소 추가
         binding.linearWritediaryAddplace.setOnClickListener{
-            writeDiaryRecyclerViewData.add(WriteDiaryRecyclerViewData("장소${idx}", "", "", File("")))
+            writeDiaryRecyclerViewData.add(WriteDiaryRecyclerViewData("장소${idx}", "", "", MultipartBody.Part.createFormData("file", "")))
             writeDiaryRecyclerViewAdapter.notifyItemInserted(writeDiaryRecyclerViewData.size)
             idx++
         }
@@ -117,7 +135,6 @@ class WriteDiaryActivity() : AppCompatActivity() {
             datePick()
         }
         //앨범에서 사진 불러오기
-
         linkApi()
     }
 
@@ -134,6 +151,8 @@ class WriteDiaryActivity() : AppCompatActivity() {
                     Log.e("question", response.body().toString())
 
                     questionId=response.body()!!.response.id
+                    val questionName=response.body()!!.response.questionName
+                    binding.tvWritediaryQuestion.text=questionName
                 }
                 override fun onFailure(call: Call<GetQuestionResponse>, t: Throwable) {
                     Log.e("TAG", "실패원인: {$t}")
@@ -151,6 +170,20 @@ class WriteDiaryActivity() : AppCompatActivity() {
                 ) {
                     Log.e("question", response.toString())
                     Log.e("question", response.body().toString())
+                    for(i in 0..response.body()!!.response.size-1){
+                        question=response.body()!!.response[i].questionName
+                        questionId=response.body()!!.response[i].id
+
+//                        Log.e("question api", "$questionId + $question")
+                        questionRecyclerViewData.add(QuestionRecyclerViewData(question, questionId))
+                    }
+//                    questionRecyclerViewAdapter.notifyItemInserted(questionRecyclerViewData.size)
+//                    val mDialogView=LayoutInflater.from(this@WriteDiaryActivity).inflate(R.layout.dialog_question_list, null)
+//                    val mBuilder = AlertDialog.Builder(this@WriteDiaryActivity)
+//                        .setView(mDialogView)
+//                        .setTitle("질문 리스트")
+                    QuestionListDialog(this@WriteDiaryActivity, questionRecyclerViewData).show()
+//                    mBuilder.show()
                 }
 
                 override fun onFailure(call: Call<GetAllQuestionResponse>, t: Throwable) {
@@ -165,33 +198,48 @@ class WriteDiaryActivity() : AppCompatActivity() {
             var authToken = sharedManager.getCurrentUser().accessToken
             var date=binding.tvWritediaryDate.text.toString()
             var answer=binding.edWritediaryAnswer.text.toString()
-            var weather=WriteDiaryRequest.Weather("맑음", 25)
-            lateinit var placeInfo: WriteDiaryRequest.PlaceLogList.PlaceInfo
-            var placeLogList: ArrayList<WriteDiaryRequest.PlaceLogList> = arrayListOf()
-            var imgList: ArrayList<File> = arrayListOf()
-            for(i in 0 until (writeDiaryRecyclerViewData.size-1)){
+//            var weather=WriteDiaryRequest.Weather("맑음", 25)
+//            lateinit var placeInfo: WriteDiaryRequest.PlaceLogList.PlaceInfo
+            var placeLogList: ArrayList<JSONObject> = arrayListOf()
+            var imgList: ArrayList<MultipartBody.Part> = arrayListOf()
+            Log.e("size", "${writeDiaryRecyclerViewData.size}")
+            for(i in 0..(writeDiaryRecyclerViewData.size-1)){
+                Log.e("for", "${i}")
                 var name=binding.recyclerviewWritediary[i].findViewById<TextView>(R.id.tv_addplace_place).text.toString()
                 var address="주소"
                 var longitude=142.42324
                 var latitude=32.23
                 var comment=binding.recyclerviewWritediary[i].findViewById<EditText>(R.id.et_addplace_coment).text.toString()
-                placeInfo=WriteDiaryRequest.PlaceLogList.PlaceInfo(i, name, address, longitude, latitude)
-                placeLogList.add(WriteDiaryRequest.PlaceLogList(placeInfo, comment, writeDiaryRecyclerViewData[i].image))
+//                placeInfo=WriteDiaryRequest.PlaceLogList.PlaceInfo(i, name, address, longitude, latitude)
+                placeLogList.add(JSONObject("{\"placeInfo\":{\"placeId\":${i+1},\"name\":\"${name}\",\"address\":\"${address}\",\"longitude\":${longitude},\"latitude\":${latitude}},\"comment\":\"${comment}\",\"imgName\":\"${writeDiaryRecyclerViewData[i].image}\"}"))
                 imgList.add(writeDiaryRecyclerViewData[i].imgFile)
             }
-            var writeDiaryRequest=WriteDiaryRequest(date,
-                weather,questionId, answer, placeLogList)
-            WriteDiaryService.getRetrofitSaveDiary(authToken, 14, writeDiaryRequest).enqueue(object: Callback<WriteDiaryResponse>{
+//            var writeDiaryRequest=WriteDiaryRequest(date,
+//                weather,questionId, answer, placeLogList)
+            val jsonObject=JSONObject("{\"date\":\"${date}\", \"weatherInfo\":{\"weather\": \"맑음\",\"degree\" : 25},\"questionId\":\"${questionId}\",\"answer\":\"${answer}\", \"placeLogList\":${placeLogList}}")
+            val mediaType = "application/json".toMediaType()
+            val jsonBody=jsonObject.toString().toRequestBody(mediaType)
+
+            WriteDiaryService.getRetrofitSaveDiary(authToken, 13, jsonBody, imgList).enqueue(object: Callback<WriteDiaryResponse>{
                 override fun onResponse(
                     call: Call<WriteDiaryResponse>,
                     response: Response<WriteDiaryResponse>
                 ) {
-                    Log.e("question", response.toString())
-                    Log.e("question", response.body().toString())
 
-//                    MainActivity.prefs.setString("writediary","true")
-//                    Log.d("writediary", MainActivity.prefs.getString("writediary","작성 실패"))
-//                    finish()
+                    if(response.isSuccessful){
+                        Log.e("question", response.toString())
+                        Log.e("question", response.body().toString())
+                    }else {
+                        try {
+                            val body = response.errorBody()!!.string()
+                            Log.e(ContentValues.TAG, "body : $body")
+                        } catch (e: IOException) {
+                            e.printStackTrace()
+                        }
+                    }
+                    MainActivity.prefs.setString("writediary","true")
+                    Log.d("writediary", MainActivity.prefs.getString("writediary","작성 실패"))
+                    finish()
                 }
 
                 override fun onFailure(call: Call<WriteDiaryResponse>, t: Throwable) {
@@ -252,7 +300,15 @@ class WriteDiaryActivity() : AppCompatActivity() {
         var year=today.get(Calendar.YEAR)
         var month= today.get(Calendar.MONTH)+1
         var day=today.get(Calendar.DAY_OF_MONTH)
-        binding.tvWritediaryDate.text="$year.$month.$day"
+
+        var m=month.toString()
+        var d=day.toString()
+        if(month<10){
+            m="0${month}"
+        }
+        if(day<10)
+            d="0${day}"
+        binding.tvWritediaryDate.text="$year-$m-$d"
     }
 
     private fun initReadDiaryRecyclerView() {
@@ -271,8 +327,6 @@ class WriteDiaryActivity() : AppCompatActivity() {
                 touchHelper.startDrag(viewHolder)
             }
         })
-
-//        var recyclerViewQuestion=find
     }
 
     fun getRealPathFromURI(uri: Uri): String{
@@ -323,7 +377,14 @@ class WriteDiaryActivity() : AppCompatActivity() {
             val month = month + 1
             
             binding.tvWritediaryOk.setOnClickListener {
-                binding.tvWritediaryDate.text="$year-$month-$day"
+                var m=month.toString()
+                var d=day.toString()
+                if(month<10){
+                    m="0${month}"
+                }
+                if(day<10)
+                    d="0${day}"
+                binding.tvWritediaryDate.text="$year-$m-$d"
                 binding.consWritediaryDatepicker.visibility=View.GONE
                 binding.btnWritediaryComplete.visibility=View.VISIBLE
             }
