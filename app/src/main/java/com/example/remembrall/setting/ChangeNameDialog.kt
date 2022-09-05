@@ -31,12 +31,15 @@ class ChangeNameDialog (
     // TODO : url key에서 들고오기
     val client = OkHttpClient.Builder()
         .addInterceptor(httpLoggingInterceptor()).build()
+
     var retrofit = Retrofit.Builder()
         .baseUrl("http://ec2-13-124-98-176.ap-northeast-2.compute.amazonaws.com:8080")
         .addConverterFactory(GsonConverterFactory.create())
         .client(client)
         .build()
+
     var userService : UserService = retrofit.create(UserService::class.java)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DialogChangeNameBinding.inflate(layoutInflater)

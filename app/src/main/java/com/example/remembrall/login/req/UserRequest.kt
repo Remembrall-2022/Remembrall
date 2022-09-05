@@ -10,6 +10,9 @@ data class SignUpRequest (
     val name : String
     )
 
+data class PasswordAuthCodeRequest(
+    val email: String
+)
 data class AuthCodeRequest(
     val email: String,
     val authCode : String
