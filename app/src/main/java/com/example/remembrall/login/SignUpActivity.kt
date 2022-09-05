@@ -6,6 +6,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import com.example.remembrall.MainActivity
 import com.example.remembrall.R
@@ -31,6 +32,8 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
+import java.util.*
+import kotlin.concurrent.timer
 
 class SignUpActivity : AppCompatActivity() {
     private lateinit var binding : ActivitySignUpBinding
@@ -72,9 +75,34 @@ class SignUpActivity : AppCompatActivity() {
                     Log.d("SendAuthCode", response.body().toString())
                     if (authCodeRes?.success.toString() == "true"){
                         Log.d("SendAuthCode", authCodeRes?.response?.message.toString())
+                        binding.llTimer.visibility = View.VISIBLE
+                        var time = 300000
+                        val context = this
+                        var timerTask : Timer?= null
+                        timerTask = timer(period = 1000) {	// timer() 호출
+                            time = time - 1000	// period=10, 0.01초마다 time를 1씩 감소Rp
+                            val min = time / 60000	// time/100, 나눗셈의 몫 (초 부분)
+                            val sec = (time % 60000) / 1000	// time%100, 나눗셈의 나머지 (밀리초 부분)
+
+                            // UI조작을 위한 메서드
+                            runOnUiThread {
+                                binding.tvTimeMinute.text = "$min"	// TextView 세팅
+                                binding.tvTimeSecond.text = ":$sec"// Textview 세팅
+                            }
+                            if(time == 0){
+                                timerTask?.cancel()
+                            }
+                        }
                     }
                     else {
-                        Toast.makeText(this@SignUpActivity, authCodeRes?.error?.errorMessage.toString(), Toast.LENGTH_SHORT).show()
+                        try {
+                            val body = response.errorBody()!!.string()
+                            val error = Gson().fromJson(body, LoginResponse::class.java)
+                            Log.e(TAG, "error - body : $body")
+                            binding.tvSignUpError.text = error.error?.errorMessage
+                        } catch (e: IOException) {
+                            e.printStackTrace()
+                        }
                     }
                 }
 
@@ -116,7 +144,14 @@ class SignUpActivity : AppCompatActivity() {
                         })
                     }
                     else {
-                        Toast.makeText(this@SignUpActivity, authRes?.error?.errorMessage.toString(), Toast.LENGTH_SHORT).show()
+                        try {
+                            val body = response.errorBody()!!.string()
+                            val error = Gson().fromJson(body, LoginResponse::class.java)
+                            Log.e(TAG, "error - body : $body")
+                            binding.tvSignUpError.text = error.error?.errorMessage
+                        } catch (e: IOException) {
+                            e.printStackTrace()
+                        }
                     }
                 }
 
@@ -153,6 +188,16 @@ class SignUpActivity : AppCompatActivity() {
                             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
                             startActivity(intent)
                             finish()
+                        }
+                        else{
+                            try {
+                                val body = response.errorBody()!!.string()
+                                val error = Gson().fromJson(body, LoginResponse::class.java)
+                                Log.e(TAG, "error - body : $body")
+                                binding.tvSignUpError.text = error.error?.errorMessage
+                            } catch (e: IOException) {
+                                e.printStackTrace()
+                            }
                         }
                     }
                     override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
@@ -197,11 +242,20 @@ class SignUpActivity : AppCompatActivity() {
                                     startActivity(intent)
                                     finish()
                                 }
+                                else {
+                                    try {
+                                        val body = response.errorBody()!!.string()
+                                        val error = Gson().fromJson(body, LoginResponse::class.java)
+                                        Log.e(TAG, "error - body : $body")
+                                        binding.tvSignUpError.text = error.error?.errorMessage
+                                    } catch (e: IOException) {
+                                        e.printStackTrace()
+                                    }
+                                }
                             }
                             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                                 Log.e("SignUpKakao", "통신 실패")
                             }
-
                         })
                     }
                 }

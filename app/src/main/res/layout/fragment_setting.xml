@@ -31,32 +31,34 @@
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:layout_marginHorizontal="20dp">
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:background="@drawable/back"
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="5dp"
-                android:layout_gravity="center"/>
+            <LinearLayout
+                android:id="@+id/ll_back"
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:gravity="left">
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/back"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
             <TextView
                 android:id="@+id/textview_readdiary_title"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="MY PAGE"
+                android:textStyle="bold"
                 android:textColor="#FFFFFF"
                 android:textSize="17sp"
                 android:layout_weight="1"/>
-
-
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_gravity="center"
-
-                />
+            <LinearLayout
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:gravity="left">
+            </LinearLayout>
         </LinearLayout>
     </androidx.appcompat.widget.Toolbar>
 
@@ -96,10 +98,10 @@
             android:layout_height="100dp"
             android:background="@drawable/writediary_borderline">
             <ImageView
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:background="@drawable/user"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginLeft="20dp"/>
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -128,7 +130,7 @@
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@drawable/btn_setting_round_border"
+            android:background="@drawable/btn_round_border"
             android:text="Log out"
             android:textColor="@color/white" />
 
@@ -181,8 +183,8 @@
             android:layout_marginLeft="5dp"/>
         <Button
             android:id="@+id/btn_signout"
-            android:layout_width="100dp"
-            android:layout_height="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
             android:text="회원 탈퇴"
             android:textColor="@color/white"
             android:layout_marginTop="10dp"

@@ -13,6 +13,7 @@ import com.example.remembrall.MainActivity
 import com.example.remembrall.R
 import com.example.remembrall.databinding.FragmentMapSearchBinding
 import com.example.remembrall.databinding.FragmentSettingBinding
+import com.example.remembrall.dongdong.DongDongFragment
 import com.example.remembrall.login.SplashActivity
 import com.example.remembrall.login.UserService
 import com.example.remembrall.login.req.UserRequest
@@ -31,6 +32,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class SettingFragment : Fragment() {
     var binding : FragmentSettingBinding?= null
     lateinit var mainActivity: MainActivity
+    var email : String ?= null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -75,9 +77,12 @@ class SettingFragment : Fragment() {
                         if(response.body()?.success.toString() == "true"){
                             var userInfo = response.body()!!.response!!
                             var name = userInfo.name
-                            var email = userInfo.email
+                            email = userInfo.email
                             binding!!.userName.text = name.toString()
                             binding!!.userEmail.text = email.toString()
+                            if(userInfo.authType == "KAKAO"){
+                                binding!!.btnChangePassword.visibility = View.GONE
+                            }
                         }
                     }
 
@@ -122,9 +127,17 @@ class SettingFragment : Fragment() {
             ChangeNameDialog(mainActivity).show()
         }
 
+        binding!!.btnChangePassword.setOnClickListener {
+            ChangePasswordDialog(mainActivity, email!!).show()
+        }
+
         binding!!.btnSignout.setOnClickListener {
             SignOutDialog(mainActivity).show()
+        }
 
+        binding!!.llBack.setOnClickListener {
+            var dongdongFragment = DongDongFragment()
+            mainActivity.replaceFragment(dongdongFragment)
         }
         return binding!!.root
     }

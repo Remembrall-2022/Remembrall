@@ -31,11 +31,17 @@
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:layout_marginHorizontal="20dp">
-            <ImageView
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_marginTop="10dp"
-                />
+            <LinearLayout
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:gravity="right">
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="10dp"
+                    />
+            </LinearLayout>
             <TextView
                 android:id="@+id/textview_readdiary_title"
                 android:layout_width="wrap_content"
@@ -97,6 +103,7 @@
         android:layout_marginHorizontal="65dp">
 
         <TextView
+            android:id="@+id/level"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Lv 1"
@@ -105,7 +112,7 @@
             android:textColor="@color/white"
             android:layout_gravity="left"/>
         <ProgressBar
-            android:id="@+id/progressBar_CharacterFragment"
+            android:id="@+id/progressBar"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="20dp"

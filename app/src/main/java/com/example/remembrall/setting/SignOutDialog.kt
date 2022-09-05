@@ -92,13 +92,11 @@ class SignOutDialog (
                     }
                 })
             binding.btnClose.setOnClickListener {
+                Toast.makeText(context,"탈퇴 취소", Toast.LENGTH_SHORT).show()
                 dismiss()
             }
-            setOnCancelListener {
-                Toast.makeText(context,"탈퇴 취소", Toast.LENGTH_SHORT).show()
-            }
-            }
         }
+    }
 
     private fun httpLoggingInterceptor(): HttpLoggingInterceptor {
         val interceptor = HttpLoggingInterceptor { message ->

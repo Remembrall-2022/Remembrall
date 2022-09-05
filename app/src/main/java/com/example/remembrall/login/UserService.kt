@@ -50,20 +50,19 @@ interface UserService {
     ) : Call <UserNameResponse>
 
     @POST("/user/password/request")
-    fun requestPassword(
-        @Body email : String
+    fun requestPasswordAuthCode(
+        @Body passwordAuthCodeRequest: PasswordAuthCodeRequest
     ) : Call <AuthResponse>
 
     @POST("/user/password/valid")
-    fun validPassword(
+    fun validPasswordAuthCode(
         @Body authCodeRequest: AuthCodeRequest
     ) : Call <AuthResponse>
 
     @POST("/user/password")
     fun changePassword(
-        @Header("X-AUTH-TOKEN") authToken : String,
-        @Body name : String
-    ) : Call <UserNameResponse>
+        @Body password : String
+    ) : Call  <AuthResponse>
 
     @DELETE("/user/signout")
     fun signOut(
