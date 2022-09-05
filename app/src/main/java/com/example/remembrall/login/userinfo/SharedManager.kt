@@ -25,7 +25,7 @@ class SharedManager(context : Context) {
             refreshToken = prefs["refreshToken"]
         )
     }
-    fun logoutCurrentUser(user : LoginData){
+    fun logoutCurrentUser(){
         prefs["grantType"] = null
         prefs["accessToken"] = null
         prefs["refreshToken"] = null

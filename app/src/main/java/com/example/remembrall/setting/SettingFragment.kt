@@ -1,32 +1,45 @@
 package com.example.remembrall.setting
 
+import android.content.ContentValues.TAG
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.remembrall.MainActivity
 import com.example.remembrall.R
+import com.example.remembrall.databinding.FragmentMapSearchBinding
+import com.example.remembrall.databinding.FragmentSettingBinding
+import com.example.remembrall.login.SplashActivity
+import com.example.remembrall.login.UserService
+import com.example.remembrall.login.req.UserRequest
+import com.example.remembrall.login.res.UserInfoResponse
+import com.example.remembrall.login.res.UserResponse
+import com.example.remembrall.login.userinfo.SharedManager
+import com.kakao.sdk.user.UserApiClient
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [SettingFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SettingFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    var binding : FragmentSettingBinding?= null
+    lateinit var mainActivity: MainActivity
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mainActivity = context as MainActivity
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
         }
     }
 
@@ -34,27 +47,104 @@ class SettingFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_setting, container, false)
+        binding = FragmentSettingBinding.inflate(inflater, container, false)
+
+        val client = OkHttpClient.Builder()
+            .addInterceptor(httpLoggingInterceptor()).build()
+
+        // 레트로핏 객체 생성.
+        var retrofit = Retrofit.Builder()
+            .baseUrl(getString(R.string.SERVER))
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
+            .build()
+
+        // user 서비스 올리기
+        var userService: UserService = retrofit.create(UserService::class.java)
+
+        val sharedManager : SharedManager by lazy { SharedManager(mainActivity) }
+        var authToken = sharedManager.getCurrentUser().accessToken
+
+        fun getUserInfo(){
+            userService.userInfo(authToken)
+                .enqueue(object : Callback<UserInfoResponse>{
+                    override fun onResponse(
+                        call: Call<UserInfoResponse>,
+                        response: Response<UserInfoResponse>
+                    ) {
+                        if(response.body()?.success.toString() == "true"){
+                            var userInfo = response.body()!!.response!!
+                            var name = userInfo.name
+                            var email = userInfo.email
+                            binding!!.userName.text = name.toString()
+                            binding!!.userEmail.text = email.toString()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<UserInfoResponse>, t: Throwable) {
+                        Log.e("UserInfo", "요청 실패")
+                    }
+
+                })
+        }
+
+        getUserInfo()
+
+        binding!!.btnLogout.setOnClickListener {
+            sharedManager.logoutCurrentUser()
+            Log.d(TAG, "로그아웃 성공")
+            // 토큰 정보 보기
+            UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
+                if (error != null) {
+                    Log.e(TAG, "토큰 정보 보기 실패", error)
+                }
+                else if (tokenInfo != null) {
+                    Log.i(TAG, "토큰 정보 보기 성공" +
+                            "\n회원번호: ${tokenInfo.id}" +
+                            "\n만료시간: ${tokenInfo.expiresIn} 초")
+                    // 로그아웃
+                    UserApiClient.instance.logout { error ->
+                        if (error != null) {
+                            Log.e(TAG, "로그아웃 실패. SDK에서 토큰 삭제됨", error)
+                        }
+                        else {
+                            Log.i(TAG, "로그아웃 성공. SDK에서 토큰 삭제됨")
+                        }
+                    }
+                }
+            }
+            var intent =  Intent(mainActivity, SplashActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            startActivity(intent)
+        }
+
+        binding!!.btnChangeName.setOnClickListener {
+            ChangeNameDialog(mainActivity).show()
+        }
+
+        binding!!.btnSignout.setOnClickListener {
+            SignOutDialog(mainActivity).show()
+
+        }
+        return binding!!.root
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SettingFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             SettingFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    private fun httpLoggingInterceptor(): HttpLoggingInterceptor {
+        val interceptor = HttpLoggingInterceptor { message ->
+            Log.e(
+                "HttpLogging:",
+                message + ""
+            )
+        }
+        return interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
     }
 }

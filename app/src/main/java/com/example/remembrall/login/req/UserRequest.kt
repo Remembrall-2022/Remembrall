@@ -15,3 +15,10 @@ data class AuthCodeRequest(
     val authCode : String
 )
 
+data class KakaoLoginRequest(
+    var kakaoToken : String
+)
+
+data class UserRequest(
+    var accessToken : String
+)

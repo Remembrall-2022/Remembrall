@@ -108,12 +108,14 @@
                 android:layout_marginTop="30dp"
                 android:layout_marginLeft="20dp">
                 <TextView
+                    android:id="@+id/user_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="이름"
                     android:textColor="@color/white"
                     android:textStyle="bold"/>
                 <TextView
+                    android:id="@+id/user_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="이메일"
@@ -122,12 +124,19 @@
             </LinearLayout>
         </LinearLayout>
         <Button
+            android:id="@+id/btn_logout"
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@drawable/writediary_borderline"
+            android:background="@drawable/btn_setting_round_border"
             android:text="Log out"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/white"
+            android:layout_marginVertical="10dp"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -137,20 +146,30 @@
             android:textStyle="bold"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="5dp"/>
+
         <Button
+            android:id="@+id/btn_change_name"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@drawable/writediary_borderline"
+            android:background="@drawable/btn_setting_round_border"
             android:text="회원 이름 수정"
             android:textColor="@color/white"
             android:layout_marginTop="10dp"/>
         <Button
+            android:id="@+id/btn_change_password"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@drawable/writediary_borderline"
+            android:background="@drawable/btn_setting_round_border"
             android:text="비밀번호 수정"
             android:textColor="@color/white"
             android:layout_marginTop="10dp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/white"
+            android:layout_marginVertical="10dp"/>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -161,13 +180,14 @@
             android:layout_marginTop="10dp"
             android:layout_marginLeft="5dp"/>
         <Button
+            android:id="@+id/btn_signout"
             android:layout_width="100dp"
             android:layout_height="30dp"
-            android:background="@drawable/writediary_borderline"
             android:text="회원 탈퇴"
             android:textColor="@color/white"
             android:layout_marginTop="10dp"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:background="@drawable/btn_setting_round_border"/>
 
     </LinearLayout>
 

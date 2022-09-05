@@ -78,9 +78,9 @@ class TriplogCreateDialog(
 
             dismiss()
         }
-//        binding.btnTriplogClose.setOnClickListener {
-//            cancel()
-//        }
+        binding.btnClose.setOnClickListener {
+            cancel()
+        }
         setOnCancelListener {
             Toast.makeText(context,"일기장 생성을 취소했어요",Toast.LENGTH_SHORT).show()
         }
