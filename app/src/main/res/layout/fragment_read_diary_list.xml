@@ -38,6 +38,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <LinearLayout
+            android:id="@+id/ll_no_diary"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="114dp"
+                android:layout_height="110dp"
+                android:layout_gravity="center"
+                android:background="@drawable/dongdong" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:text="아직 일기를 쓰지 않으셨네요! \n 둥둥이와 함께 첫 일기를 써 보시겠어요?"/>
+        </LinearLayout>
+
         <ScrollView
             android:layout_marginTop="15dp"
             android:layout_width="match_parent"

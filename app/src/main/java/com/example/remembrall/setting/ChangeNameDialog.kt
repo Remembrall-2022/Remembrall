@@ -28,6 +28,8 @@ class ChangeNameDialog (
     context: Context
 ) : Dialog(context){ // 뷰를 띄워야 하므로 Dialog 클래스는 context를 인자로 받는다.
     private lateinit var binding: DialogChangeNameBinding
+    private lateinit var onClickListener: OnDialogClickListener
+
     // TODO : url key에서 들고오기
     val client = OkHttpClient.Builder()
         .addInterceptor(httpLoggingInterceptor()).build()
@@ -61,6 +63,7 @@ class ChangeNameDialog (
                     Log.e("Username", response.body().toString())
                     if(response.body()?.success.toString() == "true"){
                         Toast.makeText(context,"닉네임 변경 성공", Toast.LENGTH_SHORT).show()
+                        onClickListener.onClicked(newName)
                     }
                     dismiss()
                 }
@@ -78,6 +81,17 @@ class ChangeNameDialog (
             Toast.makeText(context,"일기장 생성을 취소했어요", Toast.LENGTH_SHORT).show()
         }
     }
+
+    fun setOnClickListener(listener: OnDialogClickListener)
+    {
+        onClickListener = listener
+    }
+
+    interface OnDialogClickListener
+    {
+        fun onClicked(name: String)
+    }
+
     private fun httpLoggingInterceptor(): HttpLoggingInterceptor {
         val interceptor = HttpLoggingInterceptor { message ->
             Log.e(

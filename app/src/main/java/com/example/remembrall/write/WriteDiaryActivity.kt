@@ -21,6 +21,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import androidx.recyclerview.widget.*
@@ -33,17 +34,23 @@ import com.example.remembrall.databinding.ActivityWriteDiaryBinding
 import com.example.remembrall.login.res.LoginResponse
 import com.example.remembrall.login.userinfo.SharedManager
 import com.example.remembrall.map.MapSearchActivity
+import com.example.remembrall.read.ReadDiaryListRecyclerViewData
+import com.example.remembrall.read.Triplog.TriplogService
+import com.example.remembrall.read.Triplog.res.GetTriplogListResponse
 import com.google.gson.Gson
 import com.kakao.sdk.auth.Constants.CODE
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -57,6 +64,7 @@ class WriteDiaryActivity() : AppCompatActivity() {
     private lateinit var writeDiaryRecyclerViewData: ArrayList<WriteDiaryRecyclerViewData>
     private lateinit var writeDiaryRecyclerViewAdapter: WriteDiaryRecyclerViewAdapter
     private lateinit var questionRecyclerViewData: ArrayList<QuestionRecyclerViewData>
+    private lateinit var readDiaryListRecyclerViewData: ArrayList<ReadDiaryListRecyclerViewData>
     private lateinit var questionRecyclerViewAdapter: QuestionRecyclerViewAdapter
     private lateinit var touchHelper: ItemTouchHelper
     private var idx=1
@@ -141,9 +149,71 @@ class WriteDiaryActivity() : AppCompatActivity() {
         questionId=intent.getLongExtra("questionId",1)
         binding.tvWritediaryQuestion.text=question
 
-        // 일기장 선택
-        binding.textviewReaddiarylistTitle.setOnClickListener{
 
+        var retrofit = Retrofit.Builder()
+            .baseUrl("http://ec2-13-124-98-176.ap-northeast-2.compute.amazonaws.com:8080")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        var triplogService : TriplogService = retrofit.create(TriplogService::class.java)
+        val sharedManager : SharedManager by lazy { SharedManager(this@WriteDiaryActivity) }
+        var authToken = sharedManager.getCurrentUser().accessToken
+
+        readDiaryListRecyclerViewData = arrayListOf()
+        triplogService.getTripLogList(authToken).enqueue(object :
+            Callback<GetTriplogListResponse> {
+            override fun onResponse(
+                call: Call<GetTriplogListResponse>,
+                response: Response<GetTriplogListResponse>
+            ) {
+                Log.e("CreateTripLog", response.body().toString())
+
+                if(response.body()?.success.toString() == "true"){
+                    var diaryList = response.body()?.response!!
+                    if(diaryList != null){
+                        for (diary in diaryList){
+                            val title=diary!!.title.toString()
+                            val imgUrl=diary!!.tripLogImgUrl.toString()
+                            val triplogId=diary!!.triplogId!!.toLong()
+                            readDiaryListRecyclerViewData.add(ReadDiaryListRecyclerViewData(title, imgUrl, triplogId))
+                        }
+
+                    }
+                }
+            }
+            override fun onFailure(call: Call<GetTriplogListResponse>, t: Throwable) {
+                Toast.makeText(this@WriteDiaryActivity,"일기장 불러오기 실패", Toast.LENGTH_SHORT).show()
+            }
+
+        })
+
+        // 일기장 선택
+        binding.consWritediarySelect.setOnClickListener {
+            var diaryListDialog = DiaryListDialog(this@WriteDiaryActivity, readDiaryListRecyclerViewData)
+            diaryListDialog.show()
+            diaryListDialog.readDiaryListRecyclerViewAdapter.setItemClickListener(object: SelectDiaryListRecyclerViewAdapter.OnItemClickListener{
+                override fun diaryOnClick(v: View, position: Int) {
+                    val diaryTitle=readDiaryListRecyclerViewData[position].name
+                    val id=readDiaryListRecyclerViewData[position].triplogId
+                    Log.e("question", "$id + $diaryTitle")
+                    binding.tvDiaryTitle.text = diaryTitle
+                    diaryListDialog.dismiss()
+                }
+            })
+        }
+
+        // 질문 선택
+        binding.tvWritediaryQuestion.setOnClickListener{
+            var questionListDialog = QuestionListDialog(this@WriteDiaryActivity, questionRecyclerViewData)
+            questionListDialog.show()
+            questionListDialog.questionRecyclerViewAdapter.setItemClickListener(object: QuestionRecyclerViewAdapter.OnItemClickListener{
+                override fun onClick(v: View, position: Int) {
+                    val question=questionRecyclerViewData[position].questionName
+                    val id=questionRecyclerViewData[position].id
+                    Log.e("question", "$id + $question")
+                    binding.tvWritediaryQuestion.text = question
+                    questionListDialog.dismiss()
+                }
+            })
         }
 
 //        var str = binding.tvWritediaryDate.text.toString()
@@ -252,8 +322,17 @@ class WriteDiaryActivity() : AppCompatActivity() {
 //                    val mBuilder = AlertDialog.Builder(this@WriteDiaryActivity)
 //                        .setView(mDialogView)
 //                        .setTitle("질문 리스트")
-                    QuestionListDialog(this@WriteDiaryActivity, questionRecyclerViewData).show()
-//                    mBuilder.show()
+                    var questionListDialog = QuestionListDialog(this@WriteDiaryActivity, questionRecyclerViewData)
+                    questionListDialog.show()
+                    questionListDialog.questionRecyclerViewAdapter.setItemClickListener(object: QuestionRecyclerViewAdapter.OnItemClickListener{
+                    override fun onClick(v: View, position: Int) {
+                        val question=questionRecyclerViewData[position].questionName
+                        val id=questionRecyclerViewData[position].id
+                        Log.e("question", "$id + $question")
+                        binding.tvWritediaryQuestion.text = question
+                        questionListDialog.dismiss()
+                        }
+                     })
                 }
 
                 override fun onFailure(call: Call<GetAllQuestionResponse>, t: Throwable) {
@@ -277,8 +356,8 @@ class WriteDiaryActivity() : AppCompatActivity() {
                 Log.e("for", "${i}")
                 var name=binding.recyclerviewWritediary[i].findViewById<TextView>(R.id.tv_addplace_place).text.toString()
                 var address="주소"
-                var longitude=142.42324
-                var latitude=32.23
+                var longitude= writeDiaryRecyclerViewData[i].x
+                var latitude=writeDiaryRecyclerViewData[i].y
                 var comment=binding.recyclerviewWritediary[i].findViewById<EditText>(R.id.et_addplace_coment).text.toString()
 //                placeInfo=WriteDiaryRequest.PlaceLogList.PlaceInfo(i, name, address, longitude, latitude)
                 placeLogList.add(JSONObject("{\"placeInfo\":{\"placeId\":${i+1},\"name\":\"${name}\",\"address\":\"${address}\",\"longitude\":${longitude},\"latitude\":${latitude}},\"comment\":\"${comment}\",\"imgName\":\"${writeDiaryRecyclerViewData[i].image}\"}"))
@@ -299,6 +378,7 @@ class WriteDiaryActivity() : AppCompatActivity() {
                     if(response.isSuccessful){
                         Log.e("question", response.toString())
                         Log.e("question", response.body().toString())
+                        //shared preference
                     }else {
                         try {
                             val body = response.errorBody()!!.string()
@@ -380,7 +460,7 @@ class WriteDiaryActivity() : AppCompatActivity() {
 
     private fun initReadDiaryRecyclerView() {
         val recyclerViewWriteDiary=binding.recyclerviewWritediary
-        recyclerViewWriteDiary.layoutManager=LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
+        recyclerViewWriteDiary.layoutManager=LinearLayoutManager(this@WriteDiaryActivity, LinearLayoutManager.VERTICAL, false)
         writeDiaryRecyclerViewAdapter=WriteDiaryRecyclerViewAdapter(this, writeDiaryRecyclerViewData)
 
         val callback = ItemMoveCallbackListener(writeDiaryRecyclerViewAdapter)
@@ -525,4 +605,5 @@ class WriteDiaryActivity() : AppCompatActivity() {
             y = data?.getDoubleExtra("y", 0.0)!!
         }
     }
+
 }

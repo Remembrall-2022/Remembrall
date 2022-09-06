@@ -56,6 +56,7 @@
                         android:paddingVertical="12dp">
 
                         <TextView
+                            android:id="@+id/tv_diary_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="일기장 선택"
@@ -70,11 +71,12 @@
                     <LinearLayout
                         android:id="@+id/linear_writediary_date"
                         android:layout_marginTop="20dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="110dp"
+                        android:layout_height="30dp"
                         android:layout_gravity="end"
-                        android:layout_marginVertical="20dp"
-                        android:gravity="center">
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center"
+                        android:background="@drawable/writediary_bottombutton_purple">
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -100,24 +102,31 @@
 <!--                        >-->
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="50dp"
                         android:orientation="horizontal"
-                        android:layout_marginBottom="10dp"
                         >
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_weight="10">
-                            <ImageView
-                                android:id="@+id/img_writediary_refresh"
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
-                                android:src="@drawable/ic_refresh"/>
+                                android:gravity="top">
+                                <ImageView
+                                    android:id="@+id/img_writediary_refresh"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:src="@drawable/ic_refresh"
+                                    />
+                            </LinearLayout>
                         <TextView
                             android:id="@+id/tv_writediary_question"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
                             android:text="오늘은 점심으로 무엇을 드셨나요?"
+                            android:gravity="center_vertical"
                             android:textColor="@color/white"
                             android:textSize="16sp"
                             android:textStyle="bold"
