@@ -22,6 +22,7 @@ import com.example.remembrall.read.Triplog.TriplogService
 import com.example.remembrall.read.Triplog.req.TriplogRequest
 import com.example.remembrall.read.Triplog.res.CreateTriplogResponse
 import com.example.remembrall.read.Triplog.res.GetTriplogListResponse
+import com.example.remembrall.write.ReadDiaryFragment
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -113,8 +114,8 @@ class ReadDiaryListFragment : Fragment() {
                             val imgUrl=diary!!.tripLogImgUrl.toString()
                             val triplogId=diary!!.triplogId!!.toLong()
                             readDiaryRecyclerViewData.add(ReadDiaryListRecyclerViewData(title, imgUrl, triplogId))
-                            readDiaryListRecyclerViewAdapter.notifyItemInserted(readDiaryRecyclerViewData.size)
                         }
+                        readDiaryListRecyclerViewAdapter.notifyItemInserted(readDiaryRecyclerViewData.size)
                     }
                 }
             }
@@ -151,13 +152,19 @@ class ReadDiaryListFragment : Fragment() {
 
                             val triplogId=response.body()!!.response.triplogId
                             val datelogId=response.body()!!.response.placeLogIdList
-                            val title=response.body()!!.response.title
-                            val intent = Intent(mainActivity, ReadDiaryActivity::class.java)
-                            var array= datelogId.toLongArray()
-                            intent.putExtra("triplogId", triplogId)
-                            intent.putExtra("datelogId", array)
-                            intent.putExtra("title", title)
-                            startActivity(intent)
+                            if(datelogId.size==0){ //일기가 없을 때
+                                Toast.makeText(mainActivity, "아직 작성한 일기가 없어요!\n오늘의 일기를 작성해보면 어떨까요?",Toast.LENGTH_LONG).show()
+                                // 빈 탭을 하나 넣어서 일기쓰러가는 버튼 넣기
+                            }
+                            else{
+                                val title=response.body()!!.response.title
+                                val intent = Intent(mainActivity, ReadDiaryActivity::class.java)
+                                var array= datelogId.toLongArray()
+                                intent.putExtra("triplogId", triplogId)
+                                intent.putExtra("datelogId", array)
+                                intent.putExtra("title", title)
+                                startActivity(intent)
+                            }
                         }else {
                             try {
                                 val body = response.errorBody()!!.string()
@@ -176,10 +183,10 @@ class ReadDiaryListFragment : Fragment() {
 
             }
 
-            override fun heartOnClick(v: View, position: Int) { //북마크
-                binding.recyclerviewReaddiarylist[position].findViewById<ImageView>(R.id.img_adddiary_heart).setImageResource(R.drawable.ic_bookmark_fill)
+//            override fun heartOnClick(v: View, position: Int) { //북마크
+//                binding.recyclerviewReaddiarylist[position].findViewById<ImageView>(R.id.img_adddiary_heart).setImageResource(R.drawable.ic_bookmark_fill)
 //                binding.recyclerviewReaddiarylist[position].findViewById<ImageView>(R.id.img_adddiary_heart).setImageResource(R.drawable.ic_bookmark_heart)
-            }
+//            }
         })
     }
 

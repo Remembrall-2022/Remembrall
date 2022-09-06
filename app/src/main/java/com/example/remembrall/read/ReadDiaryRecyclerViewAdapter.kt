@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -30,12 +31,13 @@ class ReadDiaryRecyclerViewAdapter (
                 imageLayout.visibility=View.GONE
             }
             else{
+//                imageView.setImageURI(data.image.toUri())
                 Glide.with(this.itemView)
                     .load(data.image) // 불러올 이미지 url
                     .fitCenter()
-//                    .placeholder(R.drawable.ic_image) // 이미지 로딩 시작하기 전 표시할 이미지
-//                    .error(R.drawable.ic_image) // 로딩 에러 발생 시 표시할 이미지
-//                    .fallback(R.drawable.ic_image) // 로드할 url 이 비어있을(null 등) 경우 표시할 이미지
+                    .placeholder(R.drawable.ic_image) // 이미지 로딩 시작하기 전 표시할 이미지
+                    .error(R.drawable.ic_image) // 로딩 에러 발생 시 표시할 이미지
+                    .fallback(R.drawable.ic_image) // 로드할 url 이 비어있을(null 등) 경우 표시할 이미지
                     .apply(RequestOptions().override(500,500))
                     .into(imageView) // 이미지를 넣을 뷰
             }
