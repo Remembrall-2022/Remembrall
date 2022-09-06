@@ -8,7 +8,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.remembrall.R
 class ReadDiaryListRecyclerViewAdapter (
     private val context: Context,
@@ -19,8 +22,8 @@ class ReadDiaryListRecyclerViewAdapter (
 
     inner class ViewHolder(view: View): RecyclerView.ViewHolder(view){
         val name: TextView = itemView.findViewById(R.id.tv_readdiary_name)
-        val heart: ImageView=itemView.findViewById(R.id.img_adddiary_heart)
-        val diary: ConstraintLayout=itemView.findViewById(R.id.constraintlayout_readdiary)
+//        val heart: ImageView=itemView.findViewById(R.id.img_adddiary_heart)
+        val diary: ImageView=itemView.findViewById(R.id.img_adddiary_diary)
 
         init{
             diary.setOnClickListener{
@@ -29,12 +32,20 @@ class ReadDiaryListRecyclerViewAdapter (
 //            diary.setOnLongClickListener{
 //                itemClickListener.diaryLongOnClick(it, adapterPosition)
 //            }
-            heart.setOnClickListener {
-                itemClickListener.heartOnClick(it, adapterPosition)
-            }
+//            heart.setOnClickListener {
+//                itemClickListener.heartOnClick(it, adapterPosition)
+//            }
         }
         fun bind(data: ReadDiaryListRecyclerViewData){
             name.text=data.name
+            Glide.with(this.itemView)
+                .load(data.imgUrl) // 불러올 이미지 url
+                .fitCenter()
+                .placeholder(R.drawable.ic_image) // 이미지 로딩 시작하기 전 표시할 이미지
+                .error(R.drawable.ic_image) // 로딩 에러 발생 시 표시할 이미지
+                .fallback(R.drawable.ic_image) // 로드할 url 이 비어있을(null 등) 경우 표시할 이미지
+                .apply(RequestOptions().override(500,500))
+                .into(diary) // 이미지를 넣을 뷰
         }
     }
 
@@ -55,7 +66,7 @@ class ReadDiaryListRecyclerViewAdapter (
     interface OnItemClickListener {
         fun diaryOnClick(v: View, position: Int)
 //        fun diaryLongOnClick(v: View, position: Int)
-        fun heartOnClick(v: View, position: Int)
+//        fun heartOnClick(v: View, position: Int)
     }
 
     // (3) 외부에서 클릭 시 이벤트 설정
