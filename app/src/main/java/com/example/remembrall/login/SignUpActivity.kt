@@ -194,6 +194,7 @@ class SignUpActivity : AppCompatActivity() {
                                 val body = response.errorBody()!!.string()
                                 val error = Gson().fromJson(body, LoginResponse::class.java)
                                 Log.e(TAG, "error - body : $body")
+                                Toast.makeText(this@SignUpActivity, error.error?.errorMessage, Toast.LENGTH_SHORT).show()
                                 binding.tvSignUpError.text = error.error?.errorMessage
                             } catch (e: IOException) {
                                 e.printStackTrace()
@@ -247,7 +248,7 @@ class SignUpActivity : AppCompatActivity() {
                                         val body = response.errorBody()!!.string()
                                         val error = Gson().fromJson(body, LoginResponse::class.java)
                                         Log.e(TAG, "error - body : $body")
-                                        binding.tvSignUpError.text = error.error?.errorMessage
+                                        Toast.makeText(this@SignUpActivity, error.error?.errorMessage, Toast.LENGTH_SHORT).show()
                                     } catch (e: IOException) {
                                         e.printStackTrace()
                                     }

@@ -87,6 +87,9 @@ class SplashActivity : AppCompatActivity() {
                             startActivity(intent)
                             finish()
                         }
+                        else{
+
+                        }
                     }
                     override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                         Log.e("LoginKakao", "통신 실패")

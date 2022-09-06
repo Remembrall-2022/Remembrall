@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:layout_marginHorizontal="20dp"
+        android:text="Button"
+        tools:layout_editor_absoluteX="96dp"
+        tools:layout_editor_absoluteY="8dp"
+        android:background="@drawable/btn_round_border"/>
+</LinearLayout>

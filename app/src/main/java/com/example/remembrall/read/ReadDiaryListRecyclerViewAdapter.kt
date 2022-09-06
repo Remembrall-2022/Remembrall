@@ -26,6 +26,9 @@ class ReadDiaryListRecyclerViewAdapter (
             diary.setOnClickListener{
                 itemClickListener.diaryOnClick(it, adapterPosition)
             }
+//            diary.setOnLongClickListener{
+//                itemClickListener.diaryLongOnClick(it, adapterPosition)
+//            }
             heart.setOnClickListener {
                 itemClickListener.heartOnClick(it, adapterPosition)
             }
@@ -51,6 +54,7 @@ class ReadDiaryListRecyclerViewAdapter (
 
     interface OnItemClickListener {
         fun diaryOnClick(v: View, position: Int)
+//        fun diaryLongOnClick(v: View, position: Int)
         fun heartOnClick(v: View, position: Int)
     }
 

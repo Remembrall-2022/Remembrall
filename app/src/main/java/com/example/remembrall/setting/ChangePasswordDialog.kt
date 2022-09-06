@@ -6,6 +6,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -72,21 +73,23 @@ class ChangePasswordDialog (
                     if (authCodeRes?.success.toString() == "true"){
                         Log.d("SendAuthCode", authCodeRes?.response?.message.toString())
                         binding.llTimer.visibility = View.VISIBLE
-                        var time = 300000
-                        val context = this
-                        var timerTask : Timer?= null
-                        timerTask = timer(period = 1000) {
-                            time = time - 1000
-                            val min = time / 60000
-                            val sec = (time % 60000) / 1000
-
+//                        var time = 300000
+//                        val context = this
+//                        var timerTask : Timer?= null
+//                        timerTask = timer(period = 1000) {
+//                            time = time - 1000
+//                            val min = time / 60000
+//                            val sec = (time % 60000) / 1000
+//
+//
+//
 //                            binding.tvTimeMinute.text = "$min"	// TextView 세팅
 //                            binding.tvTimeSecond.text = ":$sec"// Textview 세팅
-
-                            if(time == 0){
-                                timerTask?.cancel()
-                            }
-                        }
+//
+//                            if(time == 0){
+//                                timerTask?.cancel()
+//                            }
+//                        }
                     }
                     else {
                         try {
@@ -108,9 +111,7 @@ class ChangePasswordDialog (
         }
         binding.btnChangePassword.setOnClickListener {
             val newPassword = binding.etNewPassword.text.toString().trim()
-
-            val sharedManager : SharedManager by lazy { SharedManager(context) }
-            var authCode = sharedManager.getCurrentUser().accessToken
+            var authCode = binding.etAuthcode.text.toString().trim()
 
             userService.validPasswordAuthCode(AuthCodeRequest(email, authCode)).enqueue(object: Callback<AuthResponse>{
                 override fun onResponse(
@@ -168,4 +169,5 @@ class ChangePasswordDialog (
         }
         return interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
     }
+    
 }
