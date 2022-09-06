@@ -78,8 +78,17 @@ class ReadDiaryListFragment : Fragment() {
                 R.drawable.readdiary_line_divider, 0,0))
         clickRecyclerView()
         binding.floatingReaddiarylist.setOnClickListener {
-            TriplogCreateDialog(mainActivity).show()
-            readDiaryListRecyclerViewAdapter.notifyDataSetChanged()
+            val triplogCreateDialog = TriplogCreateDialog(mainActivity)
+            triplogCreateDialog.show()
+            triplogCreateDialog.setOnClickListener(object : TriplogCreateDialog.OnDialogClickListener{
+                override fun onClicked(readDiaryRecyclerViewDataList: ArrayList<ReadDiaryListRecyclerViewData>) {
+                    readDiaryRecyclerViewData = readDiaryRecyclerViewDataList
+                    readDiaryListRecyclerViewAdapter.notifyItemInserted(readDiaryRecyclerViewData.size)
+                    var readDiaryFragment = ReadDiaryListFragment()
+                    mainActivity.supportFragmentManager.beginTransaction()
+                        .replace(R.id.framelayout_main, readDiaryFragment).commit()
+                }
+            })
         }
     }
 
@@ -116,6 +125,10 @@ class ReadDiaryListFragment : Fragment() {
                             readDiaryRecyclerViewData.add(ReadDiaryListRecyclerViewData(title, imgUrl, triplogId))
                         }
                         readDiaryListRecyclerViewAdapter.notifyItemInserted(readDiaryRecyclerViewData.size)
+                        binding.llNoDiary.visibility = View.GONE
+                        if(diaryList.size == 0){
+                            binding.llNoDiary.visibility = View.VISIBLE
+                        }
                     }
                 }
             }
@@ -187,6 +200,13 @@ class ReadDiaryListFragment : Fragment() {
 //                binding.recyclerviewReaddiarylist[position].findViewById<ImageView>(R.id.img_adddiary_heart).setImageResource(R.drawable.ic_bookmark_fill)
 //                binding.recyclerviewReaddiarylist[position].findViewById<ImageView>(R.id.img_adddiary_heart).setImageResource(R.drawable.ic_bookmark_heart)
 //            }
+        })
+        readDiaryListRecyclerViewAdapter.setItemLongClickListener(object : ReadDiaryListRecyclerViewAdapter.OnItemLongClickListener{
+            override fun diaryLongClick(v: View, position: Int) {
+                val sharedManager : SharedManager by lazy { SharedManager(mainActivity) }
+                var authToken = sharedManager.getCurrentUser().accessToken
+
+            }
         })
     }
 

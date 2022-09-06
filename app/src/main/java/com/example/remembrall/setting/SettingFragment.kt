@@ -124,7 +124,13 @@ class SettingFragment : Fragment() {
         }
 
         binding!!.btnChangeName.setOnClickListener {
-            ChangeNameDialog(mainActivity).show()
+            val changeNameDialog = ChangeNameDialog(mainActivity)
+            changeNameDialog.show()
+            changeNameDialog.setOnClickListener(object : ChangeNameDialog.OnDialogClickListener{
+                override fun onClicked(name: String) {
+                    binding!!.userName.text = name
+                }
+            })
         }
 
         binding!!.btnChangePassword.setOnClickListener {

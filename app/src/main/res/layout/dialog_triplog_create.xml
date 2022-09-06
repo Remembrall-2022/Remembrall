@@ -18,6 +18,7 @@
             android:layout_height="20dp"
             android:background="@drawable/close" />
     </LinearLayout>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -127,12 +128,22 @@
             android:textColor="@color/rememberall_navy"
             android:textSize="14sp" />
     </LinearLayout>
+    <TextView
+        android:id="@+id/tv_error"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:textColor="@color/rememberall_red"
+        android:textSize="12sp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="5dp"/>
 
     <Button
         android:id="@+id/btn_triplog_create"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="20dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/btn_round_border"
         android:text="일기장 생성하기"
         android:textAllCaps="false"

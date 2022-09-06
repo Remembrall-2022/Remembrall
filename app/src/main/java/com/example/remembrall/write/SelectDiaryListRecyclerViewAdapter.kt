@@ -1,4 +1,4 @@
-package com.example.remembrall.read
+package com.example.remembrall.write
 
 import android.content.Context
 import android.util.DisplayMetrics
@@ -13,30 +13,22 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.remembrall.R
-class ReadDiaryListRecyclerViewAdapter (
+import com.example.remembrall.read.ReadDiaryListRecyclerViewData
+
+class SelectDiaryListRecyclerViewAdapter (
     private val context: Context,
     private val datalist: ArrayList<ReadDiaryListRecyclerViewData>
-    ): RecyclerView.Adapter<ReadDiaryListRecyclerViewAdapter.ViewHolder>(){
+    ): RecyclerView.Adapter<SelectDiaryListRecyclerViewAdapter.ViewHolder>(){
     // (4) setItemClickListener로 설정한 함수 실행
     private lateinit var itemClickListener : OnItemClickListener
-    private lateinit var longClickListener: OnItemLongClickListener
-
     inner class ViewHolder(view: View): RecyclerView.ViewHolder(view){
         val name: TextView = itemView.findViewById(R.id.tv_readdiary_name)
-//        val heart: ImageView=itemView.findViewById(R.id.img_adddiary_heart)
         val diary: ImageView=itemView.findViewById(R.id.img_adddiary_diary)
 
         init{
             diary.setOnClickListener{
                 itemClickListener.diaryOnClick(it, adapterPosition)
             }
-            diary.setOnLongClickListener {
-                longClickListener.diaryLongClick(it, adapterPosition)
-                false
-            }
-//            heart.setOnClickListener {
-//                itemClickListener.heartOnClick(it, adapterPosition)
-//            }
         }
         fun bind(data: ReadDiaryListRecyclerViewData){
             name.text=data.name
@@ -53,7 +45,7 @@ class ReadDiaryListRecyclerViewAdapter (
 
     //만들어진 뷰홀더 없을때 뷰홀더(레이아웃) 생성하는 함수
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_add_readdiarylist,parent,false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_diary_list,parent,false)
         return ViewHolder(view)
     }
 
@@ -71,17 +63,9 @@ class ReadDiaryListRecyclerViewAdapter (
 //        fun heartOnClick(v: View, position: Int)
     }
 
-    interface OnItemLongClickListener{
-        fun diaryLongClick(v : View, position : Int)
-    }
-
     // (3) 외부에서 클릭 시 이벤트 설정
     fun setItemClickListener(onItemClickListener: OnItemClickListener) {
         this.itemClickListener = onItemClickListener
-    }
-
-    fun setItemLongClickListener(onLongClickListener: OnItemLongClickListener){
-        this.longClickListener = onLongClickListener
     }
 
 
