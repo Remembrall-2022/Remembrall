@@ -136,7 +136,6 @@ class WriteDiaryActivity() : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        prefs = PreferenceUtil(applicationContext)
         super.onCreate(savedInstanceState)
         binding=ActivityWriteDiaryBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -217,9 +216,10 @@ class WriteDiaryActivity() : AppCompatActivity() {
             })
         }
 
-        var content=SpannableString(binding.tvWritediaryDate.text.toString())
-        content.setSpan(UnderlineSpan(), 0, content.length, 0)
-        binding.tvWritediaryDate.text=content
+//        var str = binding.tvWritediaryDate.text.toString()
+//        var content=SpannableString(str)
+//        content.setSpan(UnderlineSpan(), 0, str.length, 0)
+//        binding.tvWritediaryDate.text=content
 
         initalize()
         initReadDiaryRecyclerView()
@@ -229,6 +229,45 @@ class WriteDiaryActivity() : AppCompatActivity() {
         binding.linearWritediaryAddplace.setOnClickListener{
             val intent_map = Intent(this@WriteDiaryActivity, MapSearchActivity::class.java)
             resultLauncher.launch(intent_map)
+
+            binding.linearWritediaryEdit.visibility=View.VISIBLE
+        }
+
+        binding.linearWritediaryEdit.setOnClickListener{
+            if(binding.tvWritediaryEdit.text.toString()=="경로 수정하기") {
+                val size = writeDiaryRecyclerViewData.size - 1
+                //edit 버튼 눌렀을 때
+                Log.d("수정할 때 list 사이즈", "${writeDiaryRecyclerViewData.size}")
+
+                binding.tvWritediaryEdit.text="수정 완료"
+                binding.linearWritediaryAddplace.visibility = View.GONE
+
+                for (i: Int in 0..size) {
+                    binding.recyclerviewWritediary[i].findViewById<LinearLayout>(R.id.linear_addplace_edit).visibility =
+                        View.VISIBLE
+                    binding.recyclerviewWritediary[i].findViewById<LinearLayout>(R.id.linear_addplace_drop).visibility =
+                        View.GONE
+                }
+            }
+            else{
+                val size = writeDiaryRecyclerViewData.size - 1
+
+                Log.d("완료 후 list 사이즈", "${writeDiaryRecyclerViewData.size}")
+
+                binding.linearWritediaryAddplace.visibility=View.VISIBLE
+                binding.tvWritediaryEdit.text="경로 수정하기"
+
+                if(writeDiaryRecyclerViewData.size==0){
+                    binding.linearWritediaryEdit.visibility=View.GONE
+                }
+
+                for(i: Int in 0..size){
+                    binding.recyclerviewWritediary[i].findViewById<LinearLayout>(R.id.linear_addplace_edit).visibility =
+                        View.GONE
+                    binding.recyclerviewWritediary[i].findViewById<LinearLayout>(R.id.linear_addplace_drop).visibility =
+                        View.VISIBLE
+                }
+            }
         }
 
         clickRecyclerViewItem()
@@ -377,9 +416,6 @@ class WriteDiaryActivity() : AppCompatActivity() {
                     binding.recyclerviewWritediary[position].findViewById<ImageView>(R.id.imageview_addplace_drop).setImageResource(R.drawable.ic_drop_up)
                 }
             }
-            override fun editViewOnClck(v: View, position: Int) {
-                binding.recyclerviewWritediary[position].findViewById<TextView>(R.id.tv_addplace_place).text="수정됨"
-            }
             override fun deleteViewOnClck(v: View, position: Int) {
                 Log.d("삭제 위치", "${position}")
                 writeDiaryRecyclerViewData.removeAt(position)
@@ -483,73 +519,78 @@ class WriteDiaryActivity() : AppCompatActivity() {
         binding.btnWritediaryComplete.visibility=View.GONE
         val today= Calendar.getInstance()
         var date=binding.tvWritediaryDate.text.toString().split("-")
+
+        var mon: Int=1
+        var yea: Int=1
+        var da: Int=1
         datePicker.init(date[0].toInt(), date[1].toInt()-1, date[2].toInt()){
                 view, year, month, day ->
-            val month = month + 1
-            
-            binding.tvWritediaryOk.setOnClickListener {
-                var m=month.toString()
-                var d=day.toString()
-                if(month<10){
-                    m="0${month}"
-                }
-                if(day<10)
-                    d="0${day}"
-                binding.tvWritediaryDate.text="$year-$m-$d"
-                binding.consWritediaryDatepicker.visibility=View.GONE
-                binding.btnWritediaryComplete.visibility=View.VISIBLE
+            mon = month + 1
+            da=day
+            yea=year
+        }
+        binding.linearWritediaryOk.setOnClickListener {
+            var m=mon.toString()
+            var d=da.toString()
+            if(mon<10){
+                m="0${mon}"
             }
-            binding.tvWritediaryCancel.setOnClickListener {
-                binding.consWritediaryDatepicker.visibility=View.GONE
-                binding.btnWritediaryComplete.visibility=View.VISIBLE
-            }
+            if(da<10)
+                d="0${da}"
+            binding.tvWritediaryDate.text="$yea-$m-$d"
+            binding.consWritediaryDatepicker.visibility=View.GONE
+            binding.btnWritediaryComplete.visibility=View.VISIBLE
+        }
+        binding.linearWritediaryCancel.setOnClickListener {
+            binding.consWritediaryDatepicker.visibility=View.GONE
+            binding.btnWritediaryComplete.visibility=View.VISIBLE
         }
 
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.writediary_toolbar_menu, menu)
-        return true
-    }
+//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+//        menuInflater.inflate(R.menu.writediary_toolbar_menu, menu)
+//        return true
+//    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {	//뒤로가기 버튼이 작동하도록
         when (item.itemId) {
             R.id.home -> {
                 finish()
             }
-            R.id.toolbar_writediary_edit -> {
-                val size=writeDiaryRecyclerViewData.size-1
-                //edit 버튼 눌렀을 때
-                Log.d("수정할 때 list 사이즈", "${writeDiaryRecyclerViewData.size}")
-                    binding.toolbarWritediary.menu.findItem(R.id.toolbar_writediary_edit)
-                        .setVisible(false)
-                    binding.toolbarWritediary.menu.findItem(R.id.toolbar_writediary_complete)
-                        .setVisible(true)
-                    binding.linearWritediaryAddplace.visibility = View.GONE
-
-                    for(i: Int in 0..size){
-                    binding.recyclerviewWritediary[i].findViewById<LinearLayout>(R.id.linear_addplace_edit).visibility =
-                        View.VISIBLE
-                    binding.recyclerviewWritediary[i].findViewById<LinearLayout>(R.id.linear_addplace_drop).visibility =
-                        View.GONE
-                    }
-            }
-            //완료 버튼 눌렀을 떄
-            R.id.toolbar_writediary_complete -> {
-                val size=writeDiaryRecyclerViewData.size-1
-                Log.d("완료 후 list 사이즈", "${writeDiaryRecyclerViewData.size}")
-
-                binding.toolbarWritediary.menu.findItem(R.id.toolbar_writediary_edit).setVisible(true)
-                binding.toolbarWritediary.menu.findItem(R.id.toolbar_writediary_complete).setVisible(false)
-                binding.linearWritediaryAddplace.visibility=View.VISIBLE
-
-                for(i: Int in 0..size){
-                    binding.recyclerviewWritediary[i].findViewById<LinearLayout>(R.id.linear_addplace_edit).visibility =
-                        View.GONE
-                    binding.recyclerviewWritediary[i].findViewById<LinearLayout>(R.id.linear_addplace_drop).visibility =
-                        View.VISIBLE
-                }
-            }
+//            R.id.toolbar_writediary_edit -> {
+//                val size=writeDiaryRecyclerViewData.size-1
+//                //edit 버튼 눌렀을 때
+//                Log.d("수정할 때 list 사이즈", "${writeDiaryRecyclerViewData.size}")
+//                    binding.toolbarWritediary.menu.findItem(R.id.toolbar_writediary_edit)
+//                        .setVisible(false)
+//                    binding.toolbarWritediary.menu.findItem(R.id.toolbar_writediary_complete)
+//                        .setVisible(true)
+//                    binding.linearWritediaryAddplace.visibility = View.GONE
+//
+//                    for(i: Int in 0..size){
+//                    binding.recyclerviewWritediary[i].findViewById<LinearLayout>(R.id.linear_addplace_edit).visibility =
+//                        View.VISIBLE
+//                    binding.recyclerviewWritediary[i].findViewById<LinearLayout>(R.id.linear_addplace_drop).visibility =
+//                        View.GONE
+//                    }
+//            }
+//            //완료 버튼 눌렀을 떄
+//            R.id.toolbar_writediary_complete -> {
+//                val size=writeDiaryRecyclerViewData.size-1
+//                Log.d("완료 후 list 사이즈", "${writeDiaryRecyclerViewData.size}")
+//
+//                binding.toolbarWritediary.menu.findItem(R.id.toolbar_writediary_edit).setVisible(true)
+//                binding.toolbarWritediary.menu.findItem(R.id.toolbar_writediary_complete).setVisible(false)
+//                binding.linearWritediaryAddplace.visibility=View.VISIBLE
+//
+//                for(i: Int in 0..size){
+//                    binding.recyclerviewWritediary[i].findViewById<LinearLayout>(R.id.linear_addplace_edit).visibility =
+//                        View.GONE
+//                    binding.recyclerviewWritediary[i].findViewById<LinearLayout>(R.id.linear_addplace_drop).visibility =
+//                        View.VISIBLE
+//                }
+//            }
         }
 
         return super.onOptionsItemSelected(item)

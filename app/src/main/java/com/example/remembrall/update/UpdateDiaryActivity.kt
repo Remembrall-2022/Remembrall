@@ -63,6 +63,21 @@ class UpdateDiaryActivity : AppCompatActivity() {
 
     private lateinit var question: String
     private var questionId: Long=1
+
+    private var placeName = ""
+    private var x : Double ?= null
+    private var y : Double ?= null
+
+    var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
+        if (result.resultCode == Activity.RESULT_OK){
+            placeName = result.data?.getStringExtra("placeName")!!.toString()
+            x =  result.data?.getDoubleExtra("x",0.0)
+            y =  result.data?.getDoubleExtra("y", 0.0)
+            Log.e("placeName", placeName)
+            writeDiaryRecyclerViewData.add(WriteDiaryRecyclerViewData(placeName, "", "", MultipartBody.Part.createFormData("file", ""),x!!,y!!))
+            writeDiaryRecyclerViewAdapter.notifyItemInserted(writeDiaryRecyclerViewData.size)
+        }
+    }
     private lateinit var formdata: MultipartBody.Part
 
     private var placeName = ""
@@ -296,9 +311,6 @@ class UpdateDiaryActivity : AppCompatActivity() {
                         View.VISIBLE
                     binding.recyclerviewWritediary[position].findViewById<ImageView>(R.id.imageview_addplace_drop).setImageResource(R.drawable.ic_drop_up)
                 }
-            }
-            override fun editViewOnClck(v: View, position: Int) {
-                binding.recyclerviewWritediary[position].findViewById<TextView>(R.id.tv_addplace_place).text="수정됨"
             }
             override fun deleteViewOnClck(v: View, position: Int) {
                 Log.d("삭제 위치", "${position}")

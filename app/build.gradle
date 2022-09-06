@@ -72,4 +72,5 @@ dependencies {
     kapt 'com.tickaroo.tikxml:processor:0.8.13'
 //    implementation "com.github.wisnukurniawan:date-time-range-picker-android:${version}"
     implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
+    implementation("androidx.viewpager2:viewpager2:1.0.0")
 }

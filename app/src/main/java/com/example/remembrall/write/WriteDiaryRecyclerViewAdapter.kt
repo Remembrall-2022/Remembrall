@@ -32,9 +32,8 @@ class WriteDiaryRecyclerViewAdapter(
         val coment: EditText = itemView.findViewById(R.id.et_addplace_coment)
         val drop: LinearLayout =itemView.findViewById(R.id.linear_addplace_drop)
         val placehide: LinearLayout=itemView.findViewById(R.id.linear_addplace_place)
-        val editTool: LinearLayout=itemView.findViewById(R.id.linear_addplace_edit)
 
-        val edit: ImageView=itemView.findViewById(R.id.imageview_addplace_edit)
+        val editTool: LinearLayout=itemView.findViewById(R.id.linear_addplace_edit)
         val delete: ImageView=itemView.findViewById(R.id.imageview_addplace_delete)
         val transfer: ImageView=itemView.findViewById(R.id.imageview_addplace_transfer)
 
@@ -50,9 +49,6 @@ class WriteDiaryRecyclerViewAdapter(
             }
             editTool.setOnClickListener{
                 itemClickListener.dropViewOnClck(it, adapterPosition)
-            }
-            edit.setOnClickListener {
-                itemClickListener.editViewOnClck(it, adapterPosition)
             }
             delete.setOnClickListener {
                 itemClickListener.deleteViewOnClck(it, adapterPosition)
@@ -112,7 +108,6 @@ class WriteDiaryRecyclerViewAdapter(
 //        fun onClick(v: View, position: Int)
         fun imageViewOnClick(v: View, position: Int)
         fun dropViewOnClck(v: View, position: Int)
-        fun editViewOnClck(v: View, position: Int)
         fun deleteViewOnClck(v: View, position: Int)
         fun transferViewOnClck(v: View, position: Int)
     }

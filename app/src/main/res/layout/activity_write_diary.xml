@@ -181,12 +181,30 @@
                         </EditText>
                     </androidx.constraintlayout.widget.ConstraintLayout>
                     </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/linear_writediary_edit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/writediary_borderline"
+                        android:paddingVertical="8dp"
+                        android:paddingHorizontal="15dp"
+                        android:visibility="gone">
+                        <TextView
+                            android:id="@+id/tv_writediary_edit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="경로 수정하기"
+                            android:textColor="@color/white"
+                            android:textSize="14sp"/>
+                    </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginTop="10dp">
+                        android:orientation="vertical">
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/recyclerview_writediary"
@@ -201,6 +219,7 @@
                             android:padding="15dp"
                             android:orientation="horizontal"
                             android:gravity="center_horizontal"
+                            android:layout_marginTop="10dp"
                             android:background="@drawable/writediary_borderline">
 
                             <ImageView
@@ -270,18 +289,30 @@
             app:layout_constraintTop_toBottomOf="@+id/datePicker_writediary"
             tools:ignore="MissingConstraints">
 
-            <TextView
-                android:id="@+id/tv_writediary_cancel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/white"
-                android:text="취소"
-                android:textAlignment="center"
-                android:paddingVertical="13dp"
-                android:textStyle="bold"
-                android:textSize="16sp"/>
+            <LinearLayout
+                android:id="@+id/linear_writediary_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <TextView
+                    android:id="@+id/tv_writediary_cancel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:text="취소"
+                    android:textColor="#333333"
+                    android:textAlignment="center"
+                    android:paddingVertical="15dp"
+                    android:textStyle="bold"
+                    android:textSize="15sp"/>
+            </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/linear_writediary_ok"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
             <TextView
                 android:id="@+id/tv_writediary_ok"
                 android:layout_width="match_parent"
@@ -289,10 +320,12 @@
                 android:layout_weight="1"
                 android:background="@color/white"
                 android:text="확인"
+                android:textColor="#333333"
                 android:textAlignment="center"
-                android:paddingVertical="13dp"
+                android:paddingVertical="15dp"
                 android:textStyle="bold"
-                android:textSize="16sp"/>
+                android:textSize="15sp"/>
+        </LinearLayout>
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
