@@ -50,6 +50,7 @@ class RvMapSearchAdapter(val context: Context): RecyclerView.Adapter<RvMapSearch
         // 아이템 클릭 이벤트
         holder.itemView.setOnClickListener {
             itemClickListener.onClick(it, position)
+            itemClickListener.btnOnClick(it, position)
         }
     }
 
@@ -63,6 +64,7 @@ class RvMapSearchAdapter(val context: Context): RecyclerView.Adapter<RvMapSearch
 
     interface OnItemClickListener {
         fun onClick(v: View, position: Int)
+        fun btnOnClick(v: View, position: Int)
     }
 
     fun setItemClickListener(onItemClickListener: OnItemClickListener) {

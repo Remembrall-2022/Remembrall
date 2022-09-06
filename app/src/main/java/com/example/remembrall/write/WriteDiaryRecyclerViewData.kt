@@ -9,5 +9,7 @@ data class WriteDiaryRecyclerViewData(
     val place: String,
     var image: String,
     val coment: String,
-    var imgFile: MultipartBody.Part
+    var imgFile: MultipartBody.Part,
+    var x: Double,
+    var y: Double
 )

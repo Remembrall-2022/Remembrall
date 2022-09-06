@@ -1,6 +1,7 @@
 package com.example.remembrall.write
 
 import android.Manifest
+import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
@@ -31,7 +32,9 @@ import com.example.remembrall.R
 import com.example.remembrall.databinding.ActivityWriteDiaryBinding
 import com.example.remembrall.login.res.LoginResponse
 import com.example.remembrall.login.userinfo.SharedManager
+import com.example.remembrall.map.MapSearchActivity
 import com.google.gson.Gson
+import com.kakao.sdk.auth.Constants.CODE
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -46,6 +49,7 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.*
+import kotlin.concurrent.schedule
 
 
 class WriteDiaryActivity() : AppCompatActivity() {
@@ -63,6 +67,22 @@ class WriteDiaryActivity() : AppCompatActivity() {
 
     private lateinit var question: String
     private var questionId: Long=1
+
+    private var placeName = ""
+    private var x : Double ?= null
+    private var y : Double ?= null
+
+    var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
+        if (result.resultCode == Activity.RESULT_OK){
+            placeName = result.data?.getStringExtra("placeName")!!.toString()
+            x =  result.data?.getDoubleExtra("x",0.0)
+            y =  result.data?.getDoubleExtra("y", 0.0)
+            Log.e("placeName", placeName)
+            writeDiaryRecyclerViewData.add(WriteDiaryRecyclerViewData(placeName, "", "", MultipartBody.Part.createFormData("file", ""),x!!,y!!))
+            writeDiaryRecyclerViewAdapter.notifyItemInserted(writeDiaryRecyclerViewData.size)
+        }
+    }
+
     private lateinit var formdata: MultipartBody.Part
     companion object{
         lateinit var prefs: PreferenceUtil
@@ -122,9 +142,15 @@ class WriteDiaryActivity() : AppCompatActivity() {
         questionId=intent.getLongExtra("questionId",1)
         binding.tvWritediaryQuestion.text=question
 
+        // 일기장 선택
+        binding.textviewReaddiarylistTitle.setOnClickListener{
+
+        }
+
         var content=SpannableString(binding.tvWritediaryDate.text.toString())
         content.setSpan(UnderlineSpan(), 0, content.length, 0)
         binding.tvWritediaryDate.text=content
+
 
         initalize()
         initReadDiaryRecyclerView()
@@ -132,9 +158,8 @@ class WriteDiaryActivity() : AppCompatActivity() {
 
         //장소 추가
         binding.linearWritediaryAddplace.setOnClickListener{
-            writeDiaryRecyclerViewData.add(WriteDiaryRecyclerViewData("장소${idx}", "", "", MultipartBody.Part.createFormData("file", "")))
-            writeDiaryRecyclerViewAdapter.notifyItemInserted(writeDiaryRecyclerViewData.size)
-            idx++
+            val intent_map = Intent(this@WriteDiaryActivity, MapSearchActivity::class.java)
+            resultLauncher.launch(intent_map)
         }
 
         clickRecyclerViewItem()
@@ -449,5 +474,15 @@ class WriteDiaryActivity() : AppCompatActivity() {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == 200) {
+            placeName = data?.getStringExtra("placeName")!!
+            x = data?.getDoubleExtra("x", 0.0)!!
+            y = data?.getDoubleExtra("y", 0.0)!!
+        }
     }
 }

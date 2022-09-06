@@ -4,15 +4,18 @@ import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import android.location.Location
 import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.remembrall.LoadingDialog
 import com.example.remembrall.R
 import com.example.remembrall.constellation.ConstellationActivity
 import com.example.remembrall.databinding.ActivityMainBinding
@@ -25,6 +28,7 @@ import com.example.remembrall.map.MapSearch.KakaoMapApi
 import com.example.remembrall.map.MapSearch.ResultSearchKeyword
 import com.example.remembrall.map.MapSearch.RvMapSearch
 import com.example.remembrall.map.MapSearch.RvMapSearchAdapter
+import com.example.remembrall.write.WriteDiaryActivity
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.tickaroo.tikxml.TikXml
 import com.tickaroo.tikxml.retrofit.TikXmlConverterFactory
@@ -38,12 +42,16 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.concurrent.schedule
+import kotlin.concurrent.timer
 
 class MapSearchActivity : AppCompatActivity() {
     var mapView: MapView?= null
     var uLatitude: Double ?= null
     var uLongitude: Double ?= null
-    private lateinit var binding : ActivityMapSearchBinding
+    var binding : ActivityMapSearchBinding ?= null
 
     // 검색결과 recyclerView
     var mapSearchItemList = ArrayList<RvMapSearch>()
@@ -60,7 +68,13 @@ class MapSearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMapSearchBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(binding!!.root)
+
+        // 로딩창 객체 생성
+        var loadingDialog = LoadingDialog(this@MapSearchActivity)
+        loadingDialog!!.window!!.setBackgroundDrawable(ColorDrawable(android.graphics.Color.TRANSPARENT))
+        loadingDialog!!.setCancelable(false)
+        loadingDialog!!.show()
 
         // map view 연결
         val mapView = MapView(this@MapSearchActivity)
@@ -90,14 +104,30 @@ class MapSearchActivity : AppCompatActivity() {
         rvMapSearchAdapter = RvMapSearchAdapter(this@MapSearchActivity)
         rv?.adapter = rvMapSearchAdapter
 
-//        var thread = NetworkThread()
-//        thread.start()
-
+        rvMapSearchAdapter.setItemClickListener(object: RvMapSearchAdapter.OnItemClickListener{
+            override fun onClick(v: View, position: Int) {
+                val point = MapPOIItem()
+                point.apply {
+                    itemName = mapSearchItemList[position].place_name
+                    mapPoint = MapPoint.mapPointWithGeoCoord(mapSearchItemList[position].y, mapSearchItemList[position].x)
+                    markerType = MapPOIItem.MarkerType.BluePin
+                    selectedMarkerType = MapPOIItem.MarkerType.RedPin
+                }
+                mapView.addPOIItem(point)
+                mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(mapSearchItemList[position].y, mapSearchItemList[position].x), 7, true) // 중심점 변경 + 줌 레벨 변경
+            }
+            override fun btnOnClick(v: View, position: Int) {
+                val intent = Intent(this@MapSearchActivity, WriteDiaryActivity::class.java)
+                intent.putExtra("placeName", mapSearchItemList[position].place_name)
+                intent.putExtra("x", mapSearchItemList[position].x)
+                intent.putExtra("y", mapSearchItemList[position].y)
+                setResult(RESULT_OK, intent)
+                finish()
+            }
+        })
         val client = OkHttpClient.Builder()
             .addInterceptor(
-                HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC)
-                    .setLevel(HttpLoggingInterceptor.Level.BODY)
-                    .setLevel(HttpLoggingInterceptor.Level.HEADERS)
+                httpLoggingInterceptor()
             )
             .build()
 
@@ -131,15 +161,14 @@ class MapSearchActivity : AppCompatActivity() {
                             mapSearchItemList.add(searchItem)
                             rvMapSearchAdapter.notifyDataSetChanged()
                         }
+                        loadingDialog!!.dismiss()
                     }
                 }
                 override fun onFailure(call: Call<TourRecommendResponse>, t: Throwable) {
                     Log.e("responseRecommendPlace", "관광지 추천 실패")
                 }
-
             })
-
-
+        loadingDialog!!.dismiss()
         rvMapSearchAdapter.setDataList(mapSearchItemList)
 
         val bottomSheet : View = binding!!.llBottomsheet
@@ -254,17 +283,6 @@ class MapSearchActivity : AppCompatActivity() {
         uLongitude = userNowLocation?.longitude
     }
 
-    private fun httpLoggingInterceptor(): HttpLoggingInterceptor? {
-        val interceptor = HttpLoggingInterceptor { message ->
-            Log.e(
-                "HttpLogging:",
-                message + ""
-            )
-        }
-        return interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-    }
-
-
     // 위치추적 중지
     private fun stopTracking() {
         mapView?.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOff
@@ -280,5 +298,14 @@ class MapSearchActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         mapView = null
+    }
+    fun httpLoggingInterceptor(): HttpLoggingInterceptor {
+        val interceptor = HttpLoggingInterceptor { message ->
+            Log.e(
+                "HttpLogging:",
+                message + ""
+            )
+        }
+        return interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
     }
 }
