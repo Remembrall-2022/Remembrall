@@ -64,20 +64,6 @@ class UpdateDiaryActivity : AppCompatActivity() {
     private lateinit var question: String
     private var questionId: Long=1
 
-    private var placeName = ""
-    private var x : Double ?= null
-    private var y : Double ?= null
-
-    var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
-        if (result.resultCode == Activity.RESULT_OK){
-            placeName = result.data?.getStringExtra("placeName")!!.toString()
-            x =  result.data?.getDoubleExtra("x",0.0)
-            y =  result.data?.getDoubleExtra("y", 0.0)
-            Log.e("placeName", placeName)
-            writeDiaryRecyclerViewData.add(WriteDiaryRecyclerViewData(placeName, "", "", MultipartBody.Part.createFormData("file", ""),x!!,y!!))
-            writeDiaryRecyclerViewAdapter.notifyItemInserted(writeDiaryRecyclerViewData.size)
-        }
-    }
     private lateinit var formdata: MultipartBody.Part
 
     private var placeName = ""
