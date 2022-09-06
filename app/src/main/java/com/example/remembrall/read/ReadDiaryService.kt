@@ -19,6 +19,11 @@ interface ReadDiaryService {
         @Path("id") id: Long
     ): Call<ReadTripLogResponse>
 
+    @GET("/tripLog/{id}")
+    fun getAlldiary(
+        @Header("X-AUTH-TOKEN") authToken : String,
+        @Path("id") id: Long
+    ):Call<ReadAllDiaryResponse>
 
     companion object{
         fun getRetrofitReadDateDiary(authToken: String, tripLogId: Long, dateLogId: Long): Call<ReadDiaryResponse>{
@@ -26,6 +31,9 @@ interface ReadDiaryService {
         }
         fun getRetrofitReadTripLog(authToken: String, id: Long): Call<ReadTripLogResponse>{
             return ApiClient.create(ReadDiaryService::class.java).getTripLog(authToken, id)
+        }
+        fun getRetrofitAllDiary(authToken: String, id: Long):Call<ReadAllDiaryResponse>{
+            return ApiClient.create(ReadDiaryService::class.java).getAlldiary(authToken,id)
         }
     }
 }
