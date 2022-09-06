@@ -17,6 +17,7 @@ import com.example.remembrall.MainActivity
 import com.example.remembrall.R
 import com.example.remembrall.databinding.FragmentReadDiaryListBinding
 import com.example.remembrall.login.userinfo.SharedManager
+import com.example.remembrall.read.Triplog.DeleteTriplogDialog
 import com.example.remembrall.read.Triplog.TriplogCreateDialog
 import com.example.remembrall.read.Triplog.TriplogService
 import com.example.remembrall.read.Triplog.req.TriplogRequest
@@ -203,9 +204,15 @@ class ReadDiaryListFragment : Fragment() {
         })
         readDiaryListRecyclerViewAdapter.setItemLongClickListener(object : ReadDiaryListRecyclerViewAdapter.OnItemLongClickListener{
             override fun diaryLongClick(v: View, position: Int) {
-                val sharedManager : SharedManager by lazy { SharedManager(mainActivity) }
-                var authToken = sharedManager.getCurrentUser().accessToken
-
+                val deleteTriplogDialog = DeleteTriplogDialog(mainActivity, readDiaryRecyclerViewData[position].triplogId, readDiaryRecyclerViewData[position].name)
+                deleteTriplogDialog.show()
+                deleteTriplogDialog.setOnClickListener(object : DeleteTriplogDialog.OnDialogClickListener{
+                    override fun onClicked() {
+                        var readDiaryFragment = ReadDiaryListFragment()
+                        mainActivity.supportFragmentManager.beginTransaction()
+                            .replace(R.id.framelayout_main, readDiaryFragment).commit()
+                    }
+                })
             }
         })
     }
