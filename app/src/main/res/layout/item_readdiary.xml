@@ -1,107 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingVertical="10dp">
+    android:background="@drawable/et_round_border">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cons_diary_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:ignore="MissingConstraints">
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/tv_diary_title_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-            <LinearLayout
-                android:id="@+id/linear_readdiary_hide"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingVertical="10dp"
-                android:orientation="horizontal"
-                android:layout_gravity="end">
-
-                <LinearLayout
-                    android:id="@+id/linear_readdiary_place"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:layout_weight="1">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/ic_location"/>
-                    <TextView
-                        android:id="@+id/tv_readdiary_place"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="관광지 이름"
-                        android:textColor="#333333"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:gravity="center_vertical"
-                        tools:ignore="MissingConstraints"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="end"
-                    android:orientation="horizontal"
-                    android:layout_weight="1">
-
-                    <LinearLayout
-                        android:id="@+id/linear_readdiary_drop"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="end"
-                        >
-                        <ImageView
-                            android:id="@+id/imageview_readdiary_drop"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/ic_drop_up" />
-                    </LinearLayout>
-                </LinearLayout>
-
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/linear_readdiary_bottom"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="visible">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cons_readdiary_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="visible"
-                    android:paddingVertical="10dp">
-
-                    <ImageView
-                        android:id="@+id/imageview_readdiary_picture"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/test_image"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <TextView
-                    android:id="@+id/et_readdiary_coment"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingHorizontal="15dp"
-                    android:paddingVertical="15dp"
-                    android:textSize="14sp"
-                    android:textColor="#333333"
-                    android:gravity="top"
-                    android:text="창덕궁 홍매화. 사람들이 정말 많았다.\n다음에는 한복 입고 와도 재밌을듯!" />
-            </LinearLayout>
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:text="일기장"
+            android:paddingHorizontal="15dp"
+            android:textSize="16sp"
+            android:paddingVertical="20dp"
+            android:textColor="#333333"
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

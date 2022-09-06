@@ -11,6 +11,10 @@ class LoginData(
     val refreshToken : String
 )
 
+class DiaryData(
+    val isWritten :  Boolean = false
+)
+
 class SharedManager(context : Context) {
     private val prefs: SharedPreferences = PreferenceHelper.defaultPrefs(context)
     fun loginCurrentUser(user : LoginData){
@@ -29,5 +33,13 @@ class SharedManager(context : Context) {
         prefs["grantType"] = null
         prefs["accessToken"] = null
         prefs["refreshToken"] = null
+    }
+
+    fun writeDiary(){
+        prefs["isWritten"] = true
+    }
+
+    fun  midNightInitialization(){
+        prefs["isWritten"] = false
     }
 }

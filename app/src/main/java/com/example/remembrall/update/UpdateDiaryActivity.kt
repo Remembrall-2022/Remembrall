@@ -1,6 +1,7 @@
 package com.example.remembrall.update
 
 import android.Manifest
+import android.app.Activity
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -30,6 +31,7 @@ import com.example.remembrall.PreferenceUtil
 import com.example.remembrall.R
 import com.example.remembrall.databinding.ActivityUpdateDiaryBinding
 import com.example.remembrall.login.userinfo.SharedManager
+import com.example.remembrall.map.MapSearchActivity
 import com.example.remembrall.write.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -62,6 +64,25 @@ class UpdateDiaryActivity : AppCompatActivity() {
     private lateinit var question: String
     private var questionId: Long=1
     private lateinit var formdata: MultipartBody.Part
+
+    private var placeName = ""
+    private var x : Double ?= null
+    private var y : Double ?= null
+
+    var tvQuestion : TextView ?= null
+
+    var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
+        if (result.resultCode == Activity.RESULT_OK){
+            placeName = result.data?.getStringExtra("placeName")!!.toString()
+            x =  result.data?.getDoubleExtra("x",0.0)
+            y =  result.data?.getDoubleExtra("y", 0.0)
+            Log.e("placeName", placeName)
+            writeDiaryRecyclerViewData.add(WriteDiaryRecyclerViewData(placeName, "", "", MultipartBody.Part.createFormData("file", ""),x!!,y!!))
+            writeDiaryRecyclerViewAdapter.notifyItemInserted(writeDiaryRecyclerViewData.size)
+        }
+    }
+
+
     companion object{
         lateinit var prefs: PreferenceUtil
         const val REQ_GALLERY=1
@@ -117,6 +138,8 @@ class UpdateDiaryActivity : AppCompatActivity() {
 
         question= intent.getStringExtra("question").toString()
         questionId=intent.getLongExtra("questionId",1)
+
+        tvQuestion = binding.tvUpdatediaryQuestion
         binding.tvUpdatediaryQuestion.text=question
 
         val text= SpannableString(binding.tvWritediaryDate.text.toString())
@@ -129,9 +152,8 @@ class UpdateDiaryActivity : AppCompatActivity() {
 
         //장소 추가
         binding.linearUpdatediaryAddplace.setOnClickListener{
-            writeDiaryRecyclerViewData.add(WriteDiaryRecyclerViewData("장소${idx}", "", "", MultipartBody.Part.createFormData("file", "")))
-            writeDiaryRecyclerViewAdapter.notifyItemInserted(writeDiaryRecyclerViewData.size)
-            idx++
+            val intent_map = Intent(this@UpdateDiaryActivity, MapSearchActivity::class.java)
+            resultLauncher.launch(intent_map)
         }
 
         clickRecyclerViewItem()
