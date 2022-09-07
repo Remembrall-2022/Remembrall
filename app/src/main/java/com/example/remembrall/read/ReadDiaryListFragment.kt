@@ -121,6 +121,12 @@ class ReadDiaryListFragment : Fragment() {
                             val title=diary!!.title.toString()
                             val imgUrl=diary!!.tripLogImgUrl.toString()
                             val triplogId=diary!!.triplogId!!.toLong()
+                            val tripStartDate=diary!!.tripStartDate
+                            val tripEndDate=diary!!.tripEndDate
+                            val startDate=tripStartDate.toString().split('-')
+                            val endDate=tripEndDate.toString().split('-')
+//                            val tripDate=startDate[0]+''
+
                             readDiaryRecyclerViewData.add(ReadDiaryListRecyclerViewData(title, imgUrl, triplogId))
                         }
                         readDiaryListRecyclerViewAdapter.notifyItemInserted(readDiaryRecyclerViewData.size)
