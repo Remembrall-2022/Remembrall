@@ -69,4 +69,9 @@ interface UserService {
         @Header("X-AUTH-TOKEN") authToken : String
     ) : Call <AuthResponse>
 
+    @POST("/reissue")
+    fun reIssueToken(
+        @Body reIssueRequest: ReIssueRequest
+    ) : Call <LoginResponse>
+
 }

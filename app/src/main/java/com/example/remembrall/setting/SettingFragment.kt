@@ -11,14 +11,11 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.remembrall.MainActivity
 import com.example.remembrall.R
-import com.example.remembrall.databinding.FragmentMapSearchBinding
 import com.example.remembrall.databinding.FragmentSettingBinding
 import com.example.remembrall.dongdong.DongDongFragment
 import com.example.remembrall.login.SplashActivity
 import com.example.remembrall.login.UserService
-import com.example.remembrall.login.req.UserRequest
 import com.example.remembrall.login.res.UserInfoResponse
-import com.example.remembrall.login.res.UserResponse
 import com.example.remembrall.login.userinfo.SharedManager
 import com.kakao.sdk.user.UserApiClient
 import okhttp3.OkHttpClient
@@ -68,7 +65,7 @@ class SettingFragment : Fragment() {
         var authToken = sharedManager.getCurrentUser().accessToken
 
         fun getUserInfo(){
-            userService.userInfo(authToken)
+            userService.userInfo(authToken!!)
                 .enqueue(object : Callback<UserInfoResponse>{
                     override fun onResponse(
                         call: Call<UserInfoResponse>,

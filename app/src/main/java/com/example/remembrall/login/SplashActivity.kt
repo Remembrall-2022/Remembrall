@@ -1,7 +1,6 @@
 package com.example.remembrall.login
 
 import android.content.ContentValues
-import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,9 +9,7 @@ import android.widget.Toast
 import com.example.remembrall.MainActivity
 import com.example.remembrall.R
 import com.example.remembrall.constellation.ConstellationActivity
-import com.example.remembrall.databinding.ActivityLoginBinding
 import com.example.remembrall.databinding.ActivitySplashBinding
-import com.example.remembrall.login.SignUpActivity
 import com.example.remembrall.login.req.KakaoLoginRequest
 import com.example.remembrall.login.res.LoginResponse
 import com.example.remembrall.login.userinfo.LoginData
