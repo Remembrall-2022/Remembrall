@@ -31,15 +31,28 @@
                     tools:ignore="MissingConstraints" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                android:id="@+id/tv_readdiary_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="2022-08-22"
-                android:textColor="@color/white"
-                android:textSize="14sp"
+            <LinearLayout
+                android:id="@+id/linear_readdiary_date"
+                android:layout_marginTop="15dp"
+                android:layout_width="110dp"
+                android:layout_height="30dp"
                 android:layout_gravity="end"
-                android:layout_marginVertical="15dp"/>
+                android:layout_marginBottom="15dp"
+                android:gravity="center"
+                android:background="@drawable/writediary_bottombutton_purple">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_calendar"
+                    android:layout_marginRight="3dp"/>
+                <TextView
+                    android:id="@+id/tv_readdiary_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2022-08-22"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

@@ -1,6 +1,7 @@
 package com.example.remembrall.read
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
@@ -23,10 +24,12 @@ class ViewPagerAdapter(
        fun bind(data: ViewPagerData, position: Int) {
             title.text=data.title
            date.text=data.date
-           question.text=data.queston
+           question.text=data.question
            answer.text=data.answer
            placeRecycler.layoutManager=
                LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+           Log.e("placeInfo", "${data.question} ${data.placeInfo}")
+           readDiaryRecyclerViewData.clear()
            readDiaryRecyclerViewData.addAll(data.placeInfo)
            readDiaryRecyclerViewAdapter= ReadDiaryRecyclerViewAdapter(context, readDiaryRecyclerViewData)
            placeRecycler.adapter = readDiaryRecyclerViewAdapter

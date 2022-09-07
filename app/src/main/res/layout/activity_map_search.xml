@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_readdiary"
+        android:id="@+id/toolbar_mapsearch"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         app:contentInsetStart="0dp"

@@ -23,6 +23,7 @@
             android:exported="false" />
         <activity
             android:name="com.example.remembrall.write.WriteDiaryActivity"
+            android:theme="@style/ToolbarTheme"
             android:exported="false" />
         <activity
             android:name=".login.SplashActivity"
