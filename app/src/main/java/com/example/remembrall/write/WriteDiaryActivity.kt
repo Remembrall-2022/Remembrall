@@ -159,7 +159,7 @@ class WriteDiaryActivity() : AppCompatActivity() {
         var authToken = sharedManager.getCurrentUser().accessToken
 
         readDiaryListRecyclerViewData = arrayListOf()
-        triplogService.getTripLogList(authToken).enqueue(object :
+        triplogService.getTripLogList(authToken!!).enqueue(object :
             Callback<GetTriplogListResponse> {
             override fun onResponse(
                 call: Call<GetTriplogListResponse>,
@@ -282,7 +282,7 @@ class WriteDiaryActivity() : AppCompatActivity() {
         binding.imgWritediaryRefresh.setOnClickListener {
             val sharedManager : SharedManager by lazy { SharedManager(this@WriteDiaryActivity) }
             var authToken = sharedManager.getCurrentUser().accessToken
-            WriteDiaryService.getRetrofitRefreshQuestion(authToken).enqueue(object: Callback<GetQuestionResponse>{
+            WriteDiaryService.getRetrofitRefreshQuestion(authToken!!).enqueue(object: Callback<GetQuestionResponse>{
                 override fun onResponse(
                     call: Call<GetQuestionResponse>,
                     response: Response<GetQuestionResponse>
@@ -303,7 +303,7 @@ class WriteDiaryActivity() : AppCompatActivity() {
         binding.imgWritediaryMore.setOnClickListener {
             val sharedManager : SharedManager by lazy { SharedManager(this@WriteDiaryActivity) }
             var authToken = sharedManager.getCurrentUser().accessToken
-            WriteDiaryService.getRetrofitAllQuestion(authToken).enqueue(object: Callback<GetAllQuestionResponse>{
+            WriteDiaryService.getRetrofitAllQuestion(authToken!!).enqueue(object: Callback<GetAllQuestionResponse>{
                 override fun onResponse(
                     call: Call<GetAllQuestionResponse>,
                     response: Response<GetAllQuestionResponse>
@@ -369,7 +369,7 @@ class WriteDiaryActivity() : AppCompatActivity() {
             val mediaType = "application/json".toMediaType()
             val jsonBody=jsonObject.toString().toRequestBody(mediaType)
 
-            WriteDiaryService.getRetrofitSaveDiary(authToken, 13, jsonBody, imgList).enqueue(object: Callback<WriteDiaryResponse>{
+            WriteDiaryService.getRetrofitSaveDiary(authToken!!, 13, jsonBody, imgList).enqueue(object: Callback<WriteDiaryResponse>{
                 override fun onResponse(
                     call: Call<WriteDiaryResponse>,
                     response: Response<WriteDiaryResponse>
