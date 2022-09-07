@@ -39,11 +39,13 @@
             <LinearLayout
                 android:id="@+id/linear_readdiary_date"
                 android:layout_marginTop="15dp"
-                android:layout_width="110dp"
-                android:layout_height="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_marginBottom="15dp"
                 android:layout_marginHorizontal="10dp"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="8dp"
                 android:gravity="center"
                 android:background="@drawable/writediary_bottombutton_purple">
                 <ImageView
