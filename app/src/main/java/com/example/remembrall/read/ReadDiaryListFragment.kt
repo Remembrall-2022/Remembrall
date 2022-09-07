@@ -29,6 +29,9 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class ReadDiaryListFragment : Fragment() {
     private lateinit var binding: FragmentReadDiaryListBinding
@@ -121,7 +124,16 @@ class ReadDiaryListFragment : Fragment() {
                             val title=diary!!.title.toString()
                             val imgUrl=diary!!.tripLogImgUrl.toString()
                             val triplogId=diary!!.triplogId!!.toLong()
-                            readDiaryRecyclerViewData.add(ReadDiaryListRecyclerViewData(title, imgUrl, triplogId))
+
+                            val tripStartDate=diary!!.tripStartDate
+                            val tripEndDate=diary!!.tripEndDate
+                            val startDate=tripStartDate.toString().split('-')
+                            val sDate=startDate[0].toString().split('0')
+                            val endDate=tripEndDate.toString().split('-')
+                            val eDate=startDate[0].toString().split('0')
+                            val tripDate=sDate[1]+'.'+startDate[1]+'.'+startDate[2]+" ~ "+eDate[1]+'.'+endDate[1]+'.'+endDate[2]
+
+                            readDiaryRecyclerViewData.add(ReadDiaryListRecyclerViewData(title, imgUrl, triplogId, tripDate))
                         }
                         readDiaryListRecyclerViewAdapter.notifyItemInserted(readDiaryRecyclerViewData.size)
                         binding.llNoDiary.visibility = View.GONE

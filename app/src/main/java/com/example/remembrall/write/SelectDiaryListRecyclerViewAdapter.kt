@@ -45,7 +45,7 @@ class SelectDiaryListRecyclerViewAdapter (
 
     //만들어진 뷰홀더 없을때 뷰홀더(레이아웃) 생성하는 함수
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_diary_list,parent,false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_add_readdiarylist,parent,false)
         return ViewHolder(view)
     }
 
