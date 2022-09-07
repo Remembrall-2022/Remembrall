@@ -72,7 +72,7 @@ class WriteDiaryActivity() : AppCompatActivity() {
     private lateinit var imagePath: String
     private var pos=0
     private lateinit var date: LocalDate
-
+    private var diaryId: Long=1
     private lateinit var question: String
     private var questionId: Long=1
 
@@ -193,8 +193,8 @@ class WriteDiaryActivity() : AppCompatActivity() {
             diaryListDialog.readDiaryListRecyclerViewAdapter.setItemClickListener(object: SelectDiaryListRecyclerViewAdapter.OnItemClickListener{
                 override fun diaryOnClick(v: View, position: Int) {
                     val diaryTitle=readDiaryListRecyclerViewData[position].name
-                    val id=readDiaryListRecyclerViewData[position].triplogId
-                    Log.e("question", "$id + $diaryTitle")
+                    diaryId=readDiaryListRecyclerViewData[position].triplogId
+                    Log.e("diary", "$diaryId + $diaryTitle")
                     binding.tvDiaryTitle.text = diaryTitle
                     diaryListDialog.dismiss()
                 }
@@ -369,7 +369,8 @@ class WriteDiaryActivity() : AppCompatActivity() {
             val mediaType = "application/json".toMediaType()
             val jsonBody=jsonObject.toString().toRequestBody(mediaType)
 
-            WriteDiaryService.getRetrofitSaveDiary(authToken!!, 13, jsonBody, imgList).enqueue(object: Callback<WriteDiaryResponse>{
+            WriteDiaryService.getRetrofitSaveDiary(authToken, diaryId, jsonBody, imgList).enqueue(object: Callback<WriteDiaryResponse>{
+
                 override fun onResponse(
                     call: Call<WriteDiaryResponse>,
                     response: Response<WriteDiaryResponse>
@@ -387,8 +388,8 @@ class WriteDiaryActivity() : AppCompatActivity() {
                             e.printStackTrace()
                         }
                     }
-                    MainActivity.prefs.setString("writediary","true")
-                    Log.d("writediary", MainActivity.prefs.getString("writediary","작성 실패"))
+//                    MainActivity.prefs.setString("writediary","true")
+//                    Log.d("writediary", MainActivity.prefs.getString("writediary","작성 실패"))
                     finish()
                 }
 
@@ -427,7 +428,7 @@ class WriteDiaryActivity() : AppCompatActivity() {
                     View.VISIBLE
                 binding.recyclerviewWritediary[position].findViewById<View?>(R.id.linear_addplace_bottom).visibility=View.VISIBLE
                 binding.recyclerviewWritediary[position].findViewById<ImageView>(R.id.imageview_addplace_drop).setImageResource(R.drawable.ic_drop_up)
-
+                binding.recyclerviewWritediary[position].findViewById<ImageView>(R.id.imageview_addpicture).setImageResource(R.drawable.ic_image)
                 Log.d("리스트 삭제 후 사이즈", "${writeDiaryRecyclerViewData.size}")
                 Toast.makeText(binding.root.context, "삭제되었습니다", Toast.LENGTH_SHORT).show()
             }
@@ -555,42 +556,9 @@ class WriteDiaryActivity() : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {	//뒤로가기 버튼이 작동하도록
         when (item.itemId) {
-            R.id.home -> {
+            android.R.id.home -> {
                 finish()
             }
-//            R.id.toolbar_writediary_edit -> {
-//                val size=writeDiaryRecyclerViewData.size-1
-//                //edit 버튼 눌렀을 때
-//                Log.d("수정할 때 list 사이즈", "${writeDiaryRecyclerViewData.size}")
-//                    binding.toolbarWritediary.menu.findItem(R.id.toolbar_writediary_edit)
-//                        .setVisible(false)
-//                    binding.toolbarWritediary.menu.findItem(R.id.toolbar_writediary_complete)
-//                        .setVisible(true)
-//                    binding.linearWritediaryAddplace.visibility = View.GONE
-//
-//                    for(i: Int in 0..size){
-//                    binding.recyclerviewWritediary[i].findViewById<LinearLayout>(R.id.linear_addplace_edit).visibility =
-//                        View.VISIBLE
-//                    binding.recyclerviewWritediary[i].findViewById<LinearLayout>(R.id.linear_addplace_drop).visibility =
-//                        View.GONE
-//                    }
-//            }
-//            //완료 버튼 눌렀을 떄
-//            R.id.toolbar_writediary_complete -> {
-//                val size=writeDiaryRecyclerViewData.size-1
-//                Log.d("완료 후 list 사이즈", "${writeDiaryRecyclerViewData.size}")
-//
-//                binding.toolbarWritediary.menu.findItem(R.id.toolbar_writediary_edit).setVisible(true)
-//                binding.toolbarWritediary.menu.findItem(R.id.toolbar_writediary_complete).setVisible(false)
-//                binding.linearWritediaryAddplace.visibility=View.VISIBLE
-//
-//                for(i: Int in 0..size){
-//                    binding.recyclerviewWritediary[i].findViewById<LinearLayout>(R.id.linear_addplace_edit).visibility =
-//                        View.GONE
-//                    binding.recyclerviewWritediary[i].findViewById<LinearLayout>(R.id.linear_addplace_drop).visibility =
-//                        View.VISIBLE
-//                }
-//            }
         }
 
         return super.onOptionsItemSelected(item)
