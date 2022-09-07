@@ -87,8 +87,17 @@ class CreateTriplogDialog(
                                             val title=diary!!.title.toString()
                                             val imgUrl=diary!!.tripLogImgUrl.toString()
                                             val triplogId=diary!!.triplogId!!.toLong()
+
+                                            val tripStartDate=diary!!.tripStartDate
+                                            val tripEndDate=diary!!.tripEndDate
+                                            val startDate=tripStartDate.toString().split('-')
+                                            val sDate=startDate[0].toString().split('0')
+                                            val endDate=tripEndDate.toString().split('-')
+                                            val eDate=startDate[0].toString().split('0')
+                                            val tripDate=sDate[1]+'.'+startDate[1]+'.'+startDate[2]+" ~ "+eDate[1]+'.'+endDate[1]+'.'+endDate[2]
+
                                             readDiaryListRecyclerViewData.add(
-                                                ReadDiaryListRecyclerViewData(title, imgUrl, triplogId)
+                                                ReadDiaryListRecyclerViewData(title, imgUrl, triplogId, tripDate)
                                             )
                                         }
                                     }
