@@ -4,7 +4,9 @@ import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.remembrall.R
@@ -19,8 +21,13 @@ class ViewPagerAdapter(
         val question=itemView.findViewById<TextView>(R.id.tv_readdiary_question)
         val answer=itemView.findViewById<TextView>(R.id.tv_readdiary_answer)
         val placeRecycler=itemView.findViewById<RecyclerView>(R.id.recyclerview_readdiary)
+        val place=placeRecycler.findViewById<TextView>(R.id.tv_itemread_place)
+        val image=placeRecycler.findViewById<ImageView>(R.id.image_readpicture)
+        val coment=placeRecycler.findViewById<TextView>(R.id.tv_itemread_coment)
+
         var readDiaryRecyclerViewData: ArrayList<ReadDiaryRecyclerViewData> = arrayListOf()
         private lateinit var readDiaryRecyclerViewAdapter: ReadDiaryRecyclerViewAdapter
+
        fun bind(data: ViewPagerData, position: Int) {
             title.text=data.title
            date.text=data.date
@@ -28,11 +35,15 @@ class ViewPagerAdapter(
            answer.text=data.answer
            placeRecycler.layoutManager=
                LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-           Log.e("placeInfo", "${data.question} ${data.placeInfo}")
-           readDiaryRecyclerViewData.clear()
-           readDiaryRecyclerViewData.addAll(data.placeInfo)
+           Log.e("placeInfo", "${data.placeInfo}")
+//           place.text=data.placeInfo[position].place
+//           image.setImageURI(data.placeInfo[position].image.toUri())
+//           coment.text=data.placeInfo[position].content
+           Log.d("readDiaryData", "${readDiaryRecyclerViewData}")
            readDiaryRecyclerViewAdapter= ReadDiaryRecyclerViewAdapter(context, readDiaryRecyclerViewData)
            placeRecycler.adapter = readDiaryRecyclerViewAdapter
+           readDiaryRecyclerViewData.addAll(data.placeInfo)
+           readDiaryRecyclerViewAdapter.notifyItemInserted(readDiaryRecyclerViewData.size)
        }
     }
 

@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.net.toUri
+import androidx.core.view.get
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -40,6 +41,8 @@ class ReadDiaryRecyclerViewAdapter (
                     .fallback(R.drawable.ic_image) // 로드할 url 이 비어있을(null 등) 경우 표시할 이미지
                     .apply(RequestOptions().override(500,500))
                     .into(imageView) // 이미지를 넣을 뷰
+
+                imageView.adjustViewBounds=true
             }
         }
     }

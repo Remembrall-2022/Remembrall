@@ -23,6 +23,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
+import java.lang.Math.abs
 
 class ReadDiaryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityReadDiaryBinding
@@ -70,7 +71,6 @@ class ReadDiaryActivity : AppCompatActivity() {
 
         var viewpager2=binding.viewpagerRead
         viewPagerAdapter=ViewPagerAdapter(this@ReadDiaryActivity, viewPagerData)
-        viewpager2.adapter=viewPagerAdapter
         viewpager2.orientation= ViewPager2.ORIENTATION_HORIZONTAL
         viewpager2.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback(){
             override fun onPageSelected(position: Int) {
@@ -131,25 +131,47 @@ class ReadDiaryActivity : AppCompatActivity() {
                 response: Response<ReadAllDiaryResponse>
             ) {
                 if(response.isSuccessful){
-                    Log.e("diary", response.toString())
+//                    Log.e("diary", response.toString())
                     Log.e("diary", response.body().toString())
+                    for(i in 0..(response.body()!!.response.dateLogResponseDtoList.size-1)){
+                        var list= arrayListOf<ReadDiaryRecyclerViewData>()
 
-                    for(i in 0..response.body()!!.response.dateLogResponseDtoList.size-1){
                         val date=response.body()!!.response.dateLogResponseDtoList[i].date
                         val question=response.body()!!.response.dateLogResponseDtoList[i].question.questionName
                         val answer=response.body()!!.response.dateLogResponseDtoList[i].answer
-                        readDiaryRecyclerViewData.clear()
-                        for(j in 0..response.body()!!.response.dateLogResponseDtoList[i].placeLogList.size-1) {
+
+                        for(j in 0..(response.body()!!.response.dateLogResponseDtoList[i].placeLogList.size-1)) {
                             val place =
                                 response.body()!!.response.dateLogResponseDtoList[i].placeLogList[j].place.name
                             val image = response.body()!!.response.dateLogResponseDtoList[i].placeLogList[j].userLogImg.imgUrl
                             val content = response.body()!!.response.dateLogResponseDtoList[i].placeLogList[j].comment
-                            readDiaryRecyclerViewData.add(ReadDiaryRecyclerViewData(place, image, content))
+                            list.add(ReadDiaryRecyclerViewData(place, image, content))
                         }
-                        viewPagerData.add(ViewPagerData(title, date ,question,answer,readDiaryRecyclerViewData))
+//                        readDiaryRecyclerViewData.addAll(list)
+                        viewPagerData.add(ViewPagerData(title, date ,question,answer,list))
                     }
 //                    readDiaryRecyclerViewAdapter.notifyItemInserted(readDiaryRecyclerViewData.size)
-                    viewPagerAdapter.notifyItemInserted(viewPagerData.size)
+                    viewPagerAdapter.notifyDataSetChanged()
+                    val viewPager=binding.viewpagerRead
+                    viewPager.adapter=viewPagerAdapter
+                    viewPager.offscreenPageLimit=4
+                    val offsetBetweenPages = resources.getDimensionPixelOffset(R.dimen.offsetBetweenPages).toFloat()
+                    viewPager.setPageTransformer { page, position ->
+                        val myOffset = position * -(2 * offsetBetweenPages)
+                        if (position < -1) {
+                            page.translationX = -myOffset
+                        } else if (position <= 1) {
+                            // Paging 시 Y축 Animation 배경색을 약간 연하게 처리
+                            val scaleFactor = 0.95f.coerceAtLeast(1 - abs(position))
+                            page.translationX = myOffset
+                            page.scaleY = scaleFactor
+                            page.alpha = scaleFactor
+                        } else {
+                            page.alpha = 0f
+                            page.translationX = myOffset
+                        }
+                    }
+                    Log.e("viewPagerAdapter", "${viewPagerData.size}")
 
                 }else {
                     try {
