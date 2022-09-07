@@ -173,7 +173,7 @@ class ReadDiaryActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {	//뒤로가기 버튼이 작동하도록
         when (item.itemId) {
-            R.id.home -> {
+            android.R.id.home -> {
                 finish()
             }
         }

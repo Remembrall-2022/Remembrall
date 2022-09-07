@@ -10,6 +10,7 @@ import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
@@ -62,6 +63,11 @@ class MapSearchActivity : AppCompatActivity() {
 
         binding = ActivityMapSearchBinding.inflate(layoutInflater)
         setContentView(binding!!.root)
+
+        setSupportActionBar(binding!!.toolbarMapsearch)	//
+        val tb=supportActionBar!!
+        tb.setDisplayShowTitleEnabled(false)
+        tb.setDisplayHomeAsUpEnabled(true)
 
         // 로딩창 객체 생성
         var loadingDialog = LoadingDialog(this@MapSearchActivity)
@@ -300,5 +306,15 @@ class MapSearchActivity : AppCompatActivity() {
             )
         }
         return interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {	//뒤로가기 버튼이 작동하도록
+        when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 }

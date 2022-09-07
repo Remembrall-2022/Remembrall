@@ -12,7 +12,7 @@ interface WriteDiaryService {
     @Headers("Accept: application/json")
     fun postSaveDiary(
         @Header("X-AUTH-TOKEN") authToken : String,
-        @Path("tripLogId") tripLogId:Int,
+        @Path("tripLogId") tripLogId:Long,
         @Part ("saveRequestDto") saveRequestDto: RequestBody,
         @Part file: List<MultipartBody.Part>
     ) : Call<WriteDiaryResponse>
@@ -30,7 +30,7 @@ interface WriteDiaryService {
     ) : Call<GetAllQuestionResponse>
 
     companion object{
-        fun getRetrofitSaveDiary(authToken: String, tripLogId: Int, saveRequestDto: RequestBody, file: List<MultipartBody.Part>):Call<WriteDiaryResponse>{
+        fun getRetrofitSaveDiary(authToken: String, tripLogId: Long, saveRequestDto: RequestBody, file: List<MultipartBody.Part>):Call<WriteDiaryResponse>{
             return ApiClient.create(WriteDiaryService::class.java).postSaveDiary(authToken, tripLogId, saveRequestDto, file)
         }
         fun getRetrofitRefreshQuestion(authToken: String): Call<GetQuestionResponse> {
