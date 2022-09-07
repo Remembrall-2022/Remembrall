@@ -5,20 +5,15 @@ import android.app.Dialog
 import android.content.ContentValues
 import android.content.Context
 import android.os.Bundle
-import android.provider.Settings.Global.getString
 import android.util.Log
-import android.view.View
 import android.widget.Toast
-import com.example.remembrall.R
 import com.example.remembrall.databinding.DialogTriplogCreateBinding
-import com.example.remembrall.login.LoginActivity
 import com.example.remembrall.login.res.LoginResponse
 import com.example.remembrall.login.userinfo.SharedManager
 import com.example.remembrall.read.ReadDiaryListRecyclerViewData
 import com.example.remembrall.read.Triplog.req.TriplogRequest
 import com.example.remembrall.read.Triplog.res.CreateTriplogResponse
 import com.example.remembrall.read.Triplog.res.GetTriplogListResponse
-import com.example.remembrall.setting.ChangeNameDialog
 import com.google.gson.Gson
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
@@ -26,12 +21,17 @@ import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
 
-class TriplogCreateDialog(
-    context: Context
+class UpdateTriplogDialog(
+    context: Context,
+    triplogId: Long,
+    triplogRequest: TriplogRequest
 ) : Dialog(context){ // 뷰를 띄워야 하므로 Dialog 클래스는 context를 인자로 받는다.
     private lateinit var binding: DialogTriplogCreateBinding
-    private lateinit var onClickListener: TriplogCreateDialog.OnDialogClickListener
+    private lateinit var onClickListener: UpdateTriplogDialog.OnDialogClickListener
     private lateinit var readDiaryListRecyclerViewData: ArrayList<ReadDiaryListRecyclerViewData>
+    private var triplogRequest = triplogRequest
+    private var triplogId = triplogId
+
     // TODO : url key에서 들고오기
     var retrofit = Retrofit.Builder()
         .baseUrl("http://ec2-13-124-98-176.ap-northeast-2.compute.amazonaws.com:8080")
@@ -46,6 +46,11 @@ class TriplogCreateDialog(
     }
 
     private fun initViews() = with(binding) {
+
+        binding.etTriplogCreateName.setText(triplogRequest.title)
+        binding.tvStartDate.text = triplogRequest.tripStartDate
+        binding.tvEndDate.text = triplogRequest.tripEndDate
+        binding.tvDialogTitle.text = "일기장 수정하기"
 
         binding.llCreateTriplogStartDate.setOnClickListener {
             val cal = Calendar.getInstance()
@@ -66,54 +71,16 @@ class TriplogCreateDialog(
             val endDate = binding.tvEndDate.text.toString()
             val sharedManager : SharedManager by lazy { SharedManager(context) }
             var authToken = sharedManager.getCurrentUser().accessToken
-            triplogService.createTripLog(authToken, TriplogRequest(title, startDate, endDate)).enqueue(object : Callback<CreateTriplogResponse>{
+            triplogService.updateTripLog(authToken!!, triplogId, TriplogRequest(title, startDate, endDate)).enqueue(object : Callback<CreateTriplogResponse>{
                 override fun onResponse(
                     call: Call<CreateTriplogResponse>,
                     response: Response<CreateTriplogResponse>
                 ) {
-                    Log.e("CreateTripLog", response.body().toString())
+                    Log.e("UpdateTripLog", response.body().toString())
                     if(response.body()?.success.toString() == "true"){
-                        Toast.makeText(context,"일기장 생성 완료",Toast.LENGTH_SHORT).show()
-
-                        val sharedManager : SharedManager by lazy { SharedManager(context) }
-                        var authToken = sharedManager.getCurrentUser().accessToken
-                        readDiaryListRecyclerViewData= arrayListOf()
-                        triplogService.getTripLogList(authToken).enqueue(object :
-                            Callback<GetTriplogListResponse> {
-                            override fun onResponse(
-                                call: Call<GetTriplogListResponse>,
-                                response: Response<GetTriplogListResponse>
-                            ) {
-                                Log.e("CreateTripLog", response.body().toString())
-                                if(response.body()?.success.toString() == "true"){
-                                    var diaryList = response.body()?.response!!
-                                    if(diaryList != null){
-                                        for (diary in diaryList){
-                                            val title=diary!!.title.toString()
-                                            val imgUrl=diary!!.tripLogImgUrl.toString()
-                                            val triplogId=diary!!.triplogId!!.toLong()
-
-                                            val tripStartDate=diary!!.tripStartDate
-                                            val tripEndDate=diary!!.tripEndDate
-                                            val startDate=tripStartDate.toString().split('-')
-                                            val sDate=startDate[0].toString().split('0')
-                                            val endDate=tripEndDate.toString().split('-')
-                                            val eDate=startDate[0].toString().split('0')
-                                            val tripDate=sDate[1]+'.'+startDate[1]+'.'+startDate[2]+" ~ "+eDate[1]+'.'+endDate[1]+'.'+endDate[2]
-
-                                            readDiaryListRecyclerViewData.add(
-                                                ReadDiaryListRecyclerViewData(title, imgUrl, triplogId, tripDate)
-                                            )
-                                        }
-                                    }
-                                }
-                                onClickListener.onClicked(readDiaryListRecyclerViewData)
-                                dismiss()
-                            }
-                            override fun onFailure(call: Call<GetTriplogListResponse>, t: Throwable) {
-                                Toast.makeText(context,"일기장 불러오기 실패", Toast.LENGTH_SHORT).show()
-                            }
-                        })
+                        Toast.makeText(context,"일기장 수정 완료",Toast.LENGTH_SHORT).show()
+                        onClickListener.onClicked()
+                        dismiss()
                     }
                     else {
                         try {
@@ -149,6 +116,6 @@ class TriplogCreateDialog(
 
     interface OnDialogClickListener
     {
-        fun onClicked(readDiaryRecyclerViewDataList: ArrayList<ReadDiaryListRecyclerViewData>)
+        fun onClicked()
     }
 }

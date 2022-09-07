@@ -54,7 +54,7 @@ class ChangeNameDialog (
             val newName = binding.etNewName.text.toString().trim()
             val sharedManager : SharedManager by lazy { SharedManager(context) }
             var authToken = sharedManager.getCurrentUser().accessToken
-            userService.changeUserName(authToken, newName).enqueue(object :
+            userService.changeUserName(authToken!!, newName).enqueue(object :
                 Callback<UserNameResponse> {
                 override fun onResponse(
                     call: Call<UserNameResponse>,

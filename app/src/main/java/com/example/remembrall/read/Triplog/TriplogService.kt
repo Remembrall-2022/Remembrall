@@ -19,6 +19,13 @@ interface TriplogService {
         @Header("X-AUTH-TOKEN") authToken : String
     ): Call<GetTriplogListResponse>
 
+    @POST("/tripLog/{id}")
+    fun updateTripLog(
+        @Header("X-AUTH-TOKEN") authToken: String,
+        @Path("id") triplogId : Long,
+        @Body triplogRequest : TriplogRequest
+    ): Call<CreateTriplogResponse>
+
     @DELETE("/tripLog/{id}")
     fun deleteTripLog(
         @Header("X-AUTH-TOKEN") authToken: String,

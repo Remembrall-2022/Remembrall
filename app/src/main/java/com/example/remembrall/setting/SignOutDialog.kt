@@ -1,6 +1,5 @@
 package com.example.remembrall.setting
 
-import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.ContentValues.TAG
 import android.content.Context
@@ -8,7 +7,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
 import com.example.remembrall.databinding.DialogSignOutBinding
 import com.example.remembrall.login.SplashActivity
 import com.example.remembrall.login.UserService
@@ -50,7 +48,7 @@ class SignOutDialog (
         binding.btnSignOut.setOnClickListener {
             val sharedManager : SharedManager by lazy { SharedManager(context) }
             var authToken = sharedManager.getCurrentUser().accessToken
-            userService.signOut(authToken).enqueue(object :
+            userService.signOut(authToken!!).enqueue(object :
                 Callback<AuthResponse> {
                 override fun onResponse(
                     call: Call<AuthResponse>,
@@ -80,7 +78,7 @@ class SignOutDialog (
                                     }
                                 }
                             }
-                            var intent = Intent(context, SplashActivity::class.java)
+                            var intent = Intent(context,SplashActivity::class.java)
                             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
                             context.startActivity(intent)
                             dismiss()
