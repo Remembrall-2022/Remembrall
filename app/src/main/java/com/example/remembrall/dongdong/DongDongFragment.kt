@@ -61,8 +61,8 @@ class DongDongFragment : Fragment() {
         val sharedManager : SharedManager by lazy { SharedManager(mainActivity) }
         var authToken = sharedManager.getCurrentUser().accessToken
 
-        Log.e("AuthToken", authToken)
-        dongdongService.getDongDong(authToken).enqueue(object : Callback<DongDongResponse> {
+        Log.e("AuthToken", authToken!!)
+        dongdongService.getDongDong(authToken!!).enqueue(object : Callback<DongDongResponse> {
             override fun onResponse(
                 call: Call<DongDongResponse>,
                 response: Response<DongDongResponse>

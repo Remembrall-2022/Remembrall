@@ -5,20 +5,15 @@ import android.app.Dialog
 import android.content.ContentValues
 import android.content.Context
 import android.os.Bundle
-import android.provider.Settings.Global.getString
 import android.util.Log
-import android.view.View
 import android.widget.Toast
-import com.example.remembrall.R
 import com.example.remembrall.databinding.DialogTriplogCreateBinding
-import com.example.remembrall.login.LoginActivity
 import com.example.remembrall.login.res.LoginResponse
 import com.example.remembrall.login.userinfo.SharedManager
 import com.example.remembrall.read.ReadDiaryListRecyclerViewData
 import com.example.remembrall.read.Triplog.req.TriplogRequest
 import com.example.remembrall.read.Triplog.res.CreateTriplogResponse
 import com.example.remembrall.read.Triplog.res.GetTriplogListResponse
-import com.example.remembrall.setting.ChangeNameDialog
 import com.google.gson.Gson
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
@@ -26,11 +21,11 @@ import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
 
-class TriplogCreateDialog(
+class CreateTriplogDialog(
     context: Context
 ) : Dialog(context){ // 뷰를 띄워야 하므로 Dialog 클래스는 context를 인자로 받는다.
     private lateinit var binding: DialogTriplogCreateBinding
-    private lateinit var onClickListener: TriplogCreateDialog.OnDialogClickListener
+    private lateinit var onClickListener: CreateTriplogDialog.OnDialogClickListener
     private lateinit var readDiaryListRecyclerViewData: ArrayList<ReadDiaryListRecyclerViewData>
     // TODO : url key에서 들고오기
     var retrofit = Retrofit.Builder()
@@ -66,7 +61,7 @@ class TriplogCreateDialog(
             val endDate = binding.tvEndDate.text.toString()
             val sharedManager : SharedManager by lazy { SharedManager(context) }
             var authToken = sharedManager.getCurrentUser().accessToken
-            triplogService.createTripLog(authToken, TriplogRequest(title, startDate, endDate)).enqueue(object : Callback<CreateTriplogResponse>{
+            triplogService.createTripLog(authToken!!, TriplogRequest(title, startDate, endDate)).enqueue(object : Callback<CreateTriplogResponse>{
                 override fun onResponse(
                     call: Call<CreateTriplogResponse>,
                     response: Response<CreateTriplogResponse>
@@ -78,7 +73,7 @@ class TriplogCreateDialog(
                         val sharedManager : SharedManager by lazy { SharedManager(context) }
                         var authToken = sharedManager.getCurrentUser().accessToken
                         readDiaryListRecyclerViewData= arrayListOf()
-                        triplogService.getTripLogList(authToken).enqueue(object :
+                        triplogService.getTripLogList(authToken!!).enqueue(object :
                             Callback<GetTriplogListResponse> {
                             override fun onResponse(
                                 call: Call<GetTriplogListResponse>,

@@ -1,30 +1,18 @@
 package com.example.remembrall.read.Triplog
 
-import android.app.DatePickerDialog
 import android.app.Dialog
-import android.content.ContentValues
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import com.example.remembrall.databinding.DialogDeleteTriplogBinding
-import com.example.remembrall.databinding.DialogTriplogCreateBinding
-import com.example.remembrall.login.res.LoginResponse
 import com.example.remembrall.login.userinfo.SharedManager
-import com.example.remembrall.read.ReadDiaryListRecyclerViewData
-import com.example.remembrall.read.Triplog.req.TriplogRequest
-import com.example.remembrall.read.Triplog.res.CreateTriplogResponse
 import com.example.remembrall.read.Triplog.res.DeleteTriplogResponse
-import com.example.remembrall.read.Triplog.res.GetTriplogListResponse
-import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.io.IOException
-import java.util.*
-import kotlin.collections.ArrayList
 
 class DeleteTriplogDialog(
     context: Context,
@@ -53,7 +41,7 @@ class DeleteTriplogDialog(
         binding.btnTriplogDelete.setOnClickListener {
             val sharedManager : SharedManager by lazy { SharedManager(context) }
             var authToken = sharedManager.getCurrentUser().accessToken
-            triplogService.deleteTripLog(authToken, triplogId).enqueue(object :
+            triplogService.deleteTripLog(authToken!!, triplogId).enqueue(object :
                 Callback<DeleteTriplogResponse> {
                 override fun onResponse(
                     call: Call<DeleteTriplogResponse>,

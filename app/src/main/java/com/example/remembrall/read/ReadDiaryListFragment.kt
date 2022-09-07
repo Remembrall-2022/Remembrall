@@ -9,21 +9,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.Toast
-import androidx.core.view.get
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.remembrall.MainActivity
 import com.example.remembrall.R
 import com.example.remembrall.databinding.FragmentReadDiaryListBinding
 import com.example.remembrall.login.userinfo.SharedManager
 import com.example.remembrall.read.Triplog.DeleteTriplogDialog
-import com.example.remembrall.read.Triplog.TriplogCreateDialog
+import com.example.remembrall.read.Triplog.CreateTriplogDialog
 import com.example.remembrall.read.Triplog.TriplogService
+import com.example.remembrall.read.Triplog.UpdateTriplogDialog
 import com.example.remembrall.read.Triplog.req.TriplogRequest
-import com.example.remembrall.read.Triplog.res.CreateTriplogResponse
 import com.example.remembrall.read.Triplog.res.GetTriplogListResponse
-import com.example.remembrall.write.ReadDiaryFragment
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -38,6 +35,7 @@ class ReadDiaryListFragment : Fragment() {
     private lateinit var readDiaryRecyclerViewData: ArrayList<ReadDiaryListRecyclerViewData>
     private lateinit var readDiaryListRecyclerViewAdapter: ReadDiaryListRecyclerViewAdapter
     private var pos=0
+    private var diaryList : List<com.example.remembrall.read.Triplog.res.Response?>? = null
 
     lateinit var mainActivity: MainActivity
 
@@ -79,9 +77,9 @@ class ReadDiaryListFragment : Fragment() {
                 R.drawable.readdiary_line_divider, 0,0))
         clickRecyclerView()
         binding.floatingReaddiarylist.setOnClickListener {
-            val triplogCreateDialog = TriplogCreateDialog(mainActivity)
+            val triplogCreateDialog = CreateTriplogDialog(mainActivity)
             triplogCreateDialog.show()
-            triplogCreateDialog.setOnClickListener(object : TriplogCreateDialog.OnDialogClickListener{
+            triplogCreateDialog.setOnClickListener(object : CreateTriplogDialog.OnDialogClickListener{
                 override fun onClicked(readDiaryRecyclerViewDataList: ArrayList<ReadDiaryListRecyclerViewData>) {
                     readDiaryRecyclerViewData = readDiaryRecyclerViewDataList
                     readDiaryListRecyclerViewAdapter.notifyItemInserted(readDiaryRecyclerViewData.size)
@@ -108,7 +106,7 @@ class ReadDiaryListFragment : Fragment() {
         val sharedManager : SharedManager by lazy { SharedManager(mainActivity) }
         var authToken = sharedManager.getCurrentUser().accessToken
         readDiaryRecyclerViewData= arrayListOf()
-        triplogService.getTripLogList(authToken).enqueue(object :
+        triplogService.getTripLogList(authToken!!).enqueue(object :
             Callback<GetTriplogListResponse> {
             override fun onResponse(
                 call: Call<GetTriplogListResponse>,
@@ -117,9 +115,9 @@ class ReadDiaryListFragment : Fragment() {
                 Log.e("CreateTripLog", response.body().toString())
 
                 if(response.body()?.success.toString() == "true"){
-                    var diaryList = response.body()?.response!!
+                    diaryList = response.body()?.response!!
                     if(diaryList != null){
-                        for (diary in diaryList){
+                        for (diary in diaryList!!){
                             val title=diary!!.title.toString()
                             val imgUrl=diary!!.tripLogImgUrl.toString()
                             val triplogId=diary!!.triplogId!!.toLong()
@@ -127,7 +125,7 @@ class ReadDiaryListFragment : Fragment() {
                         }
                         readDiaryListRecyclerViewAdapter.notifyItemInserted(readDiaryRecyclerViewData.size)
                         binding.llNoDiary.visibility = View.GONE
-                        if(diaryList.size == 0){
+                        if(diaryList!!.size == 0){
                             binding.llNoDiary.visibility = View.VISIBLE
                         }
                     }
@@ -155,7 +153,7 @@ class ReadDiaryListFragment : Fragment() {
                 val sharedManager : SharedManager by lazy { SharedManager(mainActivity) }
                 var authToken = sharedManager.getCurrentUser().accessToken
 
-                ReadDiaryService.getRetrofitReadTripLog(authToken, readDiaryRecyclerViewData[position].triplogId).enqueue(object: Callback<ReadTripLogResponse>{
+                ReadDiaryService.getRetrofitReadTripLog(authToken!!, readDiaryRecyclerViewData[position].triplogId).enqueue(object: Callback<ReadTripLogResponse>{
                     override fun onResponse(
                         call: Call<ReadTripLogResponse>,
                         response: Response<ReadTripLogResponse>
@@ -204,15 +202,45 @@ class ReadDiaryListFragment : Fragment() {
         })
         readDiaryListRecyclerViewAdapter.setItemLongClickListener(object : ReadDiaryListRecyclerViewAdapter.OnItemLongClickListener{
             override fun diaryLongClick(v: View, position: Int) {
-                val deleteTriplogDialog = DeleteTriplogDialog(mainActivity, readDiaryRecyclerViewData[position].triplogId, readDiaryRecyclerViewData[position].name)
-                deleteTriplogDialog.show()
-                deleteTriplogDialog.setOnClickListener(object : DeleteTriplogDialog.OnDialogClickListener{
-                    override fun onClicked() {
-                        var readDiaryFragment = ReadDiaryListFragment()
-                        mainActivity.supportFragmentManager.beginTransaction()
-                            .replace(R.id.framelayout_main, readDiaryFragment).commit()
+                binding.llBack.visibility = View.VISIBLE
+                binding.llDelete.visibility = View.VISIBLE
+                binding.llUpdate.visibility = View.VISIBLE
+
+                binding.llBack.setOnClickListener {
+                    var readDiaryFragment = ReadDiaryListFragment()
+                    mainActivity.supportFragmentManager.beginTransaction()
+                        .replace(R.id.framelayout_main, readDiaryFragment).commit()
+                }
+                binding.llUpdate.setOnClickListener {
+                    if (diaryList != null){
+                        val updateTriplogDialog = UpdateTriplogDialog(mainActivity,
+                            readDiaryRecyclerViewData[position].triplogId,
+                            TriplogRequest(
+                                diaryList!![position]?.title!!,
+                                diaryList!![position]?.tripStartDate!!,
+                                diaryList!![position]?.tripEndDate!!))
+                        updateTriplogDialog.show()
+                        updateTriplogDialog.setOnClickListener(object : UpdateTriplogDialog.OnDialogClickListener{
+                            override fun onClicked() {
+                                var readDiaryFragment = ReadDiaryListFragment()
+                                mainActivity.supportFragmentManager.beginTransaction()
+                                    .replace(R.id.framelayout_main, readDiaryFragment).commit()
+                            }
+                        })
                     }
-                })
+                }
+                binding.llDelete.setOnClickListener {
+                    val deleteTriplogDialog = DeleteTriplogDialog(mainActivity, readDiaryRecyclerViewData[position].triplogId, readDiaryRecyclerViewData[position].name)
+                    deleteTriplogDialog.show()
+                    deleteTriplogDialog.setOnClickListener(object : DeleteTriplogDialog.OnDialogClickListener{
+                        override fun onClicked() {
+                            var readDiaryFragment = ReadDiaryListFragment()
+                            mainActivity.supportFragmentManager.beginTransaction()
+                                .replace(R.id.framelayout_main, readDiaryFragment).commit()
+                        }
+                    })
+                }
+
             }
         })
     }

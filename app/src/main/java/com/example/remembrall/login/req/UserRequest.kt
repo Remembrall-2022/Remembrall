@@ -25,3 +25,8 @@ data class KakaoLoginRequest(
 data class UserRequest(
     var accessToken : String
 )
+
+data class ReIssueRequest(
+    var accessToken : String,
+    var refreshToken : String
+)

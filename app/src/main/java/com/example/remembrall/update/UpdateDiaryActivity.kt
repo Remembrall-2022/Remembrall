@@ -169,7 +169,7 @@ class UpdateDiaryActivity : AppCompatActivity() {
         binding.imgUpdatediaryRefresh.setOnClickListener {
             val sharedManager : SharedManager by lazy { SharedManager(this@UpdateDiaryActivity) }
             var authToken = sharedManager.getCurrentUser().accessToken
-            WriteDiaryService.getRetrofitRefreshQuestion(authToken).enqueue(object:
+            WriteDiaryService.getRetrofitRefreshQuestion(authToken!!).enqueue(object:
                 Callback<GetQuestionResponse> {
                 override fun onResponse(
                     call: Call<GetQuestionResponse>,
@@ -191,7 +191,7 @@ class UpdateDiaryActivity : AppCompatActivity() {
         binding.imgUpdatediaryMore.setOnClickListener {
             val sharedManager : SharedManager by lazy { SharedManager(this@UpdateDiaryActivity) }
             var authToken = sharedManager.getCurrentUser().accessToken
-            WriteDiaryService.getRetrofitAllQuestion(authToken).enqueue(object:
+            WriteDiaryService.getRetrofitAllQuestion(authToken!!).enqueue(object:
                 Callback<GetAllQuestionResponse> {
                 override fun onResponse(
                     call: Call<GetAllQuestionResponse>,
@@ -249,7 +249,7 @@ class UpdateDiaryActivity : AppCompatActivity() {
             val mediaType = "application/json".toMediaType()
             val jsonBody=jsonObject.toString().toRequestBody(mediaType)
 
-            WriteDiaryService.getRetrofitSaveDiary(authToken, 13, jsonBody, imgList).enqueue(object:
+            WriteDiaryService.getRetrofitSaveDiary(authToken!!, 13, jsonBody, imgList).enqueue(object:
                 Callback<WriteDiaryResponse> {
                 override fun onResponse(
                     call: Call<WriteDiaryResponse>,

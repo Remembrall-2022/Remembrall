@@ -42,7 +42,7 @@ class ReadDiaryFragment : Fragment() {
 
         val sharedManager : SharedManager by lazy { SharedManager(mainActivity) }
         var authToken = sharedManager.getCurrentUser().accessToken
-        WriteDiaryService.getRetrofitRefreshQuestion(authToken).enqueue(object: Callback<GetQuestionResponse>{
+        WriteDiaryService.getRetrofitRefreshQuestion(authToken!!).enqueue(object: Callback<GetQuestionResponse>{
             override fun onResponse(
                 call: Call<GetQuestionResponse>,
                 response: Response<GetQuestionResponse>

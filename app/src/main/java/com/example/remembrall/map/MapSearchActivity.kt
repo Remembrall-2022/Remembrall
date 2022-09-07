@@ -9,7 +9,6 @@ import android.location.Location
 import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -17,10 +16,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.remembrall.LoadingDialog
 import com.example.remembrall.R
-import com.example.remembrall.constellation.ConstellationActivity
-import com.example.remembrall.databinding.ActivityMainBinding
 import com.example.remembrall.databinding.ActivityMapSearchBinding
-import com.example.remembrall.databinding.FragmentMapSearchBinding
 import com.example.remembrall.login.SplashActivity
 import com.example.remembrall.map.Gallery.TourRecommendApi
 import com.example.remembrall.map.Gallery.TourRecommendResponse
@@ -42,10 +38,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.concurrent.schedule
-import kotlin.concurrent.timer
 
 class MapSearchActivity : AppCompatActivity() {
     var mapView: MapView?= null

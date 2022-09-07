@@ -125,7 +125,7 @@ class ReadDiaryActivity : AppCompatActivity() {
     private fun ReadAllDiary(){
         val sharedManager : SharedManager by lazy { SharedManager(this@ReadDiaryActivity) }
         var authToken = sharedManager.getCurrentUser().accessToken
-        ReadDiaryService.getRetrofitAllDiary(authToken, triplogId).enqueue(object: Callback<ReadAllDiaryResponse>{
+        ReadDiaryService.getRetrofitAllDiary(authToken!!, triplogId).enqueue(object: Callback<ReadAllDiaryResponse>{
             override fun onResponse(
                 call: Call<ReadAllDiaryResponse>,
                 response: Response<ReadAllDiaryResponse>

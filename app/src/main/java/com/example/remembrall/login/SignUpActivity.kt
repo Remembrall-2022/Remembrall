@@ -19,7 +19,6 @@ import com.example.remembrall.login.res.LoginResponse
 import com.example.remembrall.login.userinfo.LoginData
 import com.example.remembrall.login.userinfo.SharedManager
 import com.google.gson.Gson
-import com.google.gson.JsonObject
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause

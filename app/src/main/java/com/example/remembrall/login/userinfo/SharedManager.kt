@@ -6,9 +6,9 @@ import com.example.remembrall.login.userinfo.PreferenceHelper.set
 import com.example.remembrall.login.userinfo.PreferenceHelper.get
 
 class LoginData(
-    val grantType : String,
-    val accessToken : String,
-    val refreshToken : String
+    val grantType : String?,
+    val accessToken : String?,
+    val refreshToken : String?
 )
 
 class DiaryData(
