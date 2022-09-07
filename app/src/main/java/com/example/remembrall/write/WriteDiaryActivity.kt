@@ -75,6 +75,7 @@ class WriteDiaryActivity() : AppCompatActivity() {
     private var diaryId: Long=1
     private lateinit var question: String
     private var questionId: Long=1
+    private var selectDiary=false
 
     private var placeName = ""
     private var x : Double ?= null
@@ -148,7 +149,7 @@ class WriteDiaryActivity() : AppCompatActivity() {
         question= intent.getStringExtra("question").toString()
         questionId=intent.getLongExtra("questionId",1)
         binding.tvWritediaryQuestion.text=question
-
+        selectDiary=false
 
         var retrofit = Retrofit.Builder()
             .baseUrl("http://ec2-13-124-98-176.ap-northeast-2.compute.amazonaws.com:8080")
@@ -196,6 +197,7 @@ class WriteDiaryActivity() : AppCompatActivity() {
                     diaryId=readDiaryListRecyclerViewData[position].triplogId
                     Log.e("diary", "$diaryId + $diaryTitle")
                     binding.tvDiaryTitle.text = diaryTitle
+                    selectDiary=true
                     diaryListDialog.dismiss()
                 }
             })
@@ -353,14 +355,14 @@ class WriteDiaryActivity() : AppCompatActivity() {
             var imgList: ArrayList<MultipartBody.Part> = arrayListOf()
             Log.e("size", "${writeDiaryRecyclerViewData.size}")
             for(i in 0..(writeDiaryRecyclerViewData.size-1)){
-                Log.e("for", "${i}")
                 var name=binding.recyclerviewWritediary[i].findViewById<TextView>(R.id.tv_addplace_place).text.toString()
-                var address="주소"
+                var address=writeDiaryRecyclerViewData[i].place
                 var longitude= writeDiaryRecyclerViewData[i].x
                 var latitude=writeDiaryRecyclerViewData[i].y
                 var comment=binding.recyclerviewWritediary[i].findViewById<EditText>(R.id.et_addplace_coment).text.toString()
 //                placeInfo=WriteDiaryRequest.PlaceLogList.PlaceInfo(i, name, address, longitude, latitude)
-                placeLogList.add(JSONObject("{\"placeInfo\":{\"placeId\":${i+1},\"name\":\"${name}\",\"address\":\"${address}\",\"longitude\":${longitude},\"latitude\":${latitude}},\"comment\":\"${comment}\",\"imgName\":\"${writeDiaryRecyclerViewData[i].image}\"}"))
+                Log.e("placeLogList", "${name}  ${address}  ${longitude}  ${latitude}  ${comment}")
+                placeLogList.add(JSONObject("{\"placeInfo\":{\"name\":\"${name}\",\"address\":\"${address}\",\"longitude\":${longitude},\"latitude\":${latitude}},\"comment\":\"${comment}\",\"imgName\":\"${writeDiaryRecyclerViewData[i].image}\"}"))
                 imgList.add(writeDiaryRecyclerViewData[i].imgFile)
             }
 //            var writeDiaryRequest=WriteDiaryRequest(date,
@@ -369,33 +371,38 @@ class WriteDiaryActivity() : AppCompatActivity() {
             val mediaType = "application/json".toMediaType()
             val jsonBody=jsonObject.toString().toRequestBody(mediaType)
 
-            WriteDiaryService.getRetrofitSaveDiary(authToken, diaryId, jsonBody, imgList).enqueue(object: Callback<WriteDiaryResponse>{
-                override fun onResponse(
-                    call: Call<WriteDiaryResponse>,
-                    response: Response<WriteDiaryResponse>
-                ) {
+            if(selectDiary==false){
+                Toast.makeText(this@WriteDiaryActivity, "일기장을 선택해주세요",Toast.LENGTH_SHORT ).show()
+            }
+            else {
+                WriteDiaryService.getRetrofitSaveDiary(authToken, diaryId, jsonBody, imgList)
+                    .enqueue(object : Callback<WriteDiaryResponse> {
+                        override fun onResponse(
+                            call: Call<WriteDiaryResponse>,
+                            response: Response<WriteDiaryResponse>
+                        ) {
 
-                    if(response.isSuccessful){
-                        Log.e("question", response.toString())
-                        Log.e("question", response.body().toString())
-                        //shared preference
-                    }else {
-                        try {
-                            val body = response.errorBody()!!.string()
-                            Log.e(ContentValues.TAG, "body : $body")
-                        } catch (e: IOException) {
-                            e.printStackTrace()
+                            if (response.isSuccessful) {
+                                Log.e("question", response.toString())
+                                Log.e("question", response.body().toString())
+
+                                finish()
+                            } else {
+                                try {
+                                    val body = response.errorBody()!!.string()
+                                    //에러 Toast
+                                    Log.e(ContentValues.TAG, "body : $body")
+                                } catch (e: IOException) {
+                                    e.printStackTrace()
+                                }
+                            }
                         }
-                    }
-//                    MainActivity.prefs.setString("writediary","true")
-//                    Log.d("writediary", MainActivity.prefs.getString("writediary","작성 실패"))
-                    finish()
-                }
 
-                override fun onFailure(call: Call<WriteDiaryResponse>, t: Throwable) {
-                    Log.e("TAG", "실패원인: {$t}")
-                }
-            })
+                        override fun onFailure(call: Call<WriteDiaryResponse>, t: Throwable) {
+                            Log.e("TAG", "실패원인: {$t}")
+                        }
+                    })
+            }
         }
     }
 
@@ -418,9 +425,6 @@ class WriteDiaryActivity() : AppCompatActivity() {
             }
             override fun deleteViewOnClck(v: View, position: Int) {
                 Log.d("삭제 위치", "${position}")
-                writeDiaryRecyclerViewData.removeAt(position)
-                writeDiaryRecyclerViewAdapter.notifyItemRemoved(position)
-
                 binding.recyclerviewWritediary[position].findViewById<LinearLayout>(R.id.linear_addplace_edit).visibility =
                     View.GONE
                 binding.recyclerviewWritediary[position].findViewById<LinearLayout>(R.id.linear_addplace_drop).visibility =
@@ -428,6 +432,9 @@ class WriteDiaryActivity() : AppCompatActivity() {
                 binding.recyclerviewWritediary[position].findViewById<View?>(R.id.linear_addplace_bottom).visibility=View.VISIBLE
                 binding.recyclerviewWritediary[position].findViewById<ImageView>(R.id.imageview_addplace_drop).setImageResource(R.drawable.ic_drop_up)
                 binding.recyclerviewWritediary[position].findViewById<ImageView>(R.id.imageview_addpicture).setImageResource(R.drawable.ic_image)
+
+                writeDiaryRecyclerViewData.removeAt(position)
+                writeDiaryRecyclerViewAdapter.notifyItemRemoved(position)
                 Log.d("리스트 삭제 후 사이즈", "${writeDiaryRecyclerViewData.size}")
                 Toast.makeText(binding.root.context, "삭제되었습니다", Toast.LENGTH_SHORT).show()
             }

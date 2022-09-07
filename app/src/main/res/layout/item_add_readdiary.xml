@@ -69,7 +69,7 @@
                     android:scaleType="centerInside"
                     android:maxHeight="300dp"
                     android:src="@drawable/ic_image"
-                    android:adjustViewBounds="true"
+                    android:adjustViewBounds="false"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>

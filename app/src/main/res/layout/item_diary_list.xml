@@ -11,8 +11,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintlayout_readdiary"
-        android:layout_width="85dp"
-        android:layout_height="85dp"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
         android:layout_marginTop="5dp"
         android:background="@drawable/readdiary_round_button"
         android:elevation="5dp"
@@ -36,18 +36,29 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
+        android:id="@+id/tv_diarylist_date"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="22/09/01 ~ 22/09/03"
+        android:textSize="10sp"
+        android:textColor="#999999"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="3dp"
+        app:layout_constraintStart_toStartOf="@+id/constraintlayout_readdiary"
+        app:layout_constraintTop_toBottomOf="@+id/constraintlayout_readdiary" />
+
+    <TextView
         android:id="@+id/tv_readdiary_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="새 일기장"
-        android:textSize="12dp"
-        android:textColor="@color/rememberall_navy"
-        android:textStyle="bold"
-        android:maxLines="1"
         android:ellipsize="end"
+        android:maxLines="1"
+        android:text="새 일기장"
+        android:textColor="@color/rememberall_navy"
+        android:textSize="12dp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/constraintlayout_readdiary"
-        app:layout_constraintTop_toBottomOf="@+id/constraintlayout_readdiary"
+        app:layout_constraintTop_toBottomOf="@+id/tv_diarylist_date"
         tools:ignore="MissingConstraints"></TextView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
