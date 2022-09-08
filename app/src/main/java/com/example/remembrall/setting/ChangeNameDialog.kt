@@ -6,6 +6,7 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import com.example.remembrall.BuildConfig.SERVER
 import com.example.remembrall.databinding.DialogChangeNameBinding
 import com.example.remembrall.databinding.DialogTriplogCreateBinding
 import com.example.remembrall.login.UserService
@@ -30,12 +31,11 @@ class ChangeNameDialog (
     private lateinit var binding: DialogChangeNameBinding
     private lateinit var onClickListener: OnDialogClickListener
 
-    // TODO : url key에서 들고오기
     val client = OkHttpClient.Builder()
         .addInterceptor(httpLoggingInterceptor()).build()
 
     var retrofit = Retrofit.Builder()
-        .baseUrl("http://ec2-13-124-98-176.ap-northeast-2.compute.amazonaws.com:8080")
+        .baseUrl(SERVER)
         .addConverterFactory(GsonConverterFactory.create())
         .client(client)
         .build()

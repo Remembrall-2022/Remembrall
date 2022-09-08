@@ -15,6 +15,8 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.remembrall.BuildConfig.KAKAO_MAP_KEY
+import com.example.remembrall.BuildConfig.KAKAO_MAP_URL
 import com.example.remembrall.LoadingDialog
 import com.example.remembrall.R
 import com.example.remembrall.databinding.ActivityMapSearchBinding
@@ -51,10 +53,10 @@ class MapSearchActivity : AppCompatActivity() {
     var mapSearchItemList = ArrayList<RvMapSearch>()
 
     companion object {
-        // TODO : url key에서 들고오기
-        const val BASE_URL = "https://dapi.kakao.com/"
-        //        const val GALLERY_API_URL = "http://apis.data.go.kr/B551011/PhotoGalleryService"
-        const val API_KEY = "KakaoAK 6bc1728a7e229d952ece08fa28b0bdab"   // REST API 키
+        const val BASE_URL = KAKAO_MAP_URL
+        const val API_KEY = KAKAO_MAP_KEY
+
+    // REST API 키
     }
 
     lateinit var rvMapSearchAdapter : RvMapSearchAdapter

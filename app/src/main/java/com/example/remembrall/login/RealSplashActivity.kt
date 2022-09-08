@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import com.example.remembrall.BuildConfig.SERVER
 import com.example.remembrall.MainActivity
 import com.example.remembrall.R
 import com.example.remembrall.login.req.ReIssueRequest
@@ -36,8 +37,7 @@ class RealSplashActivity : AppCompatActivity() {
             .addInterceptor(httpLoggingInterceptor()).build()
 
         // 레트로핏 객체 생성.
-        var retrofit = Retrofit.Builder()
-            .baseUrl(getString(R.string.SERVER))
+        var retrofit = Retrofit.Builder().baseUrl(SERVER)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
@@ -61,7 +61,7 @@ class RealSplashActivity : AppCompatActivity() {
                         }
                         else{
                             try {
-                                //토큰이 유효하지 않으면 재발급
+                                //유효하지 않으면 재발급
                                 val body = response.errorBody()!!.string()
                                 val error = Gson().fromJson(body, LoginResponse::class.java)
                                 Log.e(ContentValues.TAG, "error - body : $body")

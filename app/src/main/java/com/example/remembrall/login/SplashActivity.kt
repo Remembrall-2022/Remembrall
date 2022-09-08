@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import com.example.remembrall.BuildConfig.SERVER
 import com.example.remembrall.MainActivity
 import com.example.remembrall.R
 import com.example.remembrall.constellation.ConstellationActivity
@@ -49,7 +50,7 @@ class SplashActivity : AppCompatActivity() {
 
         // 레트로핏 객체 생성.
         var retrofit = Retrofit.Builder()
-            .baseUrl(getString(R.string.SERVER))
+            .baseUrl(SERVER)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
@@ -155,25 +156,25 @@ class SplashActivity : AppCompatActivity() {
             finish()
         }
 
-        // 로그인 스킵
-        binding.button.setOnClickListener{
-            startActivity(intent)
-            finish()
-        }
-
-        // 별자리 지도 만들기
-        binding.buttonConstellation.setOnClickListener {
-            intent = Intent(this, ConstellationActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
-
-        // map search
-        binding.buttonMap.setOnClickListener {
-            intent = Intent(this, MapSearchActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
+//        // 로그인 스킵
+//        binding.button.setOnClickListener{
+//            startActivity(intent)
+//            finish()
+//        }
+//
+//        // 별자리 지도 만들기
+//        binding.buttonConstellation.setOnClickListener {
+//            intent = Intent(this, ConstellationActivity::class.java)
+//            startActivity(intent)
+//            finish()
+//        }
+//
+//        // map search
+//        binding.buttonMap.setOnClickListener {
+//            intent = Intent(this, MapSearchActivity::class.java)
+//            startActivity(intent)
+//            finish()
+//        }
     }
     private fun httpLoggingInterceptor(): HttpLoggingInterceptor {
         val interceptor = HttpLoggingInterceptor { message ->

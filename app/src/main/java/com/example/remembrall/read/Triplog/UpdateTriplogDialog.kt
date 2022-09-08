@@ -7,6 +7,7 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import com.example.remembrall.BuildConfig.SERVER
 import com.example.remembrall.databinding.DialogTriplogCreateBinding
 import com.example.remembrall.login.res.LoginResponse
 import com.example.remembrall.login.userinfo.SharedManager
@@ -32,9 +33,8 @@ class UpdateTriplogDialog(
     private var triplogRequest = triplogRequest
     private var triplogId = triplogId
 
-    // TODO : url key에서 들고오기
     var retrofit = Retrofit.Builder()
-        .baseUrl("http://ec2-13-124-98-176.ap-northeast-2.compute.amazonaws.com:8080")
+        .baseUrl(SERVER)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
     var triplogService : TriplogService = retrofit.create(TriplogService::class.java)

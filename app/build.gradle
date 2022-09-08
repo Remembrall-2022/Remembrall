@@ -13,7 +13,7 @@ android {
         minSdk 21
         targetSdk 31
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -34,6 +34,18 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+
+    def keystorePropertiesFile = rootProject.file("keystore.properties")
+    def keystoreProperties = new Properties()
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+    defaultConfig {
+        buildConfigField "String", "TOUR_API_URL", keystoreProperties["TOUR_API_URL"]
+        buildConfigField "String", "SERVER", keystoreProperties["SERVER"]
+        buildConfigField "String", "TOUR_API_DECODING_KEY", keystoreProperties["TOUR_API_DECODING_KEY"]
+        buildConfigField "String", "KAKAO_MAP_URL", keystoreProperties["KAKAO_MAP_URL"]
+        buildConfigField "String", "KAKAO_MAP_KEY", keystoreProperties["KAKAO_MAP_KEY"]
     }
 }
 

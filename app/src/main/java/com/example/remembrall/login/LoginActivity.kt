@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.remembrall.BuildConfig.SERVER
 import com.example.remembrall.MainActivity
 import com.example.remembrall.R
 import com.example.remembrall.databinding.ActivityLoginBinding
@@ -43,7 +44,7 @@ class LoginActivity : AppCompatActivity() {
 
         // 레트로핏 객체 생성.
         var retrofit = Retrofit.Builder()
-            .baseUrl(getString(R.string.SERVER))
+            .baseUrl(SERVER)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()

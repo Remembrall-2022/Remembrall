@@ -10,6 +10,7 @@ import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import com.example.remembrall.BuildConfig.SERVER
 import com.example.remembrall.databinding.DialogChangeNameBinding
 import com.example.remembrall.databinding.DialogChangePasswordBinding
 import com.example.remembrall.databinding.DialogTriplogCreateBinding
@@ -44,11 +45,11 @@ class ChangePasswordDialog (
     private lateinit var binding: DialogChangePasswordBinding
     var email = email
 
-    // TODO : url key에서 들고오기
+
     val client = OkHttpClient.Builder()
         .addInterceptor(httpLoggingInterceptor()).build()
     var retrofit = Retrofit.Builder()
-        .baseUrl("http://ec2-13-124-98-176.ap-northeast-2.compute.amazonaws.com:8080")
+        .baseUrl(SERVER)
         .addConverterFactory(GsonConverterFactory.create())
         .client(client)
         .build()

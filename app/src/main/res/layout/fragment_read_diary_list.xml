@@ -91,11 +91,6 @@
             android:gravity="center"
             android:visibility="gone">
 
-            <ImageView
-                android:layout_width="114dp"
-                android:layout_height="110dp"
-                android:layout_gravity="center"
-                android:background="@drawable/dongdong" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

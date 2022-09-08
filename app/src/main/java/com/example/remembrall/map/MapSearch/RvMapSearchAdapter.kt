@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -50,6 +51,9 @@ class RvMapSearchAdapter(val context: Context): RecyclerView.Adapter<RvMapSearch
         // 아이템 클릭 이벤트
         holder.itemView.setOnClickListener {
             itemClickListener.onClick(it, position)
+        }
+
+        holder.btnSelect.setOnClickListener {
             itemClickListener.btnOnClick(it, position)
         }
     }
@@ -59,6 +63,7 @@ class RvMapSearchAdapter(val context: Context): RecyclerView.Adapter<RvMapSearch
         val category: TextView = itemView.findViewById(R.id.tv_category_map_search)
         val address: TextView = itemView.findViewById(R.id.tv_address_map_search)
         val image: ImageView = itemView.findViewById(R.id.iv_image_map_search)
+        val btnSelect : Button = itemView.findViewById(R.id.btn_select)
     }
 
 

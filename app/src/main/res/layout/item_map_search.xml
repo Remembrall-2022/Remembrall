@@ -78,6 +78,7 @@
         </LinearLayout>
 
             <Button
+                android:id="@+id/btn_select"
                 android:layout_width="60dp"
                 android:layout_height="25dp"
                 android:background="@drawable/btn_round_border"

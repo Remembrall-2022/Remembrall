@@ -27,6 +27,7 @@ import androidx.core.view.get
 import androidx.recyclerview.widget.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.example.remembrall.BuildConfig.SERVER
 import com.example.remembrall.MainActivity
 import com.example.remembrall.PreferenceUtil
 import com.example.remembrall.R
@@ -152,7 +153,7 @@ class WriteDiaryActivity() : AppCompatActivity() {
         selectDiary=false
 
         var retrofit = Retrofit.Builder()
-            .baseUrl("http://ec2-13-124-98-176.ap-northeast-2.compute.amazonaws.com:8080")
+            .baseUrl(SERVER)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         var triplogService : TriplogService = retrofit.create(TriplogService::class.java)
@@ -336,14 +337,14 @@ class WriteDiaryActivity() : AppCompatActivity() {
                     var questionListDialog = QuestionListDialog(this@WriteDiaryActivity, questionRecyclerViewData)
                     questionListDialog.show()
                     questionListDialog.questionRecyclerViewAdapter.setItemClickListener(object: QuestionRecyclerViewAdapter.OnItemClickListener{
-                    override fun onClick(v: View, position: Int) {
-                        val question=questionRecyclerViewData[position].questionName
-                        val id=questionRecyclerViewData[position].id
-                        Log.e("question", "$id + $question")
-                        binding.tvWritediaryQuestion.text = question
-                        questionListDialog.dismiss()
+                        override fun onClick(v: View, position: Int) {
+                            val question=questionRecyclerViewData[position].questionName
+                            val id=questionRecyclerViewData[position].id
+                            Log.e("question", "$id + $question")
+                            binding.tvWritediaryQuestion.text = question
+                            questionListDialog.dismiss()
                         }
-                     })
+                    })
                 }
 
                 override fun onFailure(call: Call<GetAllQuestionResponse>, t: Throwable) {
@@ -384,7 +385,7 @@ class WriteDiaryActivity() : AppCompatActivity() {
                 Toast.makeText(this@WriteDiaryActivity, "일기장을 선택해주세요",Toast.LENGTH_SHORT ).show()
             }
             else {
-                WriteDiaryService.getRetrofitSaveDiary(authToken, diaryId, jsonBody, imgList)
+                WriteDiaryService.getRetrofitSaveDiary(authToken!!, diaryId, jsonBody, imgList)
                     .enqueue(object : Callback<WriteDiaryResponse> {
                         override fun onResponse(
                             call: Call<WriteDiaryResponse>,
@@ -508,7 +509,7 @@ class WriteDiaryActivity() : AppCompatActivity() {
         return result
 
     }
-//
+    //
     private fun selectGallery(){
         val writePermission= ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
         val readPermission=ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)

@@ -7,6 +7,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -18,15 +19,20 @@ import com.example.remembrall.read.ReadDiaryListFragment
 import com.example.remembrall.read.ReadTodayDiaryFragment
 import com.example.remembrall.write.ReadDiaryFragment
 import com.example.remembrall.map.MapSearchFragment
+import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding : ActivityMainBinding
     var context: Context?=null
+    var waitTime = 0L
+
     companion object {
         lateinit var prefs: PreferenceUtil
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+
         prefs = PreferenceUtil(applicationContext)
         super.onCreate(savedInstanceState)
         prefs.setString("writediary","false")
@@ -80,10 +86,21 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onBackPressed() {
+        if(System.currentTimeMillis() - waitTime >=1500 ) {
+            waitTime = System.currentTimeMillis()
+            Toast.makeText(this,"뒤로가기 버튼을 한번 더 누르면 종료됩니다.",Toast.LENGTH_SHORT).show()
+        } else {
+            finish() // 액티비티 종료
+            exitProcess(0)
+        }
+    }
+
     fun replaceFragment(fragment : Fragment) {
         var fragmentManager = getSupportFragmentManager()
         var fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.framelayout_main, fragment).commit()
     }
+
 
     }
