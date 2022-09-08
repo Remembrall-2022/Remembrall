@@ -11,7 +11,7 @@ data class ReadDiaryResponse(
     data class Response(
         @SerializedName("date") val date: String,
         @SerializedName("weatherInfo") val weatherInfo: Weather,
-        @SerializedName("question") val question: Question,
+        @SerializedName("question") val question: Question?,
         @SerializedName("answer") val answer: String,
         @SerializedName("placeLogList") val placeLogList: List<PlaceLogList>,
     ){
@@ -21,8 +21,8 @@ data class ReadDiaryResponse(
         )
 
         data class Question(
-            @SerializedName("id") val id: Int,
-            @SerializedName("questionName") val questionName: String
+            @SerializedName("id") val id: Int?,
+            @SerializedName("questionName") val questionName: String?
         )
 
         data class PlaceLogList(

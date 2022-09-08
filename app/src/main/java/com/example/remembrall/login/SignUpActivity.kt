@@ -36,6 +36,8 @@ import kotlin.concurrent.timer
 
 class SignUpActivity : AppCompatActivity() {
     private lateinit var binding : ActivitySignUpBinding
+    var timerTask : Timer?= null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivitySignUpBinding.inflate(layoutInflater)
@@ -65,6 +67,7 @@ class SignUpActivity : AppCompatActivity() {
 
         binding.btnAuthRequest.setOnClickListener {
             val email = binding.etEmail.text.toString().trim()
+            timerTask?.cancel()
             userService.sendAuthCode(email).enqueue(object: Callback<AuthResponse>{
                 override fun onResponse(
                     call: Call<AuthResponse>,
@@ -73,11 +76,12 @@ class SignUpActivity : AppCompatActivity() {
                     val authCodeRes = response.body()
                     Log.d("SendAuthCode", response.body().toString())
                     if (authCodeRes?.success.toString() == "true"){
+
                         Log.d("SendAuthCode", authCodeRes?.response?.message.toString())
                         binding.llTimer.visibility = View.VISIBLE
                         var time = 300000
                         val context = this
-                        var timerTask : Timer?= null
+
                         timerTask = timer(period = 1000) {	// timer() 호출
                             time = time - 1000	// period=10, 0.01초마다 time를 1씩 감소Rp
                             val min = time / 60000	// time/100, 나눗셈의 몫 (초 부분)

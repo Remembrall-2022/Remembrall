@@ -35,6 +35,16 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    def keystorePropertiesFile = rootProject.file("keystore.properties")
+    def keystoreProperties = new Properties()
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+    defaultConfig {
+        buildConfigField "String", "TOUR_API_URL", keystoreProperties["TOUR_API_URL"]
+        buildConfigField "String", "SERVER", keystoreProperties["SERVER"]
+        buildConfigField "String", "TOUR_API_DECODING_KEY", keystoreProperties["TOUR_API_DECODING_KEY"]
+    }
 }
 
 dependencies {

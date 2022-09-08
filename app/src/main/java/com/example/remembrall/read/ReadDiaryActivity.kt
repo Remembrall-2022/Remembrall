@@ -137,12 +137,15 @@ class ReadDiaryActivity : AppCompatActivity() {
                         var list= arrayListOf<ReadDiaryRecyclerViewData>()
 
                         val date=response.body()!!.response.dateLogResponseDtoList[i].date
-                        val question=response.body()!!.response.dateLogResponseDtoList[i].question.questionName
+                        var question=response.body()!!.response.dateLogResponseDtoList[i].question.questionName
                         val answer=response.body()!!.response.dateLogResponseDtoList[i].answer
 
+                        if (question == null){
+                            question = ""
+                        }
+
                         for(j in 0..(response.body()!!.response.dateLogResponseDtoList[i].placeLogList.size-1)) {
-                            val place =
-                                response.body()!!.response.dateLogResponseDtoList[i].placeLogList[j].place.name
+                            val place = response.body()!!.response.dateLogResponseDtoList[i].placeLogList[j].place.name
                             val image = response.body()!!.response.dateLogResponseDtoList[i].placeLogList[j].userLogImg.imgUrl
                             val content = response.body()!!.response.dateLogResponseDtoList[i].placeLogList[j].comment
                             list.add(ReadDiaryRecyclerViewData(place, image, content))

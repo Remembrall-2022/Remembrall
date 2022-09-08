@@ -155,25 +155,25 @@ class SplashActivity : AppCompatActivity() {
             finish()
         }
 
-        // 로그인 스킵
-        binding.button.setOnClickListener{
-            startActivity(intent)
-            finish()
-        }
-
-        // 별자리 지도 만들기
-        binding.buttonConstellation.setOnClickListener {
-            intent = Intent(this, ConstellationActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
-
-        // map search
-        binding.buttonMap.setOnClickListener {
-            intent = Intent(this, MapSearchActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
+//        // 로그인 스킵
+//        binding.button.setOnClickListener{
+//            startActivity(intent)
+//            finish()
+//        }
+//
+//        // 별자리 지도 만들기
+//        binding.buttonConstellation.setOnClickListener {
+//            intent = Intent(this, ConstellationActivity::class.java)
+//            startActivity(intent)
+//            finish()
+//        }
+//
+//        // map search
+//        binding.buttonMap.setOnClickListener {
+//            intent = Intent(this, MapSearchActivity::class.java)
+//            startActivity(intent)
+//            finish()
+//        }
     }
     private fun httpLoggingInterceptor(): HttpLoggingInterceptor {
         val interceptor = HttpLoggingInterceptor { message ->

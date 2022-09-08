@@ -1,6 +1,8 @@
 package com.example.remembrall.write
 
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
@@ -24,6 +26,7 @@ class SelectDiaryListRecyclerViewAdapter (
     inner class ViewHolder(view: View): RecyclerView.ViewHolder(view){
         val name: TextView = itemView.findViewById(R.id.tv_readdiary_name)
         val diary: ImageView=itemView.findViewById(R.id.img_adddiary_diary)
+        val date:TextView=itemView.findViewById(R.id.tv_diarylist_date)
 
         init{
             diary.setOnClickListener{
@@ -32,6 +35,8 @@ class SelectDiaryListRecyclerViewAdapter (
         }
         fun bind(data: ReadDiaryListRecyclerViewData){
             name.text=data.name
+            name.setTextColor(Color.parseColor("#525078"))
+            date.text=data.date
             Glide.with(this.itemView)
                 .load(data.imgUrl) // 불러올 이미지 url
                 .fitCenter()

@@ -45,8 +45,7 @@ class AttendanceDialog (
                 response: Response<AttendanceResponse>
             ) {
                 if(response.body()?.success.toString() == "true"){
-//                    if(response.body()?.response.message
-
+//                    if(response.body()?.response?.message ==
                 }
             }
 

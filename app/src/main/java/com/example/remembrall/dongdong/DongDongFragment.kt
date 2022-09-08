@@ -92,8 +92,8 @@ class DongDongFragment : Fragment() {
             mainActivity.replaceFragment(settingFragment)
         }
 
-        binding!!.btnAttendance.setOnClickListener {
-        }
+//        binding!!.btnAttendance.setOnClickListener {
+//        }
         return binding!!.root
     }
     private fun httpLoggingInterceptor(): HttpLoggingInterceptor {
