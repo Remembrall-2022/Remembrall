@@ -27,6 +27,7 @@ import androidx.core.view.get
 import androidx.recyclerview.widget.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.example.remembrall.BuildConfig.SERVER
 import com.example.remembrall.MainActivity
 import com.example.remembrall.PreferenceUtil
 import com.example.remembrall.R
@@ -152,7 +153,7 @@ class WriteDiaryActivity() : AppCompatActivity() {
         selectDiary=false
 
         var retrofit = Retrofit.Builder()
-            .baseUrl("http://ec2-13-124-98-176.ap-northeast-2.compute.amazonaws.com:8080")
+            .baseUrl(SERVER)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         var triplogService : TriplogService = retrofit.create(TriplogService::class.java)

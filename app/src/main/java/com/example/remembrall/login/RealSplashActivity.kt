@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import com.example.remembrall.BuildConfig.SERVER
 import com.example.remembrall.MainActivity
 import com.example.remembrall.R
 import com.example.remembrall.login.req.ReIssueRequest
@@ -36,7 +37,7 @@ class RealSplashActivity : AppCompatActivity() {
             .addInterceptor(httpLoggingInterceptor()).build()
 
         // 레트로핏 객체 생성.
-        var retrofit = Retrofit.Builder().baseUrl(getString(R.string.SERVER))
+        var retrofit = Retrofit.Builder().baseUrl(SERVER)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()

@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.remembrall.BuildConfig.SERVER
 import com.example.remembrall.MainActivity
 import com.example.remembrall.R
 import com.example.remembrall.databinding.FragmentReadDiaryListBinding
@@ -51,7 +52,7 @@ class ReadDiaryListFragment : Fragment() {
         .build()
 
     var retrofit = Retrofit.Builder()
-        .baseUrl("http://ec2-13-124-98-176.ap-northeast-2.compute.amazonaws.com:8080")
+        .baseUrl(SERVER)
         .addConverterFactory(GsonConverterFactory.create())
         .client(client)
         .build()

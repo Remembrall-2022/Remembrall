@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import com.example.remembrall.BuildConfig.SERVER
 import com.example.remembrall.databinding.DialogAttendanceBinding
 import com.example.remembrall.databinding.DialogDeleteTriplogBinding
 import com.example.remembrall.dongdong.res.AttendanceResponse
@@ -25,7 +26,7 @@ class AttendanceDialog (
     private lateinit var onClickListener: AttendanceDialog.OnDialogClickListener
     // TODO : url key에서 들고오기
     var retrofit = Retrofit.Builder()
-        .baseUrl("http://ec2-13-124-98-176.ap-northeast-2.compute.amazonaws.com:8080")
+        .baseUrl(SERVER)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
     var dongdongService : DongDongService = retrofit.create(DongDongService::class.java)

@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.remembrall.BuildConfig.*
 import com.example.remembrall.MainActivity
 import com.example.remembrall.R
 import com.example.remembrall.databinding.FragmentMapSearchBinding
@@ -60,10 +61,8 @@ class MapSearchFragment() : Fragment() {
     var mapSearchItemList = ArrayList<RvMapSearch>()
 
     companion object {
-        // TODO : url key에서 들고오기
-        const val BASE_URL = "https://dapi.kakao.com/"
-//        const val GALLERY_API_URL = "http://apis.data.go.kr/B551011/PhotoGalleryService"
-        const val API_KEY = "KakaoAK 6bc1728a7e229d952ece08fa28b0bdab"   // REST API 키
+        const val BASE_URL = KAKAO_MAP_URL
+        const val API_KEY = KAKAO_MAP_KEY   // REST API 키
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -129,7 +128,7 @@ class MapSearchFragment() : Fragment() {
 
         val recommendPlace = retrofit_recommend.create(TourRecommendApi::class.java)
 
-        recommendPlace.getTourList("AND", "AppTest", getString(R.string.TOUR_API_DECODING_KEY),uLongitude.toString(), uLatitude.toString(), "20000")
+        recommendPlace.getTourList("AND", "AppTest", TOUR_API_DECODING_KEY, uLongitude.toString(), uLatitude.toString(), "20000")
             .enqueue(object : Callback<TourRecommendResponse>{
                 override fun onResponse(
                     call: Call<TourRecommendResponse>,

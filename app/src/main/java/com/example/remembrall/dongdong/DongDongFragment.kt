@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import com.bumptech.glide.Glide
+import com.example.remembrall.BuildConfig.SERVER
 import com.example.remembrall.MainActivity
 import com.example.remembrall.R
 import com.example.remembrall.databinding.FragmentDongDongBinding
@@ -50,7 +51,7 @@ class DongDongFragment : Fragment() {
 
         // 레트로핏 객체 생성.
         var retrofit = Retrofit.Builder()
-            .baseUrl(getString(R.string.SERVER))
+            .baseUrl(SERVER)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()

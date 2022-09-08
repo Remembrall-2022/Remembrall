@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.remembrall.BuildConfig.SERVER
 import com.example.remembrall.MainActivity
 import com.example.remembrall.R
 import com.example.remembrall.databinding.FragmentSettingBinding
@@ -53,7 +54,7 @@ class SettingFragment : Fragment() {
 
         // 레트로핏 객체 생성.
         var retrofit = Retrofit.Builder()
-            .baseUrl(getString(R.string.SERVER))
+            .baseUrl(SERVER)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
