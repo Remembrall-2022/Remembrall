@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.remembrall">
+    package="com.rememberall.remembrall">
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" /> <!-- 갤러리에서 사진 가져오기 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -28,14 +28,14 @@
             android:name=".update.UpdateDiaryActivity"
             android:exported="false" />
         <activity
-            android:name="com.example.remembrall.map.MapSearchActivity"
+            android:name=".map.MapSearchActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustPan" /> <!-- android:networkSecurityConfig="@xml/network_security_config" -->
         <activity
-            android:name="com.example.remembrall.read.ReadDiaryActivity"
+            android:name=".read.ReadDiaryActivity"
             android:exported="false" />
         <activity
-            android:name="com.example.remembrall.write.WriteDiaryActivity"
+            android:name=".write.WriteDiaryActivity"
             android:theme="@style/ToolbarTheme"
             android:exported="false" />
         <activity
