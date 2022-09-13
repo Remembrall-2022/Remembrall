@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="10dp"
+    android:paddingTop="10dp"
+    android:layout_marginTop="10dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintlayout_readdiary"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="5dp"
+        android:elevation="3dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="MissingConstraints">
+
+        <ImageView
+            android:id="@+id/img_adddiary_diary"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/readdiary_round_button" />
+<!--            <ImageView-->
+<!--                android:id="@+id/img_adddiary_heart"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginEnd="8dp"-->
+<!--                android:src="@drawable/ic_bookmark"-->
+<!--                android:layout_gravity="top|end"/>-->
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tv_diarylist_date"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="22.09.01 ~ 22.09.03"
+        android:textSize="9sp"
+        android:textColor="#999999"
+        android:layout_marginBottom="3dp"
+        app:layout_constraintStart_toStartOf="@+id/constraintlayout_readdiary"
+        app:layout_constraintTop_toBottomOf="@+id/constraintlayout_readdiary" />
+
+    <TextView
+        android:id="@+id/tv_readdiary_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:text="새 일기장"
+        android:textSize="14dp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:maxLines="1"
+        android:ellipsize="end"
+        app:layout_constraintStart_toStartOf="@+id/constraintlayout_readdiary"
+        app:layout_constraintTop_toBottomOf="@+id/tv_diarylist_date"
+        tools:ignore="MissingConstraints"></TextView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

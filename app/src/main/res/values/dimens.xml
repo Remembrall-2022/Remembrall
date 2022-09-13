@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--  item_view 간의 양 옆 여백을 상쇄할 값   -->
+    <dimen name="offsetBetweenPages">20dp</dimen>
+    <!--  각 페이지의 양 옆 margin  -->
+    <dimen name="pageMargin">20dp</dimen>
+</resources>
