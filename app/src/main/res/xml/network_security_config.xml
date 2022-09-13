@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<network-security-config>
-    <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">ot0.maps.daum-img.net</domain>
-        <domain includeSubdomains="true">ot1.maps.daum-img.net</domain>
-    </domain-config>
-    <!--TODO : http 통신 예외 처리 -->
-</network-security-config>
