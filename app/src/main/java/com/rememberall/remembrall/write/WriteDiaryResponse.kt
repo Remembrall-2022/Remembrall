@@ -6,12 +6,11 @@ data class WriteDiaryResponse(
     @SerializedName("success") val success: String,
     @SerializedName("response") val response: String,
     @SerializedName("error") val error: Error
-){
-    data class Error(
-        @SerializedName("errorName") val errorName: String,
-        @SerializedName("errorMessage") val errorMessage: String
-    )
-}
+)
+data class Error(
+    @SerializedName("errorName") val errorName: String,
+    @SerializedName("errorMessage") val errorMessage: String
+)
 
 data class GetQuestionResponse(
     @SerializedName("success") val success: String,

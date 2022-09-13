@@ -39,6 +39,5 @@ interface WriteDiaryService {
         fun getRetrofitAllQuestion(authToken: String): Call<GetAllQuestionResponse>{
             return ApiClient.create(WriteDiaryService::class.java).getAllQuestion(authToken)
         }
-
     }
 }
