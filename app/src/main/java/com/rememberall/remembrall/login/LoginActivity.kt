@@ -78,7 +78,7 @@ class LoginActivity : AppCompatActivity() {
                         intent =  Intent(this@LoginActivity, MainActivity::class.java)
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
                         startActivity(intent)
-                        finish()
+                        finishAffinity()
                     }
                     else {
                         try {

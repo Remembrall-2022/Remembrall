@@ -109,3 +109,18 @@ data class ReadAllDiaryResponse(
         }
     }
 }
+
+data class DeleteDiaryResponse(
+    @SerializedName("success") val success: String,
+    @SerializedName("response") val response: Response,
+    @SerializedName("error") val error: Error
+){
+    data class Response(
+        @SerializedName("message") val message: String,
+    )
+
+    data class Error(
+        @SerializedName("errorName") val errorName: String,
+        @SerializedName("errorMessage") val errorMessage: String,
+    )
+}

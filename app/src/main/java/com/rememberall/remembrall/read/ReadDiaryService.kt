@@ -25,6 +25,13 @@ interface ReadDiaryService {
         @Path("id") id: Long
     ):Call<ReadAllDiaryResponse>
 
+    @DELETE("/tripLog/{tripLogId}/dateLog/{dateLogId}")
+    fun deleteDiary(
+        @Header("X-AUTH-TOKEN") authToken : String,
+        @Path("tripLogId") tripLogId:Long,
+        @Path("dateLogId") dateLogId: Long,
+    ):Call<DeleteDiaryResponse>
+
     companion object{
         fun getRetrofitReadDateDiary(authToken: String, tripLogId: Long, dateLogId: Long): Call<ReadDiaryResponse>{
             return ApiClient.create(ReadDiaryService::class.java).getDateDiary(authToken, tripLogId, dateLogId)
@@ -34,6 +41,9 @@ interface ReadDiaryService {
         }
         fun getRetrofitAllDiary(authToken: String, id: Long):Call<ReadAllDiaryResponse>{
             return ApiClient.create(ReadDiaryService::class.java).getAlldiary(authToken,id)
+        }
+        fun getRetrofitDeleteDiary(authToken: String, tripLogId: Long, dateLogId: Long):Call<DeleteDiaryResponse>{
+            return ApiClient.create(ReadDiaryService::class.java).deleteDiary(authToken, tripLogId, dateLogId)
         }
     }
 }
