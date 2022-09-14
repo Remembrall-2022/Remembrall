@@ -20,6 +20,8 @@ import androidx.core.view.get
 import androidx.recyclerview.widget.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.rememberall.remembrall.BuildConfig.SERVER
 import com.rememberall.remembrall.PreferenceUtil
 import com.rememberall.remembrall.R
@@ -32,6 +34,7 @@ import com.rememberall.remembrall.read.Triplog.res.GetTriplogListResponse
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
@@ -349,6 +352,8 @@ class WriteDiaryActivity() : AppCompatActivity() {
 //            var weather=WriteDiaryRequest.Weather("맑음", 25)
 //            lateinit var placeInfo: WriteDiaryRequest.PlaceLogList.PlaceInfo
             var placeLogList: ArrayList<JSONObject> = arrayListOf()
+            val body = RequestBody.create(MultipartBody.FORM,"")
+            val emptyPart = MultipartBody.Part.createFormData("file","",body)
             var imgList: ArrayList<MultipartBody.Part> = arrayListOf()
             Log.e("size", "${writeDiaryRecyclerViewData.size}")
             for(i in 0..(writeDiaryRecyclerViewData.size-1)){
@@ -361,6 +366,9 @@ class WriteDiaryActivity() : AppCompatActivity() {
                 Log.e("placeLogList", "${name}  ${address}  ${longitude}  ${latitude}  ${comment}")
                 placeLogList.add(JSONObject("{\"placeInfo\":{\"name\":\"${name}\",\"address\":\"${address}\",\"longitude\":${longitude},\"latitude\":${latitude}},\"comment\":\"${comment}\",\"imgName\":\"${writeDiaryRecyclerViewData[i].image}\"}"))
                 imgList.add(writeDiaryRecyclerViewData[i].imgFile)
+            }
+            if(imgList.size==0){
+                imgList.add(emptyPart)
             }
 //            var writeDiaryRequest=WriteDiaryRequest(date,
 //                weather,questionId, answer, placeLogList)
@@ -387,13 +395,13 @@ class WriteDiaryActivity() : AppCompatActivity() {
                             } else {
                                 try {
                                     val body = response.errorBody()!!.string()
-
-//                                    val gson=GsonBuilder().create()
-//                                    val error=gson.fromJson(response.errorBody().string())
+                                    val jsonObject=JSONObject(body)
+                                    val errorBody=jsonObject.getJSONObject("error").getString("errorMessage")
+//
                                     //에러 Toast
-                                    Toast.makeText(this@WriteDiaryActivity,"이미 작성한 날짜입니다", Toast.LENGTH_SHORT).show()
-//                                    val error=JSONObject(body)
-                                    Log.e(ContentValues.TAG, "body : $body")
+                                    Toast.makeText(this@WriteDiaryActivity,"${errorBody}", Toast.LENGTH_SHORT).show()
+
+                                    Log.e(ContentValues.TAG, "body : ${errorBody}")
                                 } catch (e: IOException) {
                                     e.printStackTrace()
                                 }
