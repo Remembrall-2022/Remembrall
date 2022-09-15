@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/toolbar_readdiary_delete"
+        android:title="삭제"
+        android:icon="@drawable/ic_delete"
+        app:showAsAction="ifRoom" />
+
+    <!--    <item-->
+<!--        android:id="@+id/toolbar_readdiary_edit"-->
+<!--        android:title="수정"-->
+<!--        android:icon="@drawable/ic_edit"-->
+<!--        app:showAsAction="ifRoom" />-->
+
+<!--    <item-->
+<!--        android:id="@+id/toolbar_readdiary_complete"-->
+<!--        android:title="완료"-->
+<!--        app:showAsAction="ifRoom"-->
+<!--        android:visible="false"-->
+<!--        />-->
+
+</menu>
