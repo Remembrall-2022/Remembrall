@@ -1,14 +1,23 @@
 package com.rememberall.remembrall.read
 
 import android.content.ContentValues
+import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.viewpager2.widget.ViewPager2
 import com.rememberall.remembrall.R
 import com.rememberall.remembrall.databinding.ActivityReadDiaryBinding
 import com.rememberall.remembrall.login.userinfo.SharedManager
+import com.rememberall.remembrall.read.Triplog.CreateTriplogDialog
+import com.rememberall.remembrall.write.DiaryListDialog
+import com.rememberall.remembrall.write.SelectDiaryListRecyclerViewAdapter
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,7 +33,7 @@ class ReadDiaryActivity : AppCompatActivity() {
     private var triplogId: Long=1
     private lateinit var datelogId:LongArray
     private lateinit var title: String
-
+    private var page=0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +48,7 @@ class ReadDiaryActivity : AppCompatActivity() {
         triplogId=intent.getLongExtra("triplogId", 1)
         datelogId= intent.getLongArrayExtra("datelogId")!!
         title= intent.getStringExtra("title").toString()
-
+        Log.e("id", "triplodId: ${triplogId}  datelogId: ${datelogId[0]}")
         initialize();
         initReadDiaryRecyclerView();
 //        binding.recyclerviewReaddiary.addItemDecoration(WriteDividerItemDecoration(binding.recyclerviewReaddiary.context, R.drawable.creatediary_line_divider, 0,0))
@@ -65,6 +74,7 @@ class ReadDiaryActivity : AppCompatActivity() {
         viewpager2.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback(){
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
+                page=position
                 Log.d("ViewPager", "Page ${position+1}")
             }
         })
@@ -134,11 +144,13 @@ class ReadDiaryActivity : AppCompatActivity() {
                             question = ""
                         }
 
-                        for(j in 0..(response.body()!!.response.dateLogResponseDtoList[i].placeLogList.size-1)) {
-                            val place = response.body()!!.response.dateLogResponseDtoList[i].placeLogList[j].place.name
-                            val image = response.body()!!.response.dateLogResponseDtoList[i].placeLogList[j].userLogImg.imgUrl
-                            val content = response.body()!!.response.dateLogResponseDtoList[i].placeLogList[j].comment
-                            list.add(ReadDiaryRecyclerViewData(place, image, content))
+                        if(response.body()!!.response.dateLogResponseDtoList[i].placeLogList!=null){
+                            for(j in 0..(response.body()!!.response.dateLogResponseDtoList[i].placeLogList.size-1)) {
+                                val place = response.body()!!.response.dateLogResponseDtoList[i].placeLogList[j].place.name
+                                val image = response.body()!!.response.dateLogResponseDtoList[i].placeLogList[j].userLogImg.imgUrl
+                                val content = response.body()!!.response.dateLogResponseDtoList[i].placeLogList[j].comment
+                                list.add(ReadDiaryRecyclerViewData(place, image, content))
+                            }
                         }
 //                        readDiaryRecyclerViewData.addAll(list)
                         viewPagerData.add(ViewPagerData(title, date ,question,answer,list))
@@ -182,16 +194,27 @@ class ReadDiaryActivity : AppCompatActivity() {
         })
     }
 
-//    private fun getDateDiaryList(): ArrayList<Long> {
-//        return arrayListOf<Long>(R.drawable.idol1, R.drawable.idol2, R.drawable.idol3)
-//    }
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.readdiary_toolbar_menu, menu)
+        return true
+    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {	//뒤로가기 버튼이 작동하도록
         when (item.itemId) {
             android.R.id.home -> {
                 finish()
             }
+            R.id.toolbar_readdiary_delete->{
+                val deleteDiaryDialog = DeleteDateLogDialog(this@ReadDiaryActivity, triplogId, datelogId[page])
+                deleteDiaryDialog.show()
+
+            }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onResume(){
+        super.onResume()
+
     }
 }

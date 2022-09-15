@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".read.DeleteDateLogDialog"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:paddingHorizontal="12dp"
+    android:paddingVertical="12dp"
+    android:background="@drawable/login_background">
+    <LinearLayout
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_gravity="right"
+        android:layout_marginTop="20dp">
+        <ImageButton
+            android:id="@+id/btn_datelog_close"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/close" />
+    </LinearLayout>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:layout_marginTop="100dp"
+    android:layout_marginBottom="30dp">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="#333333"
+        android:text="이 일기를 삭제하시겠습니까?"/>
+</LinearLayout>
+    <Button
+        android:id="@+id/btn_datelog_delete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginHorizontal="10dp"
+        android:background="@drawable/btn_round_border"
+        android:text="삭제하기"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="14dp"
+        android:textStyle="bold" />
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:gravity="center">-->
+<!--        <LinearLayout-->
+<!--            android:id="@+id/linear_deletedialog_delete"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:background="@drawable/deletedialog_border_black"-->
+<!--            android:layout_weight="1"-->
+<!--            android:paddingVertical="14dp"-->
+<!--            android:gravity="center">-->
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textSize="14sp"-->
+<!--            android:textColor="#333333"-->
+<!--            android:text="삭제"/>-->
+<!--        </LinearLayout>-->
+<!--        <LinearLayout-->
+<!--            android:id="@+id/linear_deletedialog_cancel"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            android:background="@drawable/deletedialog_border_black"-->
+<!--            android:paddingVertical="14dp"-->
+<!--            android:gravity="center">-->
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textSize="14sp"-->
+<!--            android:textColor="#333333"-->
+<!--            android:text="취소"/>-->
+<!--        </LinearLayout>-->
+<!--    </LinearLayout>-->
+</LinearLayout>

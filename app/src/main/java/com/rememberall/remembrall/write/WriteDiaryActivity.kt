@@ -565,11 +565,6 @@ class WriteDiaryActivity() : AppCompatActivity() {
 
     }
 
-//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-//        menuInflater.inflate(R.menu.writediary_toolbar_menu, menu)
-//        return true
-//    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {	//뒤로가기 버튼이 작동하도록
         when (item.itemId) {
             android.R.id.home -> {
