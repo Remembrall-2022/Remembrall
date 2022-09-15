@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.widget.Toast
 import com.rememberall.remembrall.databinding.DialogDeleteDatelogBinding
 import com.rememberall.remembrall.login.userinfo.SharedManager
+import com.rememberall.remembrall.read.Triplog.DeleteTriplogDialog
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -24,6 +25,7 @@ class DeleteDateLogDialog(
     private lateinit var binding: DialogDeleteDatelogBinding
     private var triplog: Long
     private var datelog: Long
+    private lateinit var onClickListener: DeleteDateLogDialog.OnDialogClickListener
 
     init {
         triplog=triplogId
@@ -78,6 +80,15 @@ class DeleteDateLogDialog(
             cancel()
         }
 
+    }
+
+    fun setOnClickListener(listener: DeleteTriplogDialog.OnDialogClickListener)
+    {
+        onClickListener = listener
+    }
+
+    interface  onDialogClickListener{
+        fun onClicked()
     }
 
 }
