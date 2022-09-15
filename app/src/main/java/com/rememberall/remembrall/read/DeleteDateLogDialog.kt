@@ -19,7 +19,7 @@ import java.io.IOException
 class DeleteDateLogDialog(
     context: Context,
     triplogId: Long,
-    datelogId:Long
+    datelogId:Long,
 ) : Dialog(context) {
     private lateinit var binding: DialogDeleteDatelogBinding
     private var triplog: Long
@@ -34,7 +34,7 @@ class DeleteDateLogDialog(
         binding = DialogDeleteDatelogBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.linearDeletedialogDelete.setOnClickListener {
+        binding.btnDatelogDelete.setOnClickListener {
             val sharedManager: SharedManager by lazy { SharedManager(context) }
             var authToken = sharedManager.getCurrentUser().accessToken
             ReadDiaryService.getRetrofitDeleteDiary(authToken!!, triplog, datelog).enqueue(object :
@@ -48,6 +48,7 @@ class DeleteDateLogDialog(
                         Log.e("question", response.body().toString())
                         Toast.makeText(context, "삭제되었습니다.", Toast.LENGTH_SHORT).show()
                         cancel()
+
                     } else {
                         try {
                             val body = response.errorBody()!!.string()
@@ -73,8 +74,10 @@ class DeleteDateLogDialog(
             })
         }
 
-        binding.linearDeletedialogCancel.setOnClickListener {
+        binding.btnDatelogClose.setOnClickListener {
             cancel()
         }
+
     }
+
 }

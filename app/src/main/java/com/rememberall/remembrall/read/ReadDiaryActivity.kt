@@ -48,7 +48,7 @@ class ReadDiaryActivity : AppCompatActivity() {
         triplogId=intent.getLongExtra("triplogId", 1)
         datelogId= intent.getLongArrayExtra("datelogId")!!
         title= intent.getStringExtra("title").toString()
-        Log.e("id", "triplodId: ${triplogId}  datelogId: ${datelogId[1]}")
+        Log.e("id", "triplodId: ${triplogId}  datelogId: ${datelogId[0]}")
         initialize();
         initReadDiaryRecyclerView();
 //        binding.recyclerviewReaddiary.addItemDecoration(WriteDividerItemDecoration(binding.recyclerviewReaddiary.context, R.drawable.creatediary_line_divider, 0,0))
@@ -144,11 +144,13 @@ class ReadDiaryActivity : AppCompatActivity() {
                             question = ""
                         }
 
-                        for(j in 0..(response.body()!!.response.dateLogResponseDtoList[i].placeLogList.size-1)) {
-                            val place = response.body()!!.response.dateLogResponseDtoList[i].placeLogList[j].place.name
-                            val image = response.body()!!.response.dateLogResponseDtoList[i].placeLogList[j].userLogImg.imgUrl
-                            val content = response.body()!!.response.dateLogResponseDtoList[i].placeLogList[j].comment
-                            list.add(ReadDiaryRecyclerViewData(place, image, content))
+                        if(response.body()!!.response.dateLogResponseDtoList[i].placeLogList!=null){
+                            for(j in 0..(response.body()!!.response.dateLogResponseDtoList[i].placeLogList.size-1)) {
+                                val place = response.body()!!.response.dateLogResponseDtoList[i].placeLogList[j].place.name
+                                val image = response.body()!!.response.dateLogResponseDtoList[i].placeLogList[j].userLogImg.imgUrl
+                                val content = response.body()!!.response.dateLogResponseDtoList[i].placeLogList[j].comment
+                                list.add(ReadDiaryRecyclerViewData(place, image, content))
+                            }
                         }
 //                        readDiaryRecyclerViewData.addAll(list)
                         viewPagerData.add(ViewPagerData(title, date ,question,answer,list))
@@ -205,8 +207,14 @@ class ReadDiaryActivity : AppCompatActivity() {
             R.id.toolbar_readdiary_delete->{
                 val deleteDiaryDialog = DeleteDateLogDialog(this@ReadDiaryActivity, triplogId, datelogId[page])
                 deleteDiaryDialog.show()
+
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onResume(){
+        super.onResume()
+
     }
 }
