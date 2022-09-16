@@ -49,6 +49,7 @@ class DeleteDateLogDialog(
                         Log.e("question", response.toString())
                         Log.e("question", response.body().toString())
                         Toast.makeText(context, "삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                        onClickListener.onClicked()
                         cancel()
 
                     } else {
@@ -82,12 +83,12 @@ class DeleteDateLogDialog(
 
     }
 
-    fun setOnClickListener(listener: DeleteTriplogDialog.OnDialogClickListener)
+    fun setOnClickListener(listener: OnDialogClickListener)
     {
         onClickListener = listener
     }
 
-    interface  onDialogClickListener{
+    interface  OnDialogClickListener{
         fun onClicked()
     }
 

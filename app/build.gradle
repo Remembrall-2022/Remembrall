@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
     id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
 }
 
 android {
@@ -88,5 +89,6 @@ dependencies {
     implementation("androidx.viewpager2:viewpager2:1.0.0")
     implementation 'com.android.databinding:viewbinding:7.2.2' //
     implementation platform('com.google.firebase:firebase-bom:30.4.1') // firebase
+    implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-analytics-ktx'
 }

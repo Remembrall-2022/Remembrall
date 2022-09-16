@@ -292,9 +292,6 @@ class MapSearchActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         mapView = null
-        var intent = Intent(this, SplashActivity::class.java)
-        startActivity(intent)
-        finish()
     }
     override fun onDestroy() {
         super.onDestroy()
