@@ -194,21 +194,21 @@ class ReadDiaryActivity : AppCompatActivity() {
         })
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.readdiary_toolbar_menu, menu)
-        return true
-    }
+//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+//        menuInflater.inflate(R.menu.readdiary_toolbar_menu, menu)
+//        return true
+//    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {	//뒤로가기 버튼이 작동하도록
         when (item.itemId) {
             android.R.id.home -> {
                 finish()
             }
-            R.id.toolbar_readdiary_delete->{
-                val deleteDiaryDialog = DeleteDateLogDialog(this@ReadDiaryActivity, triplogId, datelogId[page])
-                deleteDiaryDialog.show()
-
-            }
+//            R.id.toolbar_readdiary_delete->{
+//                val deleteDiaryDialog = DeleteDateLogDialog(this@ReadDiaryActivity, triplogId, datelogId[page])
+//                deleteDiaryDialog.show()
+//
+//            }
         }
         return super.onOptionsItemSelected(item)
     }
