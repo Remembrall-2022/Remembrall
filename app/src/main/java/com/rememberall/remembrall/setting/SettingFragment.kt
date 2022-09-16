@@ -5,19 +5,21 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import com.rememberall.remembrall.R
+import com.rememberall.remembrall.databinding.FragmentSettingBinding
+import com.kakao.sdk.user.UserApiClient
 import com.rememberall.remembrall.BuildConfig.SERVER
 import com.rememberall.remembrall.MainActivity
-import com.rememberall.remembrall.databinding.FragmentSettingBinding
 import com.rememberall.remembrall.dongdong.DongDongFragment
 import com.rememberall.remembrall.login.SplashActivity
 import com.rememberall.remembrall.login.UserService
 import com.rememberall.remembrall.login.res.UserInfoResponse
 import com.rememberall.remembrall.login.userinfo.SharedManager
-import com.kakao.sdk.user.UserApiClient
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -25,6 +27,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+
 
 class SettingFragment : Fragment() {
     var binding : FragmentSettingBinding?= null
@@ -47,6 +50,7 @@ class SettingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentSettingBinding.inflate(inflater, container, false)
+
 
         val client = OkHttpClient.Builder()
             .addInterceptor(httpLoggingInterceptor()).build()
@@ -142,6 +146,22 @@ class SettingFragment : Fragment() {
             var dongdongFragment = DongDongFragment()
             mainActivity.replaceFragment(dongdongFragment)
         }
+
+//        val tb=(activity as MainActivity).setSupportActionBar(bindint)
+//        tb?.setDisplayHomeAsUpEnabled(true)
+
+//        binding!!.toolbarSetting.inflateMenu(R.menu.all_toolbar_back)
+//        binding!!.toolbarSetting.setOnMenuItemClickListener{
+//            when(it.itemId){
+//                android.R.id.home->{
+//                    var dongdongFragment = DongDongFragment()
+//                    mainActivity.replaceFragment(dongdongFragment)
+//                    true
+//                }
+//                else -> false
+//            }
+//        }
+
         return binding!!.root
     }
 

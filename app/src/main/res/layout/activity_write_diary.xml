@@ -11,7 +11,8 @@
         android:id="@+id/toolbar_writediary"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
-        tools:ignore="MissingConstraints">
+        tools:ignore="MissingConstraints"
+        app:theme="@style/ToolbarTheme">
 
         <TextView
             android:id="@+id/textview_readdiarylist_title"
@@ -21,8 +22,7 @@
             android:text="오늘의 일기"
             android:textColor="#FFFFFF"
             android:textSize="17sp"
-            android:textStyle="bold"
-            app:theme="@style/ToolbarTheme"/>
+            android:textStyle="bold" />
 
 
     </androidx.appcompat.widget.Toolbar>
