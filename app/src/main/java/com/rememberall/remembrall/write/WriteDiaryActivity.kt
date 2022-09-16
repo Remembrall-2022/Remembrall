@@ -20,12 +20,10 @@ import androidx.core.view.get
 import androidx.recyclerview.widget.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
+import com.rememberall.remembrall.databinding.ActivityWriteDiaryBinding
 import com.rememberall.remembrall.BuildConfig.SERVER
 import com.rememberall.remembrall.PreferenceUtil
 import com.rememberall.remembrall.R
-import com.rememberall.remembrall.databinding.ActivityWriteDiaryBinding
 import com.rememberall.remembrall.login.userinfo.SharedManager
 import com.rememberall.remembrall.map.MapSearchActivity
 import com.rememberall.remembrall.read.ReadDiaryListRecyclerViewData

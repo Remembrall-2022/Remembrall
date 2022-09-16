@@ -16,6 +16,9 @@
     </style>
     
     <style name="ToolbarTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowBackground">@color/white</item>
+        <item name="android:homeAsUpIndicator">@drawable/ic_arrow_back</item>
     </style>
+<!--    <style name="BaseTheme" parent="Theme.AppCompat.Light.NoActionBar">-->
+<!--        <item name="colorControlNormal">@color/white</item>-->
+<!--    </style>-->
 </resources>

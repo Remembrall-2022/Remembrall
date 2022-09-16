@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/bottomnavigation_main_write" app:showAsAction="ifRoom" android:enabled="true"
-        android:icon="@drawable/ic_write_diary" android:title="write" />
+        android:icon="@drawable/ic_create" android:title="write" />
     <item android:id="@+id/bottomnavigation_main_read" app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_read_diary" android:title="diary" />
+        android:icon="@drawable/ic_book" android:title="diary" />
     <item android:id="@+id/bottomnavigation_main_mypage" app:showAsAction="ifRoom"
-        android:enabled="true" android:icon="@drawable/ic_smile_heart" android:title="mypage" />
+        android:enabled="true" android:icon="@drawable/ic_user" android:title="mypage" />
 </menu>

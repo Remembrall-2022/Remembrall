@@ -19,46 +19,41 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_readdiary"
+        android:id="@+id/toolbar_setting"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         app:contentInsetStart="0dp"
-        tools:ignore="MissingConstraints">
+        tools:ignore="MissingConstraints"
+        app:theme="@style/ToolbarTheme">
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:layout_marginHorizontal="20dp">
+            android:layout_marginHorizontal="20dp"
+            android:gravity="center_vertical">
             <LinearLayout
                 android:id="@+id/ll_back"
-                android:layout_width="70dp"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:gravity="left">
                 <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:background="@drawable/back"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_gravity="center"/>
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_arrow_back"
+                    />
             </LinearLayout>
             <TextView
-                android:id="@+id/textview_readdiary_title"
+                android:id="@+id/textview_setting_title"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="MY PAGE"
                 android:textStyle="bold"
                 android:textColor="#FFFFFF"
                 android:textSize="17sp"
                 android:layout_weight="1"/>
-            <LinearLayout
-                android:layout_width="70dp"
-                android:layout_height="match_parent"
-                android:gravity="left">
-            </LinearLayout>
         </LinearLayout>
     </androidx.appcompat.widget.Toolbar>
 

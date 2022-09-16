@@ -30,9 +30,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
 
-        prefs = PreferenceUtil(applicationContext)
+//        prefs = PreferenceUtil(applicationContext)
         super.onCreate(savedInstanceState)
-        prefs.setString("writediary","false")
+//        prefs.setString("writediary","false")
 
 
         binding=ActivityMainBinding.inflate(layoutInflater)
@@ -55,15 +55,15 @@ class MainActivity : AppCompatActivity() {
         binding.bottomnavigationMain.run{setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.bottomnavigation_main_write -> {
-                    Log.d("writediary", "${prefs.getString("writediary","작성 안됨")}")
+//                    Log.d("writediary", "${prefs.getString("writediary","작성 안됨")}")
                     var writeDiaryFragment = ReadDiaryFragment()
-                    var readTodayDiaryFragment = ReadTodayDiaryFragment()
-                    if(prefs.getString("writediary","작성 안됨")=="false")
+//                    var readTodayDiaryFragment = ReadTodayDiaryFragment()
+//                    if(prefs.getString("writediary","작성 안됨")=="false")
                         supportFragmentManager.beginTransaction()
                             .replace(R.id.framelayout_main, writeDiaryFragment).commit()
-                    else
-                        supportFragmentManager.beginTransaction()
-                            .replace(R.id.framelayout_main, readTodayDiaryFragment).commit()
+//                    else
+//                        supportFragmentManager.beginTransaction()
+//                            .replace(R.id.framelayout_main, readTodayDiaryFragment).commit()
                 }
                 R.id.bottomnavigation_main_read -> {
                     var readDiaryFragment = ReadDiaryListFragment()

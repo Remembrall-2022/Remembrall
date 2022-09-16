@@ -39,8 +39,7 @@
             android:exported="false" />
         <activity
             android:name=".write.WriteDiaryActivity"
-            android:exported="false"
-            android:theme="@style/ToolbarTheme" />
+            android:exported="false" />
         <activity
             android:name=".login.SplashActivity"
             android:exported="true"></activity>
