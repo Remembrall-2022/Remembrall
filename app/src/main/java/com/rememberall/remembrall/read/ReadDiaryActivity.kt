@@ -2,6 +2,7 @@ package com.rememberall.remembrall.read
 
 import android.content.ContentValues
 import android.content.DialogInterface
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -10,11 +11,13 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.viewpager.widget.PagerAdapter.POSITION_NONE
 import androidx.viewpager2.widget.ViewPager2
 import com.rememberall.remembrall.R
 import com.rememberall.remembrall.databinding.ActivityReadDiaryBinding
 import com.rememberall.remembrall.login.userinfo.SharedManager
 import com.rememberall.remembrall.read.Triplog.CreateTriplogDialog
+import com.rememberall.remembrall.read.Triplog.UpdateTriplogDialog
 import com.rememberall.remembrall.write.DiaryListDialog
 import com.rememberall.remembrall.write.SelectDiaryListRecyclerViewAdapter
 import org.json.JSONObject
@@ -194,23 +197,37 @@ class ReadDiaryActivity : AppCompatActivity() {
         })
     }
 
-//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-//        menuInflater.inflate(R.menu.readdiary_toolbar_menu, menu)
-//        return true
-//    }
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.readdiary_toolbar_menu, menu)
+        return true
+    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {	//뒤로가기 버튼이 작동하도록
         when (item.itemId) {
             android.R.id.home -> {
                 finish()
             }
-//            R.id.toolbar_readdiary_delete->{
-//                val deleteDiaryDialog = DeleteDateLogDialog(this@ReadDiaryActivity, triplogId, datelogId[page])
-//                deleteDiaryDialog.show()
-//
-//            }
+            R.id.toolbar_readdiary_delete->{
+                val deleteDiaryDialog = DeleteDateLogDialog(this@ReadDiaryActivity, triplogId, datelogId[page])
+                deleteDiaryDialog.setOnClickListener(object : DeleteDateLogDialog.OnDialogClickListener{
+                    override fun onClicked() {
+//                        viewPagerAdapter.notifyItemRemoved(page)
+//                        viewPagerAdapter.notifyItemRangeChanged(page, readDiaryRecyclerViewData.size)
+//                        viewPagerAdapter.notifyDataSetChanged()
+                        initialize();
+                        initReadDiaryRecyclerView();
+                        ReadAllDiary()
+                    }
+                })
+                deleteDiaryDialog.show()
+
+            }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
     }
 
     override fun onResume(){

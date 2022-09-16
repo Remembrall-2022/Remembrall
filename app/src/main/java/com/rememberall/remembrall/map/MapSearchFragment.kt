@@ -117,7 +117,7 @@ class MapSearchFragment() : Fragment() {
         val parser = TikXml.Builder().exceptionOnUnreadXml(false).build()
 
         val retrofit_recommend = Retrofit.Builder()   // Retrofit 구성
-            .baseUrl(getString(R.string.TOUR_APY_URL))
+            .baseUrl(TOUR_API_URL)
             .addConverterFactory(TikXmlConverterFactory.create(parser))
             .client(client)
             .build()
