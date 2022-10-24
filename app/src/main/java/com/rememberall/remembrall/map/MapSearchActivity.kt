@@ -15,8 +15,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.rememberall.remembrall.BuildConfig.KAKAO_MAP_KEY
-import com.rememberall.remembrall.BuildConfig.KAKAO_MAP_URL
 import com.rememberall.remembrall.LoadingDialog
 import com.rememberall.remembrall.R
 import com.rememberall.remembrall.databinding.ActivityMapSearchBinding
@@ -29,6 +27,7 @@ import com.rememberall.remembrall.map.MapSearch.RvMapSearch
 import com.rememberall.remembrall.map.MapSearch.RvMapSearchAdapter
 import com.rememberall.remembrall.write.WriteDiaryActivity
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.rememberall.remembrall.BuildConfig.*
 import com.tickaroo.tikxml.TikXml
 import com.tickaroo.tikxml.retrofit.TikXmlConverterFactory
 import net.daum.mf.map.api.MapPOIItem
@@ -42,6 +41,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import kotlin.collections.ArrayList
+import com.rememberall.remembrall.BuildConfig.TOUR_API_URL
 
 class MapSearchActivity : AppCompatActivity() {
     var mapView: MapView?= null
@@ -135,7 +135,7 @@ class MapSearchActivity : AppCompatActivity() {
         val parser = TikXml.Builder().exceptionOnUnreadXml(false).build()
 
         val retrofit_recommend = Retrofit.Builder()   // Retrofit 구성
-            .baseUrl(getString(R.string.TOUR_APY_URL))
+            .baseUrl(TOUR_API_URL)
             .addConverterFactory(TikXmlConverterFactory.create(parser))
             .client(client)
             .build()
@@ -292,9 +292,6 @@ class MapSearchActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         mapView = null
-        var intent = Intent(this, SplashActivity::class.java)
-        startActivity(intent)
-        finish()
     }
     override fun onDestroy() {
         super.onDestroy()

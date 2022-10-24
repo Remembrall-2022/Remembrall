@@ -430,7 +430,7 @@ class UpdateDiaryActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.writediary_toolbar_menu, menu)
+        menuInflater.inflate(R.menu.readdiary_toolbar_menu, menu)
         return true
     }
 

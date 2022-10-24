@@ -22,7 +22,8 @@
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         app:contentInsetStart="0dp"
-        tools:ignore="MissingConstraints">
+        tools:ignore="MissingConstraints"
+        app:theme="@style/ToolbarTheme">
 
         <TextView
             android:id="@+id/textview_readdiary_title"

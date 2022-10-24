@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "424049382286",
+    "project_id": "rememberall-33aab",
+    "storage_bucket": "rememberall-33aab.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:424049382286:android:d53c5131abaf08ebdf0adf",
+        "android_client_info": {
+          "package_name": "com.rememberall.remembrall"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "424049382286-rbsu59qerlnv1r1j54r2fghpge4gb727.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4mpjwUrjqsW_9_1K7rkdjmFF4o6aL5e8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "424049382286-rbsu59qerlnv1r1j54r2fghpge4gb727.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
