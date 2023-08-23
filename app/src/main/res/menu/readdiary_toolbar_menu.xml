@@ -8,11 +8,11 @@
         android:icon="@drawable/ic_delete"
         app:showAsAction="ifRoom" />
 
-    <!--    <item-->
-<!--        android:id="@+id/toolbar_readdiary_edit"-->
-<!--        android:title="수정"-->
-<!--        android:icon="@drawable/ic_edit"-->
-<!--        app:showAsAction="ifRoom" />-->
+        <item
+        android:id="@+id/toolbar_readdiary_edit"
+        android:title="수정"
+        android:icon="@drawable/ic_edit"
+        app:showAsAction="ifRoom" />
 
 <!--    <item-->
 <!--        android:id="@+id/toolbar_readdiary_complete"-->
