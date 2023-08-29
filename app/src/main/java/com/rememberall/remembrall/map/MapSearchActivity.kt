@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.rememberall.remembrall.LoadingDialog
 import com.rememberall.remembrall.R
 import com.rememberall.remembrall.databinding.ActivityMapSearchBinding
-import com.rememberall.remembrall.login.SplashActivity
 import com.rememberall.remembrall.map.Gallery.TourRecommendApi
 import com.rememberall.remembrall.map.Gallery.TourRecommendResponse
 import com.rememberall.remembrall.map.MapSearch.KakaoMapApi
@@ -55,8 +54,6 @@ class MapSearchActivity : AppCompatActivity() {
     companion object {
         const val BASE_URL = KAKAO_MAP_URL
         const val API_KEY = KAKAO_MAP_KEY
-
-    // REST API 키
     }
 
     lateinit var rvMapSearchAdapter : RvMapSearchAdapter
@@ -66,7 +63,7 @@ class MapSearchActivity : AppCompatActivity() {
         binding = ActivityMapSearchBinding.inflate(layoutInflater)
         setContentView(binding!!.root)
 
-        setSupportActionBar(binding!!.toolbarMapsearch)	//
+        setSupportActionBar(binding!!.toolbarMapsearch)
         val tb=supportActionBar!!
         tb.setDisplayShowTitleEnabled(false)
         tb.setDisplayHomeAsUpEnabled(true)

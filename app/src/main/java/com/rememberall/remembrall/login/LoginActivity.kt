@@ -11,7 +11,7 @@ import com.rememberall.remembrall.BuildConfig.SERVER
 import com.rememberall.remembrall.MainActivity
 import com.rememberall.remembrall.databinding.ActivityLoginBinding
 import com.rememberall.remembrall.login.req.LoginRequest
-import com.rememberall.remembrall.login.res.LoginResponse
+import com.rememberall.remembrall.login.res.LoginV2Response
 import com.rememberall.remembrall.login.userinfo.LoginData
 import com.rememberall.remembrall.login.userinfo.SharedManager
 import com.google.gson.Gson
@@ -41,7 +41,7 @@ class LoginActivity : AppCompatActivity() {
         val client = OkHttpClient.Builder()
             .addInterceptor(httpLoggingInterceptor()).build()
 
-        // 레트로핏 객체 생성.
+        // 레트로핏 객체 생성
         var retrofit = Retrofit.Builder()
             .baseUrl(SERVER)
             .addConverterFactory(GsonConverterFactory.create())
@@ -58,17 +58,16 @@ class LoginActivity : AppCompatActivity() {
             val email = binding.etEmail.text.toString().trim()
             val password = binding.etPassword.text.toString().trim()
 
-            loginService.loginEmail(LoginRequest(email, password)).enqueue(object: Callback<LoginResponse> {
-                override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                    Log.e("Login", t.toString())
-                    Toast.makeText(applicationContext,"error : 로그인 실패", Toast.LENGTH_SHORT)
+            loginService.loginEmail(LoginRequest(email, password)).enqueue(object: Callback<LoginV2Response> {
+                override fun onFailure(call: Call<LoginV2Response>, t: Throwable) {
+                    Log.e("Login failed : ", t.toString())
+                    Toast.makeText(applicationContext,"error : 로그인 실패", Toast.LENGTH_SHORT).show()
+                    binding.tvLoginError.text = t.toString()
                 }
-                override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
-                    val login = response
-                    Log.d("Login:", "login success : "+response.code())
-
+                override fun onResponse(call: Call<LoginV2Response>, response: Response<LoginV2Response>) {
+                    Log.d("Login", "Login successed : " + response.code())
                     if(response.isSuccessful){
-                        var loginData = login?.body()!!.response!!
+                        var loginData = response?.body()!!
                         val currentUser = LoginData(
                             grantType = loginData.grantType.toString(),
                             accessToken = loginData.accessToken.toString(),
@@ -83,9 +82,10 @@ class LoginActivity : AppCompatActivity() {
                     else {
                         try {
                             val body = response.errorBody()!!.string()
-                            val error = Gson().fromJson(body, LoginResponse::class.java)
-                            Log.e(TAG, "error - body : $body")
-                            binding.tvLoginError.text = error.error?.errorMessage
+//                            val error = Gson().fromJson(body, Error::class.java)
+                              Log.e(TAG, "error - body : $body")
+//                            Log.e(TAG, "error - body : $body")
+//                            binding.tvLoginError.text = error?.errorMessage
                         } catch (e: IOException) {
                             e.printStackTrace()
                         }
@@ -102,7 +102,7 @@ class LoginActivity : AppCompatActivity() {
     private fun httpLoggingInterceptor(): HttpLoggingInterceptor {
         val interceptor = HttpLoggingInterceptor { message ->
             Log.e(
-                "HttpLogging:",
+                "HttpLogging",
                 message + ""
             )
         }
