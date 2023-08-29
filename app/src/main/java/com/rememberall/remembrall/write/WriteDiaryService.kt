@@ -1,6 +1,7 @@
 package com.rememberall.remembrall.write
 
 import com.rememberall.remembrall.ApiClient
+import com.rememberall.remembrall.CommonResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -15,7 +16,7 @@ interface WriteDiaryService {
         @Path("tripLogId") tripLogId:Long,
         @Part ("saveRequestDto") saveRequestDto: RequestBody,
         @Part file: List<MultipartBody.Part>
-    ) : Call<WriteDiaryResponse>
+    ) : Call<CommonResponse>
 
     @GET("/question/random")
     @Headers("Content-Type: application/json", "Accept-Type: application/json")
@@ -30,7 +31,7 @@ interface WriteDiaryService {
     ) : Call<GetAllQuestionResponse>
 
     companion object{
-        fun getRetrofitSaveDiary(authToken: String, tripLogId: Long, saveRequestDto: RequestBody, file: List<MultipartBody.Part>):Call<WriteDiaryResponse>{
+        fun getRetrofitSaveDiary(authToken: String, tripLogId: Long, saveRequestDto: RequestBody, file: List<MultipartBody.Part>):Call<CommonResponse>{
             return ApiClient.create(WriteDiaryService::class.java).postSaveDiary(authToken, tripLogId, saveRequestDto, file)
         }
         fun getRetrofitRefreshQuestion(authToken: String): Call<GetQuestionResponse> {

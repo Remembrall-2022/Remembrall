@@ -22,6 +22,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.rememberall.remembrall.databinding.ActivityWriteDiaryBinding
 import com.rememberall.remembrall.BuildConfig.SERVER
+import com.rememberall.remembrall.CommonResponse
+import com.rememberall.remembrall.GlobalApplication
 import com.rememberall.remembrall.PreferenceUtil
 import com.rememberall.remembrall.R
 import com.rememberall.remembrall.login.userinfo.SharedManager
@@ -379,20 +381,23 @@ class WriteDiaryActivity() : AppCompatActivity() {
             }
             else {
                 WriteDiaryService.getRetrofitSaveDiary(authToken!!, diaryId, jsonBody, imgList)
-                    .enqueue(object : Callback<WriteDiaryResponse> {
+                    .enqueue(object : Callback<CommonResponse> {
                         override fun onResponse(
-                            call: Call<WriteDiaryResponse>,
-                            response: Response<WriteDiaryResponse>
+                            call: Call<CommonResponse>,
+                            response: Response<CommonResponse>
                         ) {
 
                             if (response.isSuccessful) {
                                 Log.e("question", response.toString())
                                 Log.e("question", response.body().toString())
 
+                                GlobalApplication.prefs.setString("today_write","true")
                                 finish()
                             } else {
                                 try {
                                     val body = response.errorBody()!!.string()
+                                    Log.e(ContentValues.TAG, "body : $body")
+
                                     val jsonObject=JSONObject(body)
                                     val errorBody=jsonObject.getJSONObject("error").getString("errorMessage")
 //
@@ -406,7 +411,7 @@ class WriteDiaryActivity() : AppCompatActivity() {
                             }
                         }
 
-                        override fun onFailure(call: Call<WriteDiaryResponse>, t: Throwable) {
+                        override fun onFailure(call: Call<CommonResponse>, t: Throwable) {
                             Log.e("TAG", "실패원인: {$t}")
                         }
                     })
@@ -535,9 +540,10 @@ class WriteDiaryActivity() : AppCompatActivity() {
         val today= Calendar.getInstance()
         var date=binding.tvWritediaryDate.text.toString().split("-")
 
-        var mon: Int=1
-        var yea: Int=1
-        var da: Int=1
+        var mon: Int=today.get(Calendar.MONTH)+1
+        var yea: Int=today.get(Calendar.YEAR)
+        var da: Int=today.get(Calendar.DAY_OF_MONTH)
+
         datePicker.init(date[0].toInt(), date[1].toInt()-1, date[2].toInt()){
                 view, year, month, day ->
             mon = month + 1

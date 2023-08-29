@@ -18,6 +18,7 @@ import com.rememberall.remembrall.databinding.ActivityReadDiaryBinding
 import com.rememberall.remembrall.login.userinfo.SharedManager
 import com.rememberall.remembrall.read.Triplog.CreateTriplogDialog
 import com.rememberall.remembrall.read.Triplog.UpdateTriplogDialog
+import com.rememberall.remembrall.update.UpdateDiaryActivity
 import com.rememberall.remembrall.write.DiaryListDialog
 import com.rememberall.remembrall.write.SelectDiaryListRecyclerViewAdapter
 import org.json.JSONObject
@@ -220,7 +221,14 @@ class ReadDiaryActivity : AppCompatActivity() {
                     }
                 })
                 deleteDiaryDialog.show()
+            }
+            R.id.toolbar_readdiary_edit->{
+                val intent=Intent(this,UpdateDiaryActivity::class.java)
+                intent.putExtra("triplogId", triplogId)
+                intent.putExtra("datelogId", datelogId[page])
+                intent.putExtra("title", title)
 
+                startActivity(intent)
             }
         }
         return super.onOptionsItemSelected(item)

@@ -56,6 +56,7 @@
                     android:paddingVertical="12dp">
 
                     <TextView
+                        android:id="@+id/tv_update_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="일기장 제목"
@@ -81,7 +82,7 @@
                         android:src="@drawable/ic_calendar"
                         android:layout_marginRight="3dp"/>
                     <TextView
-                        android:id="@+id/tv_writediary_date"
+                        android:id="@+id/tv_updatediary_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="2022-08-22"
@@ -178,7 +179,7 @@
                     android:layout_marginTop="10dp">
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recyclerview_writediary"
+                        android:id="@+id/recyclerview_updatediary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical" />
