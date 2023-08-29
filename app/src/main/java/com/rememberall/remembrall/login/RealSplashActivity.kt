@@ -60,51 +60,51 @@ class RealSplashActivity : AppCompatActivity() {
                             finish()
                         }
                         else{
-                            try {
-                                //유효하지 않으면 재발급
-                                val body = response.errorBody()!!.string()
-                                val error = Gson().fromJson(body, LoginResponse::class.java)
-                                Log.e(ContentValues.TAG, "error - body : $body")
-                                if (error.error?.errorName == "EXPIRED_TOKEN"){
-                                    loginService.reIssueToken(ReIssueRequest(authToken, refreshToken!!)).enqueue(object : Callback<LoginResponse>{
-                                        override fun onResponse(
-                                            call: Call<LoginResponse>,
-                                            response: Response<LoginResponse>
-                                        ) {
-                                            if(response.body()?.success.toString() == "true"){
-                                                var loginData = response?.body()!!.response!!
-                                                val currentUser = LoginData(
-                                                    grantType = loginData.grantType.toString(),
-                                                    accessToken = loginData.accessToken.toString(),
-                                                    refreshToken = loginData.refreshToken.toString()
-                                                )
-                                                sharedManager.loginCurrentUser(currentUser)
-                                                val intent = Intent(baseContext, MainActivity::class.java)
-                                                startActivity(intent)
-                                                finish()
-                                            }
-                                            else{ //재발급 원활 X -> splash
-                                                val body = response.errorBody()!!.string()
-                                                val error = Gson().fromJson(body, LoginResponse::class.java)
-                                                Log.e(ContentValues.TAG, "error - body : $body")
-                                                val intent = Intent(baseContext, SplashActivity::class.java)
-                                                startActivity(intent)
-                                                finish()
-                                            }
-                                        }
-                                        override fun onFailure(
-                                            call: Call<LoginResponse>,
-                                            t: Throwable
-                                        ) {
-                                            Log.e("reIssue", t.toString())
-                                        }
-
-                                    })
-
-                                }
-                            } catch (e: IOException) {
-                                e.printStackTrace()
-                            }
+//                            try {
+//                                //유효하지 않으면 재발급
+//                                val body = response.errorBody()!!.string()
+//                                val error = Gson().fromJson(body, LoginResponse::class.java)
+//                                Log.e(ContentValues.TAG, "error - body : $body")
+//                                if (error.error?.errorName == "EXPIRED_TOKEN"){
+//                                    loginService.reIssueToken(ReIssueRequest(authToken, refreshToken!!)).enqueue(object : Callback<LoginResponse>{
+//                                        override fun onResponse(
+//                                            call: Call<LoginResponse>,
+//                                            response: Response<LoginResponse>
+//                                        ) {
+//                                            if(response.body()?.success.toString() == "true"){
+//                                                var loginData = response?.body()!!.response!!
+//                                                val currentUser = LoginData(
+//                                                    grantType = loginData.grantType.toString(),
+//                                                    accessToken = loginData.accessToken.toString(),
+//                                                    refreshToken = loginData.refreshToken.toString()
+//                                                )
+//                                                sharedManager.loginCurrentUser(currentUser)
+//                                                val intent = Intent(baseContext, MainActivity::class.java)
+//                                                startActivity(intent)
+//                                                finish()
+//                                            }
+//                                            else{ //재발급 원활 X -> splash
+//                                                val body = response.errorBody()!!.string()
+//                                                val error = Gson().fromJson(body, LoginResponse::class.java)
+//                                                Log.e(ContentValues.TAG, "error - body : $body")
+//                                                val intent = Intent(baseContext, SplashActivity::class.java)
+//                                                startActivity(intent)
+//                                                finish()
+//                                            }
+//                                        }
+//                                        override fun onFailure(
+//                                            call: Call<LoginResponse>,
+//                                            t: Throwable
+//                                        ) {
+//                                            Log.e("reIssue", t.toString())
+//                                        }
+//
+//                                    })
+//
+//                                }
+//                            } catch (e: IOException) {
+//                                e.printStackTrace()
+//                            }
                         }
                     }
                     override fun onFailure(call: Call<UserInfoResponse>, t: Throwable) {

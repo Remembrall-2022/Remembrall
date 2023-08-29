@@ -11,7 +11,7 @@ interface UserService {
     @Headers("Content-Type: application/json")
     fun loginEmail(
         @Body loginRequest: LoginRequest
-    ) : Call<LoginResponse>
+    ) : Call<LoginV2Response>
 
     @POST("/signup/email")
     fun signUpEmail(
