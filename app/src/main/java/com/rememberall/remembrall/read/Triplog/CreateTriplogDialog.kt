@@ -74,14 +74,14 @@ class CreateTriplogDialog(
                         var authToken = sharedManager.getCurrentUser().accessToken
                         readDiaryListRecyclerViewData= arrayListOf()
                         triplogService.getTripLogList(authToken!!).enqueue(object :
-                            Callback<GetTriplogListResponse> {
+                            Callback<List<GetTriplogListResponse>> {
                             override fun onResponse(
-                                call: Call<GetTriplogListResponse>,
-                                response: Response<GetTriplogListResponse>
+                                call: Call<List<GetTriplogListResponse>>,
+                                response: Response<List<GetTriplogListResponse>>
                             ) {
                                 Log.e("CreateTripLog", response.body().toString())
-                                if(response.body()?.success.toString() == "true"){
-                                    var diaryList = response.body()?.response!!
+                                if(response.body()!=null){
+                                    var diaryList = response.body()
                                     if(diaryList != null){
                                         for (diary in diaryList){
                                             val title=diary!!.title.toString()
@@ -105,7 +105,7 @@ class CreateTriplogDialog(
                                 onClickListener.onClicked(readDiaryListRecyclerViewData)
                                 dismiss()
                             }
-                            override fun onFailure(call: Call<GetTriplogListResponse>, t: Throwable) {
+                            override fun onFailure(call: Call<List<GetTriplogListResponse>>, t: Throwable) {
                                 Toast.makeText(context,"일기장 불러오기 실패", Toast.LENGTH_SHORT).show()
                             }
                         })

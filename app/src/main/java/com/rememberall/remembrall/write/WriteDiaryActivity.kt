@@ -22,6 +22,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.rememberall.remembrall.databinding.ActivityWriteDiaryBinding
 import com.rememberall.remembrall.BuildConfig.SERVER
+import com.rememberall.remembrall.CommonResponse
+import com.rememberall.remembrall.GlobalApplication
 import com.rememberall.remembrall.PreferenceUtil
 import com.rememberall.remembrall.R
 import com.rememberall.remembrall.login.userinfo.SharedManager
@@ -135,30 +137,35 @@ class WriteDiaryActivity() : AppCompatActivity() {
         tb.setDisplayShowTitleEnabled(false)
         tb.setDisplayHomeAsUpEnabled(true)
 
-        question= intent.getStringExtra("question").toString()
-        questionId=intent.getLongExtra("questionId",1)
-        binding.tvWritediaryQuestion.text=question
+        question=GlobalApplication.prefs.getString("today_question", "")
+        questionId=GlobalApplication.prefs.getString("today_questionId", "").toLong()
         selectDiary=false
 
-        var retrofit = Retrofit.Builder()
-            .baseUrl(SERVER)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        var triplogService : TriplogService = retrofit.create(TriplogService::class.java)
+        val tripId = intent.getLongExtra("triplogId", 0)
+        if(tripId != 0L)
+            diaryId=tripId
+        val title=intent.getStringExtra("title").toString()
+        if(title!=null){
+            binding.tvDiaryTitle.text = title
+            selectDiary=true
+        }
+
+        binding.tvWritediaryQuestion.text=question
+
         val sharedManager : SharedManager by lazy { SharedManager(this@WriteDiaryActivity) }
         var authToken = sharedManager.getCurrentUser().accessToken
 
         readDiaryListRecyclerViewData = arrayListOf()
-        triplogService.getTripLogList(authToken!!).enqueue(object :
-            Callback<GetTriplogListResponse> {
+        TriplogService.getRetrofitTripLogList(authToken!!).enqueue(object :
+            Callback<List<GetTriplogListResponse>> {
             override fun onResponse(
-                call: Call<GetTriplogListResponse>,
-                response: Response<GetTriplogListResponse>
+                call: Call<List<GetTriplogListResponse>>,
+                response: Response<List<GetTriplogListResponse>>
             ) {
                 Log.e("CreateTripLog", response.body().toString())
 
-                if(response.body()?.success.toString() == "true"){
-                    var diaryList = response.body()?.response!!
+                if(response.body()!=null){
+                    var diaryList = response.body()
                     if(diaryList != null){
                         for (diary in diaryList){
                             val title=diary!!.title.toString()
@@ -179,7 +186,7 @@ class WriteDiaryActivity() : AppCompatActivity() {
                     }
                 }
             }
-            override fun onFailure(call: Call<GetTriplogListResponse>, t: Throwable) {
+            override fun onFailure(call: Call<List<GetTriplogListResponse>>, t: Throwable) {
                 Toast.makeText(this@WriteDiaryActivity,"일기장 불러오기 실패", Toast.LENGTH_SHORT).show()
             }
 
@@ -290,8 +297,8 @@ class WriteDiaryActivity() : AppCompatActivity() {
                     Log.e("question", response.toString())
                     Log.e("question", response.body().toString())
 
-                    questionId=response.body()!!.response.id
-                    val questionName=response.body()!!.response.questionName
+                    questionId=response.body()!!.id
+                    val questionName=response.body()!!.questionName
                     binding.tvWritediaryQuestion.text=questionName
                 }
                 override fun onFailure(call: Call<GetQuestionResponse>, t: Throwable) {
@@ -303,16 +310,16 @@ class WriteDiaryActivity() : AppCompatActivity() {
         binding.imgWritediaryMore.setOnClickListener {
             val sharedManager : SharedManager by lazy { SharedManager(this@WriteDiaryActivity) }
             var authToken = sharedManager.getCurrentUser().accessToken
-            WriteDiaryService.getRetrofitAllQuestion(authToken!!).enqueue(object: Callback<GetAllQuestionResponse>{
+            WriteDiaryService.getRetrofitAllQuestion(authToken!!).enqueue(object: Callback<List<GetQuestionResponse>>{
                 override fun onResponse(
-                    call: Call<GetAllQuestionResponse>,
-                    response: Response<GetAllQuestionResponse>
+                    call: Call<List<GetQuestionResponse>>,
+                    response: Response<List<GetQuestionResponse>>
                 ) {
                     Log.e("question", response.toString())
                     Log.e("question", response.body().toString())
-                    for(i in 0..response.body()!!.response.size-1){
-                        question=response.body()!!.response[i].questionName
-                        questionId=response.body()!!.response[i].id
+                    for(i in 0..response.body()!!.size-1){
+                        question=response.body()!![i].questionName
+                        questionId=response.body()!![i].id
 
 //                        Log.e("question api", "$questionId + $question")
                         questionRecyclerViewData.add(QuestionRecyclerViewData(question, questionId))
@@ -335,7 +342,7 @@ class WriteDiaryActivity() : AppCompatActivity() {
                     })
                 }
 
-                override fun onFailure(call: Call<GetAllQuestionResponse>, t: Throwable) {
+                override fun onFailure(call: Call<List<GetQuestionResponse>>, t: Throwable) {
                     Log.e("TAG", "실패원인: {$t}")
                 }
             })
@@ -379,20 +386,23 @@ class WriteDiaryActivity() : AppCompatActivity() {
             }
             else {
                 WriteDiaryService.getRetrofitSaveDiary(authToken!!, diaryId, jsonBody, imgList)
-                    .enqueue(object : Callback<WriteDiaryResponse> {
+                    .enqueue(object : Callback<CommonResponse> {
                         override fun onResponse(
-                            call: Call<WriteDiaryResponse>,
-                            response: Response<WriteDiaryResponse>
+                            call: Call<CommonResponse>,
+                            response: Response<CommonResponse>
                         ) {
 
                             if (response.isSuccessful) {
                                 Log.e("question", response.toString())
                                 Log.e("question", response.body().toString())
 
+                                GlobalApplication.prefs.setString("today_write","true")
                                 finish()
                             } else {
                                 try {
                                     val body = response.errorBody()!!.string()
+                                    Log.e(ContentValues.TAG, "body : $body")
+
                                     val jsonObject=JSONObject(body)
                                     val errorBody=jsonObject.getJSONObject("error").getString("errorMessage")
 //
@@ -406,7 +416,7 @@ class WriteDiaryActivity() : AppCompatActivity() {
                             }
                         }
 
-                        override fun onFailure(call: Call<WriteDiaryResponse>, t: Throwable) {
+                        override fun onFailure(call: Call<CommonResponse>, t: Throwable) {
                             Log.e("TAG", "실패원인: {$t}")
                         }
                     })
@@ -535,9 +545,10 @@ class WriteDiaryActivity() : AppCompatActivity() {
         val today= Calendar.getInstance()
         var date=binding.tvWritediaryDate.text.toString().split("-")
 
-        var mon: Int=1
-        var yea: Int=1
-        var da: Int=1
+        var mon: Int=today.get(Calendar.MONTH)+1
+        var yea: Int=today.get(Calendar.YEAR)
+        var da: Int=today.get(Calendar.DAY_OF_MONTH)
+
         datePicker.init(date[0].toInt(), date[1].toInt()-1, date[2].toInt()){
                 view, year, month, day ->
             mon = month + 1

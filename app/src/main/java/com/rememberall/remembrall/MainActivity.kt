@@ -14,8 +14,9 @@ import androidx.fragment.app.Fragment
 import com.rememberall.remembrall.databinding.ActivityMainBinding
 import com.rememberall.remembrall.dongdong.DongDongFragment
 import com.rememberall.remembrall.read.ReadDiaryListFragment
+import com.rememberall.remembrall.read.ReadDiaryFragment
 import com.rememberall.remembrall.read.ReadTodayDiaryFragment
-import com.rememberall.remembrall.write.ReadDiaryFragment
+import java.util.*
 import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity() {
@@ -52,18 +53,24 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        val today=GlobalApplication.prefs.getString("today","")
+        val calendar= Calendar.getInstance()
+        val day=calendar.get(Calendar.DAY_OF_MONTH)
+        if(today!=day.toString()) { //날짜가 다름
+            GlobalApplication.prefs.setString("today_write","false")
+        }
         binding.bottomnavigationMain.run{setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.bottomnavigation_main_write -> {
-//                    Log.d("writediary", "${prefs.getString("writediary","작성 안됨")}")
-                    var writeDiaryFragment = ReadDiaryFragment()
-//                    var readTodayDiaryFragment = ReadTodayDiaryFragment()
-//                    if(prefs.getString("writediary","작성 안됨")=="false")
+                    Log.d("writediary", "${GlobalApplication.prefs.getString("writediary","작성 안됨")}")
+                    var readDiaryFragment = ReadDiaryFragment()
+                    var readTodayDiaryFragment = ReadTodayDiaryFragment()
+                    if(GlobalApplication.prefs.getString("today_write","false")=="true")
                         supportFragmentManager.beginTransaction()
-                            .replace(R.id.framelayout_main, writeDiaryFragment).commit()
-//                    else
-//                        supportFragmentManager.beginTransaction()
-//                            .replace(R.id.framelayout_main, readTodayDiaryFragment).commit()
+                            .replace(R.id.framelayout_main, readTodayDiaryFragment).commit()
+                    else
+                        supportFragmentManager.beginTransaction()
+                            .replace(R.id.framelayout_main, readDiaryFragment).commit()
                 }
                 R.id.bottomnavigation_main_read -> {
                     var readDiaryFragment = ReadDiaryListFragment()
