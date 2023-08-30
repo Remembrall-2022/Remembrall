@@ -36,7 +36,7 @@ class ReadDiaryListFragment : Fragment() {
     private lateinit var readDiaryRecyclerViewData: ArrayList<ReadDiaryListRecyclerViewData>
     private lateinit var readDiaryListRecyclerViewAdapter: ReadDiaryListRecyclerViewAdapter
     private var pos=0
-    private var diaryList : List<com.rememberall.remembrall.read.Triplog.res.Response?>? = null
+    private var diaryList : List<GetTriplogListResponse>? = null
 
     lateinit var mainActivity: MainActivity
 
@@ -108,15 +108,15 @@ class ReadDiaryListFragment : Fragment() {
         var authToken = sharedManager.getCurrentUser().accessToken
         readDiaryRecyclerViewData= arrayListOf()
         triplogService.getTripLogList(authToken!!).enqueue(object :
-            Callback<GetTriplogListResponse> {
+            Callback<List<GetTriplogListResponse>> {
             override fun onResponse(
-                call: Call<GetTriplogListResponse>,
-                response: Response<GetTriplogListResponse>
+                call: Call<List<GetTriplogListResponse>>,
+                response: Response<List<GetTriplogListResponse>>
             ) {
                 Log.e("CreateTripLog", response.body().toString())
 
-                if(response.body()?.success.toString() == "true"){
-                    diaryList = response.body()?.response!!
+                if(response.body() != null){
+                    diaryList = response.body()
                     if(diaryList != null){
                         for (diary in diaryList!!){
                             val title=diary!!.title.toString()
@@ -141,7 +141,7 @@ class ReadDiaryListFragment : Fragment() {
                     }
                 }
             }
-            override fun onFailure(call: Call<GetTriplogListResponse>, t: Throwable) {
+            override fun onFailure(call: Call<List<GetTriplogListResponse>>, t: Throwable) {
                 Toast.makeText(context,"일기장 불러오기 실패", Toast.LENGTH_SHORT).show()
             }
 
@@ -172,21 +172,17 @@ class ReadDiaryListFragment : Fragment() {
                             Log.e("diaryInfo", response.toString())
                             Log.e("diaryInfo", response.body().toString())
 
-                            val triplogId=response.body()!!.response.triplogId
-                            val datelogId=response.body()!!.response.placeLogIdList
-                            if(datelogId.size==0){ //일기가 없을 때
-                                Toast.makeText(mainActivity, "아직 작성한 일기가 없어요!\n오늘의 일기를 작성해보면 어떨까요?",Toast.LENGTH_LONG).show()
-                                // 빈 탭을 하나 넣어서 일기쓰러가는 버튼 넣기
-                            }
-                            else{
-                                val title=response.body()!!.response.title
-                                val intent = Intent(mainActivity, ReadDiaryActivity::class.java)
-                                var array= datelogId.toLongArray()
-                                intent.putExtra("triplogId", triplogId)
-                                intent.putExtra("datelogId", array)
-                                intent.putExtra("title", title)
-                                startActivity(intent)
-                            }
+                            val triplogId=response.body()!!.triplogId
+                            val datelogId=response.body()!!.placeLogIdList
+
+                            val title=response.body()!!.title
+                            val intent = Intent(mainActivity, ReadDiaryActivity::class.java)
+                            var array= datelogId.toLongArray()
+                            intent.putExtra("triplogId", triplogId)
+                            intent.putExtra("datelogId", array)
+                            intent.putExtra("title", title)
+                            startActivity(intent)
+
                         }else {
                             try {
                                 val body = response.errorBody()!!.string()

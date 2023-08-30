@@ -262,8 +262,8 @@ class UpdateDiaryActivity : AppCompatActivity() {
                     Log.e("question", response.toString())
                     Log.e("question", response.body().toString())
 
-                    questionId=response.body()!!.response.id
-                    val questionName=response.body()!!.response.questionName
+                    questionId=response.body()!!.id
+                    val questionName=response.body()!!.questionName
                     binding.tvUpdatediaryQuestion.text=questionName
                 }
                 override fun onFailure(call: Call<GetQuestionResponse>, t: Throwable) {
@@ -276,16 +276,16 @@ class UpdateDiaryActivity : AppCompatActivity() {
             val sharedManager : SharedManager by lazy { SharedManager(this@UpdateDiaryActivity) }
             var authToken = sharedManager.getCurrentUser().accessToken
             WriteDiaryService.getRetrofitAllQuestion(authToken!!).enqueue(object:
-                Callback<GetAllQuestionResponse> {
+                Callback<List<GetQuestionResponse>> {
                 override fun onResponse(
-                    call: Call<GetAllQuestionResponse>,
-                    response: Response<GetAllQuestionResponse>
+                    call: Call<List<GetQuestionResponse>>,
+                    response: Response<List<GetQuestionResponse>>
                 ) {
                     Log.e("question", response.toString())
                     Log.e("question", response.body().toString())
-                    for(i in 0..response.body()!!.response.size-1){
-                        question=response.body()!!.response[i].questionName
-                        questionId=response.body()!!.response[i].id
+                    for(i in 0..response.body()!!.size-1){
+                        question=response.body()!![i].questionName
+                        questionId=response.body()!![i].id
 
 //                        Log.e("question api", "$questionId + $question")
                         questionRecyclerViewData.add(QuestionRecyclerViewData(question, questionId))
@@ -299,7 +299,7 @@ class UpdateDiaryActivity : AppCompatActivity() {
 //                    mBuilder.show()
                 }
 
-                override fun onFailure(call: Call<GetAllQuestionResponse>, t: Throwable) {
+                override fun onFailure(call: Call<List<GetQuestionResponse>>, t: Throwable) {
                     Log.e("TAG", "실패원인: {$t}")
                 }
             })
@@ -512,48 +512,15 @@ class UpdateDiaryActivity : AppCompatActivity() {
 
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.readdiary_toolbar_menu, menu)
-        return true
-    }
+//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+//        menuInflater.inflate(R.menu.readdiary_toolbar_menu, menu)
+//        return true
+//    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {	//뒤로가기 버튼이 작동하도록
         when (item.itemId) {
-            R.id.home -> {
+            android.R.id.home -> {
                 finish()
-            }
-            R.id.toolbar_writediary_edit -> {
-                val size=writeDiaryRecyclerViewData.size-1
-                //edit 버튼 눌렀을 때
-                Log.d("수정할 때 list 사이즈", "${writeDiaryRecyclerViewData.size}")
-                binding.toolbarUpdatediary.menu.findItem(R.id.toolbar_writediary_edit)
-                    .setVisible(false)
-                binding.toolbarUpdatediary.menu.findItem(R.id.toolbar_writediary_complete)
-                    .setVisible(true)
-                binding.linearUpdatediaryAddplace.visibility = View.GONE
-
-                for(i: Int in 0..size){
-                    binding.recyclerviewUpdatediary[i].findViewById<LinearLayout>(R.id.linear_addplace_edit).visibility =
-                        View.VISIBLE
-                    binding.recyclerviewUpdatediary[i].findViewById<LinearLayout>(R.id.linear_addplace_drop).visibility =
-                        View.GONE
-                }
-            }
-            //완료 버튼 눌렀을 떄
-            R.id.toolbar_writediary_complete -> {
-                val size=writeDiaryRecyclerViewData.size-1
-                Log.d("완료 후 list 사이즈", "${writeDiaryRecyclerViewData.size}")
-
-                binding.toolbarUpdatediary.menu.findItem(R.id.toolbar_writediary_edit).setVisible(true)
-                binding.toolbarUpdatediary.menu.findItem(R.id.toolbar_writediary_complete).setVisible(false)
-                binding.linearUpdatediaryAddplace.visibility=View.VISIBLE
-
-                for(i: Int in 0..size){
-                    binding.recyclerviewUpdatediary[i].findViewById<LinearLayout>(R.id.linear_addplace_edit).visibility =
-                        View.GONE
-                    binding.recyclerviewUpdatediary[i].findViewById<LinearLayout>(R.id.linear_addplace_drop).visibility =
-                        View.VISIBLE
-                }
             }
         }
 

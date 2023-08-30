@@ -21,6 +21,7 @@ import com.rememberall.remembrall.read.Triplog.UpdateTriplogDialog
 import com.rememberall.remembrall.update.UpdateDiaryActivity
 import com.rememberall.remembrall.write.DiaryListDialog
 import com.rememberall.remembrall.write.SelectDiaryListRecyclerViewAdapter
+import com.rememberall.remembrall.write.WriteDiaryActivity
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -53,11 +54,12 @@ class ReadDiaryActivity : AppCompatActivity() {
         datelogId= intent.getLongArrayExtra("datelogId")!!
         title= intent.getStringExtra("title").toString()
         Log.e("id", "triplodId: ${triplogId}  datelogId: ${datelogId[0]}")
-        initialize();
-        initReadDiaryRecyclerView();
+        initialize()
+        initReadDiaryRecyclerView()
 //        binding.recyclerviewReaddiary.addItemDecoration(WriteDividerItemDecoration(binding.recyclerviewReaddiary.context, R.drawable.creatediary_line_divider, 0,0))
 //        ReadDiaryApi();
-        ReadAllDiary();
+        readAllDiary()
+        addDiary()
     }
 
     private fun initialize(){
@@ -126,7 +128,7 @@ class ReadDiaryActivity : AppCompatActivity() {
 //        })
 //    }
 
-    private fun ReadAllDiary(){
+    private fun readAllDiary(){
         val sharedManager : SharedManager by lazy { SharedManager(this@ReadDiaryActivity) }
         var authToken = sharedManager.getCurrentUser().accessToken
         ReadDiaryService.getRetrofitAllDiary(authToken!!, triplogId).enqueue(object: Callback<ReadAllDiaryResponse>{
@@ -137,22 +139,22 @@ class ReadDiaryActivity : AppCompatActivity() {
                 if(response.isSuccessful){
 //                    Log.e("diary", response.toString())
                     Log.e("diary", response.body().toString())
-                    for(i in 0..(response.body()!!.response.dateLogResponseDtoList.size-1)){
+                    for(i in 0..(response.body()!!.dateLogResponseDtoList.size-1)){
                         var list= arrayListOf<ReadDiaryRecyclerViewData>()
 
-                        val date=response.body()!!.response.dateLogResponseDtoList[i].date
-                        var question=response.body()!!.response.dateLogResponseDtoList[i].question.questionName
-                        val answer=response.body()!!.response.dateLogResponseDtoList[i].answer
+                        val date=response.body()!!.dateLogResponseDtoList[i].date
+                        var question=response.body()!!.dateLogResponseDtoList[i].question.questionName
+                        val answer=response.body()!!.dateLogResponseDtoList[i].answer
 
                         if (question == null){
                             question = ""
                         }
 
-                        if(response.body()!!.response.dateLogResponseDtoList[i].placeLogList!=null){
-                            for(j in 0..(response.body()!!.response.dateLogResponseDtoList[i].placeLogList.size-1)) {
-                                val place = response.body()!!.response.dateLogResponseDtoList[i].placeLogList[j].place.name
-                                val image = response.body()!!.response.dateLogResponseDtoList[i].placeLogList[j].userLogImg.imgUrl
-                                val content = response.body()!!.response.dateLogResponseDtoList[i].placeLogList[j].comment
+                        if(response.body()!!.dateLogResponseDtoList[i].placeLogList!=null){
+                            for(j in 0..(response.body()!!.dateLogResponseDtoList[i].placeLogList.size-1)) {
+                                val place = response.body()!!.dateLogResponseDtoList[i].placeLogList[j].place.name
+                                val image = response.body()!!.dateLogResponseDtoList[i].placeLogList[j].userLogImg.imgUrl
+                                val content = response.body()!!.dateLogResponseDtoList[i].placeLogList[j].comment
                                 list.add(ReadDiaryRecyclerViewData(place, image, content))
                             }
                         }
@@ -198,6 +200,15 @@ class ReadDiaryActivity : AppCompatActivity() {
         })
     }
 
+    private fun addDiary(){
+        binding.floatingReaddiary.setOnClickListener {
+            val intent = Intent(this, WriteDiaryActivity::class.java)
+            intent.putExtra("triplogId", triplogId)
+            intent.putExtra("title", title)
+            startActivity(intent)
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.readdiary_toolbar_menu, menu)
         return true
@@ -215,9 +226,9 @@ class ReadDiaryActivity : AppCompatActivity() {
 //                        viewPagerAdapter.notifyItemRemoved(page)
 //                        viewPagerAdapter.notifyItemRangeChanged(page, readDiaryRecyclerViewData.size)
 //                        viewPagerAdapter.notifyDataSetChanged()
-                        initialize();
-                        initReadDiaryRecyclerView();
-                        ReadAllDiary()
+                        initialize()
+                        initReadDiaryRecyclerView()
+                        readAllDiary()
                     }
                 })
                 deleteDiaryDialog.show()
@@ -227,7 +238,6 @@ class ReadDiaryActivity : AppCompatActivity() {
                 intent.putExtra("triplogId", triplogId)
                 intent.putExtra("datelogId", datelogId[page])
                 intent.putExtra("title", title)
-
                 startActivity(intent)
             }
         }

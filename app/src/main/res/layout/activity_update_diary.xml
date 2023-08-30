@@ -5,13 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".write.WriteDiaryActivity"
-    android:background="@drawable/main_background">
+    android:background="@drawable/gradient_bg">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_updatediary"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
-        tools:ignore="MissingConstraints">
+        tools:ignore="MissingConstraints"
+        app:theme="@style/ToolbarTheme">
 
         <TextView
             android:id="@+id/tv_updatediarylist_title"

@@ -63,13 +63,15 @@ class ReadDiaryFragment : Fragment() {
                             Log.e("call question", response.toString())
                             Log.e("call question", response.body().toString())
 
-                            question = response.body()!!.response.questionName
-                            id = response.body()!!.response.id
-                            binding.textviewCreatediaryQuestion.text = question
+                            if(response.body()!=null){
+                                question = response.body()!!.questionName
+                                id = response.body()!!.id
+                                binding.textviewCreatediaryQuestion.text = question
 
-                            GlobalApplication.prefs.setString("today", day.toString())
-                            GlobalApplication.prefs.setString("today_question", question)
-                            GlobalApplication.prefs.setString("today_questionId", id.toString())
+                                GlobalApplication.prefs.setString("today", day.toString())
+                                GlobalApplication.prefs.setString("today_question", question)
+                                GlobalApplication.prefs.setString("today_questionId", id.toString())
+                            }
 
                         } else {
                             try {
@@ -95,10 +97,6 @@ class ReadDiaryFragment : Fragment() {
         Log.e("ReadDiary read", "${binding.linearReaddiaryRead.visibility}")
         binding.linearylayoutReaddiaryWrite.setOnClickListener{
             val intent = Intent(mainActivity, WriteDiaryActivity::class.java)
-            val todayQuestion=GlobalApplication.prefs.getString("today_question", "")
-            val todayQuestionId=GlobalApplication.prefs.getString("today_questionId", "")
-            intent.putExtra("question", todayQuestion)
-            intent.putExtra("questionId", todayQuestionId.toLong())
             startActivity(intent)
         }
     }

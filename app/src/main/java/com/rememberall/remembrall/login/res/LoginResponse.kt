@@ -1,7 +1,6 @@
 package com.rememberall.remembrall.login.res
 
 data class LoginResponse(
-    val success: Boolean,
     val response: Response?,
     val error: Error?
 )
@@ -16,3 +15,9 @@ data class Error(
     val errorName : String?,
     val errorMessage : String?
     )
+
+data class LoginV2Response(
+    val accessToken: String?,
+    val grantType: String?,
+    val refreshToken: String?
+)

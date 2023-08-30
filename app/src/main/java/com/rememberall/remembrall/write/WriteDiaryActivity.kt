@@ -137,30 +137,35 @@ class WriteDiaryActivity() : AppCompatActivity() {
         tb.setDisplayShowTitleEnabled(false)
         tb.setDisplayHomeAsUpEnabled(true)
 
-        question= intent.getStringExtra("question").toString()
-        questionId=intent.getLongExtra("questionId",1)
-        binding.tvWritediaryQuestion.text=question
+        question=GlobalApplication.prefs.getString("today_question", "")
+        questionId=GlobalApplication.prefs.getString("today_questionId", "").toLong()
         selectDiary=false
 
-        var retrofit = Retrofit.Builder()
-            .baseUrl(SERVER)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        var triplogService : TriplogService = retrofit.create(TriplogService::class.java)
+        val tripId = intent.getLongExtra("triplogId", 0)
+        if(tripId != 0L)
+            diaryId=tripId
+        val title=intent.getStringExtra("title").toString()
+        if(title!=null){
+            binding.tvDiaryTitle.text = title
+            selectDiary=true
+        }
+
+        binding.tvWritediaryQuestion.text=question
+
         val sharedManager : SharedManager by lazy { SharedManager(this@WriteDiaryActivity) }
         var authToken = sharedManager.getCurrentUser().accessToken
 
         readDiaryListRecyclerViewData = arrayListOf()
-        triplogService.getTripLogList(authToken!!).enqueue(object :
-            Callback<GetTriplogListResponse> {
+        TriplogService.getRetrofitTripLogList(authToken!!).enqueue(object :
+            Callback<List<GetTriplogListResponse>> {
             override fun onResponse(
-                call: Call<GetTriplogListResponse>,
-                response: Response<GetTriplogListResponse>
+                call: Call<List<GetTriplogListResponse>>,
+                response: Response<List<GetTriplogListResponse>>
             ) {
                 Log.e("CreateTripLog", response.body().toString())
 
-                if(response.body()?.success.toString() == "true"){
-                    var diaryList = response.body()?.response!!
+                if(response.body()!=null){
+                    var diaryList = response.body()
                     if(diaryList != null){
                         for (diary in diaryList){
                             val title=diary!!.title.toString()
@@ -181,7 +186,7 @@ class WriteDiaryActivity() : AppCompatActivity() {
                     }
                 }
             }
-            override fun onFailure(call: Call<GetTriplogListResponse>, t: Throwable) {
+            override fun onFailure(call: Call<List<GetTriplogListResponse>>, t: Throwable) {
                 Toast.makeText(this@WriteDiaryActivity,"일기장 불러오기 실패", Toast.LENGTH_SHORT).show()
             }
 
@@ -292,8 +297,8 @@ class WriteDiaryActivity() : AppCompatActivity() {
                     Log.e("question", response.toString())
                     Log.e("question", response.body().toString())
 
-                    questionId=response.body()!!.response.id
-                    val questionName=response.body()!!.response.questionName
+                    questionId=response.body()!!.id
+                    val questionName=response.body()!!.questionName
                     binding.tvWritediaryQuestion.text=questionName
                 }
                 override fun onFailure(call: Call<GetQuestionResponse>, t: Throwable) {
@@ -305,16 +310,16 @@ class WriteDiaryActivity() : AppCompatActivity() {
         binding.imgWritediaryMore.setOnClickListener {
             val sharedManager : SharedManager by lazy { SharedManager(this@WriteDiaryActivity) }
             var authToken = sharedManager.getCurrentUser().accessToken
-            WriteDiaryService.getRetrofitAllQuestion(authToken!!).enqueue(object: Callback<GetAllQuestionResponse>{
+            WriteDiaryService.getRetrofitAllQuestion(authToken!!).enqueue(object: Callback<List<GetQuestionResponse>>{
                 override fun onResponse(
-                    call: Call<GetAllQuestionResponse>,
-                    response: Response<GetAllQuestionResponse>
+                    call: Call<List<GetQuestionResponse>>,
+                    response: Response<List<GetQuestionResponse>>
                 ) {
                     Log.e("question", response.toString())
                     Log.e("question", response.body().toString())
-                    for(i in 0..response.body()!!.response.size-1){
-                        question=response.body()!!.response[i].questionName
-                        questionId=response.body()!!.response[i].id
+                    for(i in 0..response.body()!!.size-1){
+                        question=response.body()!![i].questionName
+                        questionId=response.body()!![i].id
 
 //                        Log.e("question api", "$questionId + $question")
                         questionRecyclerViewData.add(QuestionRecyclerViewData(question, questionId))
@@ -337,7 +342,7 @@ class WriteDiaryActivity() : AppCompatActivity() {
                     })
                 }
 
-                override fun onFailure(call: Call<GetAllQuestionResponse>, t: Throwable) {
+                override fun onFailure(call: Call<List<GetQuestionResponse>>, t: Throwable) {
                     Log.e("TAG", "실패원인: {$t}")
                 }
             })
