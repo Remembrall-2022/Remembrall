@@ -64,7 +64,7 @@ class LoginActivity : AppCompatActivity() {
                     binding.tvLoginError.text = t.toString()
                 }
                 override fun onResponse(call: Call<LoginV2Response>, response: Response<LoginV2Response>) {
-                    Log.d("Login", "Login successed : " + response.code())
+                    Log.d("Login", "로그인 성공 " + response.code())
                     if(response.isSuccessful){
                         val loginData = response.body()!!
                         val currentUser = LoginData(
