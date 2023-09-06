@@ -12,6 +12,7 @@ import com.rememberall.remembrall.MainActivity
 import com.rememberall.remembrall.databinding.ActivityLoginBinding
 import com.rememberall.remembrall.login.req.LoginRequest
 import com.rememberall.remembrall.login.res.LoginV2Response
+import com.rememberall.remembrall.login.res.Error
 import com.rememberall.remembrall.login.userinfo.LoginData
 import com.rememberall.remembrall.login.userinfo.SharedManager
 import com.google.gson.Gson
@@ -82,10 +83,9 @@ class LoginActivity : AppCompatActivity() {
                     else {
                         try {
                             val body = response.errorBody()!!.string()
-//                            val error = Gson().fromJson(body, Error::class.java)
-                              Log.e(TAG, "error - body : $body")
-//                            Log.e(TAG, "error - body : $body")
-//                            binding.tvLoginError.text = error?.errorMessage
+                            val error = Gson().fromJson(body, Error::class.java)
+                            Log.e(TAG, "error - body : $body")
+                            binding.tvLoginError.text = error?.errorMessage
                         } catch (e: IOException) {
                             e.printStackTrace()
                         }
