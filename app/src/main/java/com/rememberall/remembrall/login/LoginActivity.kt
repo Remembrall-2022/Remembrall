@@ -27,9 +27,7 @@ import java.io.IOException
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding : ActivityLoginBinding
     var context: Context? = null
-    fun getLoginContext(): Context? {
-        return context
-    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityLoginBinding.inflate(layoutInflater)
@@ -43,14 +41,14 @@ class LoginActivity : AppCompatActivity() {
             .addInterceptor(httpLoggingInterceptor()).build()
 
         // 레트로핏 객체 생성
-        var retrofit = Retrofit.Builder()
+        val retrofit = Retrofit.Builder()
             .baseUrl(SERVER)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
 
         // 로그인 서비스 올리기
-        var loginService: UserService = retrofit.create(UserService::class.java)
+        val loginService: UserService = retrofit.create(UserService::class.java)
 
         // 현재 유저 정보
         val sharedManager = SharedManager(this)
@@ -68,7 +66,7 @@ class LoginActivity : AppCompatActivity() {
                 override fun onResponse(call: Call<LoginV2Response>, response: Response<LoginV2Response>) {
                     Log.d("Login", "Login successed : " + response.code())
                     if(response.isSuccessful){
-                        var loginData = response?.body()!!
+                        val loginData = response.body()!!
                         val currentUser = LoginData(
                             grantType = loginData.grantType.toString(),
                             accessToken = loginData.accessToken.toString(),
