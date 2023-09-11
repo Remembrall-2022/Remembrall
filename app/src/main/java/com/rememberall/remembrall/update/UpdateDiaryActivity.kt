@@ -21,6 +21,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -35,6 +36,10 @@ import com.rememberall.remembrall.login.userinfo.SharedManager
 import com.rememberall.remembrall.map.MapSearchActivity
 import com.rememberall.remembrall.read.*
 import com.rememberall.remembrall.write.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -183,9 +188,9 @@ class UpdateDiaryActivity : AppCompatActivity() {
 //                    Log.e("diary", response.toString())
                     Log.e("diary", response.body().toString())
 
-                    var data= response.body()?.response
+                    var data= response.body()
                     var date= data?.date
-                    var question=data?.question.toString()
+                    var question=data?.question?.questionName
                     var answer=data?.answer
                     var placeLogList=data?.placeLogList
 
@@ -193,46 +198,78 @@ class UpdateDiaryActivity : AppCompatActivity() {
                     binding.tvUpdatediaryQuestion.text=question
                     binding.edUpdatediaryAnswer.setText(answer)
 
-                    if (placeLogList != null) {
-                        for(placeLog in placeLogList){
-                            var placeLogId=placeLog.placeLogId
-                            var placeLogIndex=placeLog.placeLogIndex
-                            var place=placeLog.place
-                            var id=place.id
-                            var name=place.name
-                            var address=place.address
-                            var longitude=place.longitude
-                            var latitude=place.latitude
-                            var userLogImg=placeLog.userLogImg
-                            var imgUrl=userLogImg.imgUrl
-                            var userLogImgId=userLogImg.userLogImgId
-                            var comment=placeLog.comment
+                    lifecycleScope.launch {
+                        withContext(Dispatchers.IO) {
+                            var idx=0
+                            if (placeLogList != null) {
+                                for (placeLog in placeLogList) {
+                                    var placeLogId = placeLog.placeLogId
+                                    var placeLogIndex = placeLog.placeLogIndex
+                                    var place = placeLog.place
+                                    var id = place.id
+                                    var name = place.name
+                                    var address = place.address
+                                    var longitude = place.longitude
+                                    var latitude = place.latitude
+                                    var userLogImg = placeLog.userLogImg
+                                    var imgUrl = userLogImg.imgUrl
+                                    var userLogImgId = userLogImg.userLogImgId
+                                    var comment = placeLog.comment
 
-                            val now = Date()
-                            val time: String =
-                                SimpleDateFormat("yyyyMMddHHmmss", Locale.ENGLISH).format(now)
+                                    val now = Date()
+                                    val time: String =
+                                        SimpleDateFormat("yyyyMMddHHmmss", Locale.ENGLISH).format(
+                                            now
+                                        )
 
-                            var file = File(cacheDir, "${time}.jpg")
-                            file.createNewFile()
-                            var uri = Uri.fromFile(file)
+                                    var file = File(cacheDir, "${time}.jpg")
+                                    file.createNewFile()
+                                    var uri = Uri.fromFile(file)
 
-                            val inputStream = URL(imgUrl).openStream()
-                            val outputStream = FileOutputStream(file)
-                            inputStream.copyTo(outputStream)
+                                    Log.e("imgUrl", "$imgUrl")
+                                    val inputStream = URL(imgUrl).openStream()
+                                    val outputStream = FileOutputStream(file)
+                                    inputStream.copyTo(outputStream)
 
-                            imageUri.add(uri)
+                                    imageUri.add(uri)
 //                            val body = RequestBody.create(MultipartBody.FORM,"")
 //                            val emptyPart = MultipartBody.Part.createFormData("file","",body)
-                            val requestBody = file?.asRequestBody("multipart/form-data".toMediaTypeOrNull())
-                            var image =
-                                MultipartBody.Part.createFormData("multipartFiles", file.name, requestBody)
-                            Log.e("imgFile", "$image")
+                                    val requestBody =
+                                        file?.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+                                    var image =
+                                        MultipartBody.Part.createFormData(
+                                            "multipartFiles",
+                                            file.name,
+                                            requestBody
+                                        )
+                                    Log.e("imgFile", "$image")
 
-                            writeDiaryRecyclerViewData.add(WriteDiaryRecyclerViewData(address, file.name, comment, image, longitude, latitude))
+                                    writeDiaryRecyclerViewData.add(
+                                        WriteDiaryRecyclerViewData(
+                                            address,
+                                            file.name,
+                                            comment,
+                                            image,
+                                            longitude,
+                                            latitude
+                                        )
+                                    )
+
+                                    Glide.with(this@UpdateDiaryActivity)
+                                        .load(uri)
+                                        .fitCenter()
+                                        .apply(RequestOptions().override(500,500))
+                                        .into(binding.recyclerviewUpdatediary[idx].findViewById(R.id.imageview_addpicture))
+                                    idx++
+                                }
+                            }
+                        }
+                        withContext(Dispatchers.Main) {
+                            writeDiaryRecyclerViewAdapter.notifyItemInserted(
+                                writeDiaryRecyclerViewData.size
+                            )
                         }
                     }
-
-                    writeDiaryRecyclerViewAdapter.notifyItemInserted(writeDiaryRecyclerViewData.size)
                 }else {
                     try {
                         val body = response.errorBody()!!.string()
