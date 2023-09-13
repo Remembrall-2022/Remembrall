@@ -49,7 +49,6 @@ class UpdateTriplogDialog(
         binding.etTriplogCreateName.setText(triplogRequest.title)
         binding.tvStartDate.text = triplogRequest.tripStartDate
         binding.tvEndDate.text = triplogRequest.tripEndDate
-        binding.tvDialogTitle.text = "일기장 수정하기"
 
         binding.llCreateTriplogStartDate.setOnClickListener {
             val cal = Calendar.getInstance()

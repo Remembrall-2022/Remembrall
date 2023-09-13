@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
-    android:background="@drawable/main_background"
+    android:background="@drawable/gradient_bg"
     android:paddingBottom="15dp">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_readdiarylist"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
+        android:background="@drawable/divider"
         app:contentInsetStart="0dp"
         tools:ignore="MissingConstraints">
 
@@ -22,8 +22,9 @@
             android:layout_gravity="center"
             android:text="책장"
             android:textColor="#FFFFFF"
-            android:textSize="17sp"
-            android:textStyle="bold" />
+            android:textSize="21sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/hakgyoansim_gaeulsopun_b"/>
         <LinearLayout
             android:id="@+id/ll_back"
             android:layout_width="wrap_content"
@@ -73,7 +74,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/gradation_round"
         android:layout_marginHorizontal="15dp"
         android:layout_marginTop="?attr/actionBarSize"
         app:layout_constraintBottom_toBottomOf="parent"

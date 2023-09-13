@@ -200,7 +200,6 @@ class UpdateDiaryActivity : AppCompatActivity() {
 
                     lifecycleScope.launch {
                         withContext(Dispatchers.IO) {
-                            var idx=0
                             if (placeLogList != null) {
                                 for (placeLog in placeLogList) {
                                     var placeLogId = placeLog.placeLogId
@@ -254,17 +253,21 @@ class UpdateDiaryActivity : AppCompatActivity() {
                                             latitude
                                         )
                                     )
-
-                                    Glide.with(this@UpdateDiaryActivity)
-                                        .load(uri)
-                                        .fitCenter()
-                                        .apply(RequestOptions().override(500,500))
-                                        .into(binding.recyclerviewUpdatediary[idx].findViewById(R.id.imageview_addpicture))
-                                    idx++
                                 }
                             }
                         }
                         withContext(Dispatchers.Main) {
+                            binding.recyclerviewUpdatediary.layoutManager=LinearLayoutManager(this@UpdateDiaryActivity, LinearLayoutManager.VERTICAL, false)
+                            writeDiaryRecyclerViewAdapter=WriteDiaryRecyclerViewAdapter(this@UpdateDiaryActivity, writeDiaryRecyclerViewData)
+
+                            for (idx in 0..writeDiaryRecyclerViewData.size){
+                                Glide.with(this@UpdateDiaryActivity)
+                                    .load(imageUri[idx])
+                                    .fitCenter()
+                                    .apply(RequestOptions().override(500,500))
+                                    .into(binding.recyclerviewUpdatediary[idx].findViewById(R.id.imageview_addpicture))
+                            }
+
                             writeDiaryRecyclerViewAdapter.notifyItemInserted(
                                 writeDiaryRecyclerViewData.size
                             )
@@ -464,8 +467,6 @@ class UpdateDiaryActivity : AppCompatActivity() {
 
     private fun initReadDiaryRecyclerView() {
         val recyclerViewWriteDiary=binding.recyclerviewUpdatediary
-        recyclerViewWriteDiary.layoutManager=LinearLayoutManager(this@UpdateDiaryActivity, LinearLayoutManager.VERTICAL, false)
-        writeDiaryRecyclerViewAdapter=WriteDiaryRecyclerViewAdapter(this@UpdateDiaryActivity, writeDiaryRecyclerViewData)
 
         val callback = ItemMoveCallbackListener(writeDiaryRecyclerViewAdapter)
         val touchHelper = ItemTouchHelper(callback)

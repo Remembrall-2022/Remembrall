@@ -15,7 +15,6 @@ class ViewPagerAdapter(
     private val datelist: ArrayList<ViewPagerData>
     ) : RecyclerView.Adapter<ViewPagerAdapter.PagerViewHolder>() {
     inner class PagerViewHolder(itemView: ViewGroup) : RecyclerView.ViewHolder(itemView){
-        val title=itemView.findViewById<TextView>(R.id.tv_readdiary_title)
         val date=itemView.findViewById<TextView>(R.id.tv_readdiary_date)
         val question=itemView.findViewById<TextView>(R.id.tv_readdiary_question)
         val answer=itemView.findViewById<TextView>(R.id.tv_readdiary_answer)
@@ -28,7 +27,6 @@ class ViewPagerAdapter(
         private lateinit var readDiaryRecyclerViewAdapter: ReadDiaryRecyclerViewAdapter
 
        fun bind(data: ViewPagerData, position: Int) {
-            title.text=data.title
            date.text=data.date
            question.text=data.question
            answer.text=data.answer

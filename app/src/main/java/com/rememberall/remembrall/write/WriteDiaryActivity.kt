@@ -243,7 +243,7 @@ class WriteDiaryActivity() : AppCompatActivity() {
         }
 
         binding.linearWritediaryEdit.setOnClickListener{
-            if(binding.tvWritediaryEdit.text.toString()=="경로 수정하기") {
+            if(binding.tvWritediaryEdit.text.toString()=="수정") {
                 val size = writeDiaryRecyclerViewData.size - 1
                 //edit 버튼 눌렀을 때
                 Log.d("수정할 때 list 사이즈", "${writeDiaryRecyclerViewData.size}")

@@ -11,6 +11,7 @@
         android:id="@+id/toolbar_updatediary"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
+        android:background="@drawable/divider"
         tools:ignore="MissingConstraints"
         app:theme="@style/ToolbarTheme">
 
@@ -20,9 +21,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="일기 수정"
-            android:textColor="#FFFFFF"
-            android:textSize="17sp"
-            android:textStyle="bold" />
+            android:textColor="@color/text_white"
+            android:textSize="21sp"
+            android:fontFamily="@font/hakgyoansim_gaeulsopun_b" />
 
 
     </androidx.appcompat.widget.Toolbar>
@@ -32,8 +33,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/writediary_gradation"
-        android:layout_marginHorizontal="15dp"
+        android:layout_marginHorizontal="24dp"
         android:layout_marginTop="?attr/actionBarSize">
 
         <androidx.core.widget.NestedScrollView
@@ -45,8 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:padding="15dp"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="28dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cons_updatediary_select"
@@ -61,7 +60,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="일기장 제목"
-                        android:textColor="@color/white"
+                        android:textColor="@color/text_white"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -71,113 +70,118 @@
 
                 <LinearLayout
                     android:id="@+id/linear_updatediary_date"
-                    android:layout_marginTop="20dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:layout_marginVertical="20dp"
+                    android:paddingVertical="8dp"
+                    android:paddingLeft="8dp"
+                    android:layout_marginVertical="9dp"
                     android:gravity="center">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_calendar"
-                        android:layout_marginRight="3dp"/>
                     <TextView
                         android:id="@+id/tv_updatediary_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="2022-08-22"
-                        android:textColor="@color/white"
-                        android:textSize="14sp" />
+                        android:textColor="@color/text_white"
+                        android:textSize="14sp"
+                        android:layout_marginRight="5dp"/>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_calendar"
+                        />
                 </LinearLayout>
 
-                <!--                    <androidx.constraintlayout.widget.ConstraintLayout-->
-                <!--                        android:layout_width="match_parent"-->
-                <!--                        android:layout_height="wrap_content"-->
-                <!--                        android:layout_marginBottom="15dp"-->
-                <!--                        android:background="@drawable/creatediary_white"-->
-                <!--                        android:layout_gravity="center_horizontal"-->
-                <!--                        android:paddingHorizontal="15dp"-->
-                <!--                        android:paddingVertical="30dp"-->
-                <!--                        >-->
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="76dp"
                     android:orientation="horizontal"
-                    android:layout_marginBottom="10dp">
-                    <LinearLayout
+                    android:background="@drawable/creatediary_border_white"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="14dp"
+                    >
+                    <ImageView
+                        android:id="@+id/img_updatediary_refresh"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent">
-                        <ImageView
-                            android:id="@+id/img_updatediary_refresh"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/ic_refresh"/>
-                        <TextView
-                            android:id="@+id/tv_updatediary_question"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="오늘은 점심으로 무엇을 드셨나요?"
-                            android:textColor="@color/white"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:paddingHorizontal="10dp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            tools:ignore="MissingConstraints" />
-
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:gravity="end">
-                        <ImageView
-                            android:id="@+id/img_updatediary_more"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/ic_add_white"
-                            android:layout_gravity="end"
-                            />
-                    </LinearLayout>
-                </LinearLayout>
+                        android:src="@drawable/ic_refresh"
+                        app:tint="@color/text_main"
+                        android:layout_marginRight="15dp"
+                        />
 
-                <!--                    </androidx.constraintlayout.widget.ConstraintLayout>-->
+                    <TextView
+                        android:id="@+id/tv_updatediary_question"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="오늘은 점심으로 무엇을 드셨나요?"
+                        android:gravity="center_vertical"
+                        android:textColor="@color/text_black"
+                        android:textSize="14sp"
+                        android:paddingHorizontal="5dp"
+                        android:layout_marginRight="21dp"/>
+
+                    <ImageView
+                        android:id="@+id/img_updatediary_more"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_more"
+                        />
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1.5"
-                    android:layout_marginTop="10dp">
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/writediary_borderline"
-                        >
+                    android:layout_marginVertical="23dp"
+                    android:background="@drawable/creatediary_border_white">
 
-                        <EditText
-                            android:id="@+id/ed_updatediary_answer"
-                            android:paddingHorizontal="15dp"
-                            android:paddingVertical="15dp"
-                            android:layout_width="match_parent"
-                            android:layout_height="200dp"
-                            android:inputType="textMultiLine"
-                            android:background="@null"
-                            android:textSize="16sp"
-                            android:textColor="@color/white"
-                            android:gravity="top"
-                            android:hint="당신의 하루를 적어주세요!"
-                            android:text=""
-                            android:textColorHint="#99FFFFFF"
-                            tools:ignore="MissingConstraints">
-                        </EditText>
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                    <EditText
+                        android:id="@+id/ed_updatediary_answer"
+                        android:padding="17dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:inputType="textMultiLine"
+                        android:background="@null"
+                        android:textSize="14sp"
+                        android:textColor="@color/text_black"
+                        android:gravity="top"
+                        android:hint="당신의 하루를 적어주세요!"
+                        android:textColorHint="@color/text_black">
+                    </EditText>
+
                 </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linear_updatediary_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="여행 장소"
+                        android:textColor="@color/text_white"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/tv_updatediary_edit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="수정"
+                        android:textColor="@color/text_white"
+                        android:textSize="14sp"
+                        android:layout_weight="1"
+                        android:gravity="right"/>
+                </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_marginTop="10dp">
+                    android:orientation="vertical">
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyclerview_updatediary"
@@ -192,46 +196,37 @@
                         android:padding="15dp"
                         android:orientation="horizontal"
                         android:gravity="center_horizontal"
-                        android:background="@drawable/writediary_borderline">
+                        android:background="@drawable/creatediary_border_white"
+                        android:layout_marginBottom="24dp">
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/ic_location"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="관광지 추가"
-                            android:textColor="@color/white"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            tools:ignore="MissingConstraints">
-
-                        </TextView>
+                            android:text="여행 장소 추가 +"
+                            android:textColor="@color/text_black"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
+
         <LinearLayout
             android:id="@+id/linear_updatediary_complete"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="55dp"
             android:orientation="vertical"
-            android:paddingBottom="15dp"
+            android:layout_marginBottom="21dp"
             android:windowSoftInputMode="adjustNothing">
 
             <Button
                 android:id="@+id/btn_updatediary_complete"
-                android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/writediary_bottombutton_purple"
-                android:layout_marginHorizontal="15dp"
                 android:gravity="center"
-                android:text="수정 완료"
-                android:textColor="@color/white"
+                android:text="완료"
+                android:textColor="@color/text_white"
                 android:textSize="14sp"
                 android:textStyle="bold"/>
         </LinearLayout>

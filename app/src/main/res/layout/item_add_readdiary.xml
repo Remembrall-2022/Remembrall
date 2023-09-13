@@ -24,24 +24,21 @@
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:layout_weight="1"
-            android:background="@drawable/readdiary_place_round"
             android:gravity="start"
-            android:paddingLeft="10dp"
-            android:paddingRight="15dp"
             android:paddingVertical="6dp"
-            tools:ignore="MissingConstraints"
-            android:layout_marginBottom="10dp">
+            tools:ignore="MissingConstraints">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_location_readdiary"/>
+                android:src="@drawable/ic_location_readdiary"
+                app:tint="@color/text_white"/>
             <TextView
                 android:id="@+id/tv_itemread_place"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="창덕궁"
-                android:textColor="@color/white"
+                android:textColor="@color/text_white"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:gravity="center_vertical"
@@ -53,7 +50,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="visible"
-                android:layout_marginBottom="10dp">
+                android:layout_marginBottom="5dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cons_addreaddiary_image"
@@ -79,10 +76,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingBottom="15dp"
-                android:paddingHorizontal="10dp"
                 android:textSize="14sp"
                 android:text=""
-                android:textColor="@color/white"
+                android:textColor="@color/text_white"
                 android:lineSpacingMultiplier="1.2"
                 android:letterSpacing="0.01"
                 android:gravity="top" />

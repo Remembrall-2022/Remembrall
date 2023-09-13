@@ -16,4 +16,16 @@
     <color name="rememberall_red">#C22B4C</color>
     <color name="rememberall_gray">#D1D1D1</color>
     <color name="rememberall_black">#242335</color>
+
+    <color name="text_main">#363062</color>
+    <color name="text_white">#FAFAFA</color>
+    <color name="text_black">#2D2D2D</color>
+    <color name="hint_grey">#B4B4B4</color>
+
+    <color name="btn_round_white">#FAFAFA</color>
+    <color name="btn_round_main">#363062</color>
+
+    <color name="toolbar_divider">#DEDEDE</color>
+
+    <color name="edittext_border">#DEDEDE</color>
 </resources>

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".read.ReadDiaryFragment"
-    android:background="@drawable/main_background"
+    android:background="@drawable/gradient_bg"
     android:paddingBottom="15dp">
 
     <androidx.appcompat.widget.Toolbar
@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="기록하기"
+            android:text="오늘의 일기"
             android:textColor="#FFFFFF"
             android:textSize="17sp"
             android:textStyle="bold" />
@@ -94,4 +94,15 @@
                 android:textColor="#333333"/>
         </LinearLayout>
     </LinearLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floating_todaydiary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="?attr/actionBarSize"
+        android:layout_marginRight="30dp"
+        android:contentDescription="submit"
+        android:src="@drawable/ic_add"
+        android:tint="@color/rememberall_purple"
+        app:backgroundTint="#FFFFFF"
+        android:layout_gravity="bottom|end"/>
 </FrameLayout>

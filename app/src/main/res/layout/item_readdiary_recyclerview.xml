@@ -4,80 +4,53 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="@dimen/pageMargin"
-    android:layout_marginRight="@dimen/pageMargin">
+    android:layout_marginHorizontal="24dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:paddingVertical="15dp"
-            android:paddingHorizontal="10dp"
-            android:background="@drawable/writediary_gradation">
+            android:paddingVertical="15dp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/writediary_borderline"
-                android:paddingHorizontal="15dp"
-                android:paddingVertical="12dp"
-                android:layout_marginHorizontal="10dp">
-
-                <TextView
-                    android:id="@+id/tv_readdiary_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="창덕궁 나들이"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    tools:ignore="MissingConstraints" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
                 android:id="@+id/linear_readdiary_date"
-                android:layout_marginTop="15dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:layout_marginBottom="15dp"
-                android:layout_marginHorizontal="10dp"
-                android:paddingHorizontal="10dp"
                 android:paddingVertical="8dp"
-                android:gravity="center"
-                android:background="@drawable/writediary_bottombutton_purple">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_calendar"
-                    android:layout_marginRight="3dp"/>
+                android:paddingLeft="8dp"
+                android:layout_marginBottom="9dp"
+                android:gravity="center">
                 <TextView
                     android:id="@+id/tv_readdiary_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="2022-08-22"
-                    android:textColor="@color/white"
+                    android:textColor="@color/text_white"
                     android:textSize="14sp" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_calendar"
+                    android:layout_marginLeft="5dp"/>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="@drawable/readdiary_rectangle_opacity"
+                android:background="@drawable/creatediary_border_white"
                 android:paddingHorizontal="20dp"
-                android:paddingVertical="25dp"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginBottom="15dp">
+                android:paddingVertical="20dp"
+                android:layout_marginBottom="10dp">
                 <TextView
                     android:id="@+id/tv_readdiary_question"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Q. 오늘 하루는 어땠나요?"
-                    android:textColor="@color/point"
-                    android:textSize="16sp"
+                    android:text="오늘 하루는 어땠나요?"
+                    android:textColor="@color/text_main"
+                    android:textSize="15sp"
                     android:textStyle="bold"
                     android:layout_marginBottom="15dp"/>
                 <TextView
@@ -88,7 +61,8 @@
 다음에는 가족들이랑 같이 오고 싶기도 하고,
 오늘은 사람들이 많았는데 한적할 때의 창덕궁은
 어떤 모습을 가지고 있을지 궁금하기도 하다."
-                    android:textColor="#333333"
+                    android:textColor="@color/text_black"
+                    android:textSize="14sp"
                     android:lineSpacingMultiplier="1.2"
                     android:letterSpacing="0.01"/>
             </LinearLayout>
@@ -96,9 +70,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:orientation="vertical"
-                android:paddingHorizontal="5dp"
-                android:layout_marginHorizontal="10dp">
+                android:orientation="vertical">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerview_readdiary"

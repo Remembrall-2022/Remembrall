@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingVertical="10dp">
+    android:background="@drawable/creatediary_border_white"
+    android:layout_marginVertical="16dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -14,12 +15,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingHorizontal="14dp"
+            android:paddingVertical="17dp">
             <LinearLayout
                 android:id="@+id/linear_addplace_hide"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingVertical="10dp"
                 android:orientation="horizontal"
                 android:layout_gravity="end">
 
@@ -33,13 +35,14 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:src="@drawable/ic_location"/>
+                        android:src="@drawable/ic_location"
+                        app:tint="@color/text_main"/>
                     <TextView
                         android:id="@+id/tv_addplace_place"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:text="관광지 이름"
-                        android:textColor="@color/white"
+                        android:textColor="@color/text_black"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:gravity="center_vertical"
@@ -93,7 +96,8 @@
                             android:id="@+id/imageview_addplace_drop"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:src="@drawable/ic_drop_up" />
+                            android:src="@drawable/ic_drop_up"
+                            app:tint="@color/text_main"/>
                     </LinearLayout>
                 </LinearLayout>
 
@@ -127,15 +131,13 @@
                     android:id="@+id/et_addplace_coment"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingHorizontal="15dp"
-                    android:paddingVertical="15dp"
                     android:inputType="textMultiLine"
                     android:background="@null"
                     android:textSize="14sp"
-                    android:textColor="@color/white"
+                    android:textColor="@color/text_black"
                     android:gravity="top"
                     android:hint="어떤 곳이었나요?"
-                    android:textColorHint="#99FFFFFF"/>
+                    android:textColorHint="@color/text_black"/>
             </LinearLayout>
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

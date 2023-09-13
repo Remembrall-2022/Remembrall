@@ -1,7 +1,6 @@
 package com.rememberall.remembrall.read
 
 data class ViewPagerData (
-    val title: String,
     val date:String,
     val question: String,
     val answer: String,

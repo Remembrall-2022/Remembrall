@@ -4,8 +4,10 @@ import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.ContentValues
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.view.WindowManager
 import android.widget.Toast
 import com.rememberall.remembrall.BuildConfig.SERVER
 import com.rememberall.remembrall.databinding.DialogTriplogCreateBinding
@@ -16,6 +18,7 @@ import com.rememberall.remembrall.read.Triplog.req.TriplogRequest
 import com.rememberall.remembrall.read.Triplog.res.CreateTriplogResponse
 import com.rememberall.remembrall.read.Triplog.res.GetTriplogListResponse
 import com.google.gson.Gson
+import com.rememberall.remembrall.R
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
@@ -38,6 +41,12 @@ class CreateTriplogDialog(
         binding = DialogTriplogCreateBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initViews()
+
+        val layoutParams = WindowManager.LayoutParams()
+        layoutParams.copyFrom(window?.attributes)
+        layoutParams.width = (context.resources.displayMetrics.widthPixels * 0.9).toInt()
+        layoutParams.height = (context.resources.displayMetrics.heightPixels * 0.55).toInt()
+        window?.attributes = layoutParams
     }
 
     private fun initViews() = with(binding) {
@@ -47,12 +56,14 @@ class CreateTriplogDialog(
             DatePickerDialog(context, DatePickerDialog.OnDateSetListener { datePicker, y, m, d->
                 binding.tvStartDate.text = String.format("%d-%02d-%02d", y, m+1, d)
             }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE)).show()
+            binding.tvStartDate.setTextColor(Color.parseColor("#2D2D2D"))
         }
         binding.llCreateTriplogEndDate.setOnClickListener {
             val cal = Calendar.getInstance()
             DatePickerDialog(context, DatePickerDialog.OnDateSetListener { datePicker, y, m, d->
                 binding.tvEndDate.text = String.format("%d-%02d-%02d", y, m+1, d)
             }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE)).show()
+            binding.tvEndDate.setTextColor(Color.parseColor("#2D2D2D"))
         }
 
         binding.btnTriplogCreate.setOnClickListener {
