@@ -1,20 +1,20 @@
 package com.rememberall.remembrall.login
 
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.gson.Gson
 import com.rememberall.remembrall.BuildConfig.SERVER
 import com.rememberall.remembrall.MainActivity
 import com.rememberall.remembrall.databinding.ActivityLoginBinding
 import com.rememberall.remembrall.login.req.LoginRequest
-import com.rememberall.remembrall.login.res.LoginV2Response
+import com.rememberall.remembrall.login.res.Error
+import com.rememberall.remembrall.login.res.LoginResponse
 import com.rememberall.remembrall.login.userinfo.LoginData
 import com.rememberall.remembrall.login.userinfo.SharedManager
-import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -26,9 +26,7 @@ import java.io.IOException
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding : ActivityLoginBinding
     var context: Context? = null
-    fun getLoginContext(): Context? {
-        return context
-    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityLoginBinding.inflate(layoutInflater)
@@ -42,14 +40,14 @@ class LoginActivity : AppCompatActivity() {
             .addInterceptor(httpLoggingInterceptor()).build()
 
         // 레트로핏 객체 생성
-        var retrofit = Retrofit.Builder()
+        val retrofit = Retrofit.Builder()
             .baseUrl(SERVER)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
 
         // 로그인 서비스 올리기
-        var loginService: UserService = retrofit.create(UserService::class.java)
+        val loginService: UserService = retrofit.create(UserService::class.java)
 
         // 현재 유저 정보
         val sharedManager = SharedManager(this)
@@ -58,16 +56,14 @@ class LoginActivity : AppCompatActivity() {
             val email = binding.etEmail.text.toString().trim()
             val password = binding.etPassword.text.toString().trim()
 
-            loginService.loginEmail(LoginRequest(email, password)).enqueue(object: Callback<LoginV2Response> {
-                override fun onFailure(call: Call<LoginV2Response>, t: Throwable) {
-                    Log.e("Login failed : ", t.toString())
-                    Toast.makeText(applicationContext,"error : 로그인 실패", Toast.LENGTH_SHORT).show()
-                    binding.tvLoginError.text = t.toString()
-                }
-                override fun onResponse(call: Call<LoginV2Response>, response: Response<LoginV2Response>) {
-                    Log.d("Login", "Login successed : " + response.code())
+            loginService.loginEmail(LoginRequest(email, password)).enqueue(object: Callback<LoginResponse> {
+                override fun onResponse(
+                    call: Call<LoginResponse>,
+                    response: Response<LoginResponse>
+                ) {
                     if(response.isSuccessful){
-                        var loginData = response?.body()!!
+                        Log.d("Login", "로그인 성공 " + response.code())
+                        val loginData = response.body()!!
                         val currentUser = LoginData(
                             grantType = loginData.grantType.toString(),
                             accessToken = loginData.accessToken.toString(),
@@ -82,14 +78,19 @@ class LoginActivity : AppCompatActivity() {
                     else {
                         try {
                             val body = response.errorBody()!!.string()
-//                            val error = Gson().fromJson(body, Error::class.java)
-                              Log.e(TAG, "error - body : $body")
-//                            Log.e(TAG, "error - body : $body")
-//                            binding.tvLoginError.text = error?.errorMessage
+                            val error = Gson().fromJson(body, Error::class.java)
+                            Log.e("Login", "error - body : $body")
+                            binding.tvLoginError.text = error?.errorMessage
                         } catch (e: IOException) {
                             e.printStackTrace()
                         }
                     }
+                }
+
+                override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                    Log.e("Login", "로그인 실패 " + t.toString())
+                    Toast.makeText(applicationContext,"error : 로그인 실패", Toast.LENGTH_SHORT).show()
+                    binding.tvLoginError.text = t.toString()
                 }
             })
         }

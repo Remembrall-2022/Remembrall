@@ -36,7 +36,7 @@ class SplashActivity : AppCompatActivity() {
         var intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
 
-        var keyHash = Utility.getKeyHash(this)
+        val keyHash = Utility.getKeyHash(this)
         // 해시 키 찾기
         Log.e("hash key : ", keyHash)
 
@@ -46,14 +46,14 @@ class SplashActivity : AppCompatActivity() {
             .addInterceptor(httpLoggingInterceptor()).build()
 
         // 레트로핏 객체 생성.
-        var retrofit = Retrofit.Builder()
+        val retrofit = Retrofit.Builder()
             .baseUrl(SERVER)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
 
         // 로그인 서비스 올리기
-        var userService: UserService = retrofit.create(UserService::class.java)
+        val userService: UserService = retrofit.create(UserService::class.java)
 
         // 카카오계정으로 로그인 공통 callback 구성
         // 카카오톡으로 로그인 할 수 없어 카카오계정으로 로그인할 경우 사용됨
@@ -69,7 +69,7 @@ class SplashActivity : AppCompatActivity() {
                         response: Response<LoginResponse>
                     ) {
                         if (response.isSuccessful){
-                            var loginData = response?.body()!!.response!!
+                            val loginData = response?.body()!!
                             val currentUser = LoginData(
                                 grantType = loginData.grantType.toString(),
                                 accessToken = loginData.accessToken.toString(),
@@ -83,11 +83,12 @@ class SplashActivity : AppCompatActivity() {
                             finish()
                         }
                         else{
-
+                            Toast.makeText(this@SplashActivity, "로그인 실패", Toast.LENGTH_SHORT).show()
                         }
                     }
                     override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                         Log.e("LoginKakao", "통신 실패")
+                        Toast.makeText(this@SplashActivity, "로그인 통신 실패", Toast.LENGTH_SHORT).show()
                     }
                 })
             }
@@ -108,14 +109,13 @@ class SplashActivity : AppCompatActivity() {
                         UserApiClient.instance.loginWithKakaoAccount(this@SplashActivity, callback = callback)
                     } else if (token != null) {
                         Log.i(ContentValues.TAG, "카카오톡으로 로그인 성공 ${token.accessToken}")
-                        userService.loginKakao(KakaoLoginRequest(token.accessToken)).enqueue(object:
-                            Callback<LoginResponse> {
+                        userService.loginKakao(KakaoLoginRequest(token.accessToken)).enqueue(object: Callback<LoginResponse> {
                             override fun onResponse(
                                 call: Call<LoginResponse>,
                                 response: Response<LoginResponse>
                             ) {
                                 if (response.isSuccessful){
-                                    var loginData = response?.body()!!.response!!
+                                    var loginData = response?.body()!!
                                     val currentUser = LoginData(
                                         grantType = loginData.grantType.toString(),
                                         accessToken = loginData.accessToken.toString(),
@@ -131,6 +131,7 @@ class SplashActivity : AppCompatActivity() {
                             }
                             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                                 Log.e("LoginKakao", "통신 실패")
+                                Toast.makeText(this@SplashActivity, "로그인 통신 실패", Toast.LENGTH_SHORT).show()
                             }
 
                         })

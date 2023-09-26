@@ -55,7 +55,7 @@ class SignOutDialog (
                     response: Response<AuthResponse>
                 ) {
                     Log.e("Signout", response.body().toString())
-                    if (response.body()?.success.toString() == "true") {
+                    if (response.isSuccessful) {
                         Toast.makeText(context, "회원 탈퇴 성공", Toast.LENGTH_SHORT).show()
                         UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
                             if (error != null) {
