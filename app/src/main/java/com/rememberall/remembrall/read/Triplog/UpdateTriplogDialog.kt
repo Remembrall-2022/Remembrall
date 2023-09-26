@@ -7,19 +7,21 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import com.google.gson.Gson
 import com.rememberall.remembrall.BuildConfig.SERVER
 import com.rememberall.remembrall.databinding.DialogTriplogCreateBinding
-import com.rememberall.remembrall.login.res.LoginResponse
+import com.rememberall.remembrall.login.res.Error
 import com.rememberall.remembrall.login.userinfo.SharedManager
 import com.rememberall.remembrall.read.ReadDiaryListRecyclerViewData
 import com.rememberall.remembrall.read.Triplog.req.TriplogRequest
 import com.rememberall.remembrall.read.Triplog.res.CreateTriplogResponse
-import com.google.gson.Gson
-import retrofit2.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
-import java.util.*
-import kotlin.collections.ArrayList
+import java.util.Calendar
 
 class UpdateTriplogDialog(
     context: Context,
@@ -84,9 +86,9 @@ class UpdateTriplogDialog(
                     else {
                         try {
                             val body = response.errorBody()!!.string()
-                            val error = Gson().fromJson(body, LoginResponse::class.java)
+                            val error = Gson().fromJson(body, Error::class.java)
                             Log.e(ContentValues.TAG, "error - body : $body")
-                            binding.tvError.text = error.error?.errorMessage
+                            binding.tvError.text = error?.errorMessage
                         } catch (e: IOException) {
                             e.printStackTrace()
                         }

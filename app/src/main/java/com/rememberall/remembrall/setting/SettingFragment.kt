@@ -8,13 +8,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.rememberall.remembrall.R
-import com.rememberall.remembrall.databinding.FragmentSettingBinding
 import com.kakao.sdk.user.UserApiClient
 import com.rememberall.remembrall.BuildConfig.SERVER
 import com.rememberall.remembrall.MainActivity
+import com.rememberall.remembrall.databinding.FragmentSettingBinding
 import com.rememberall.remembrall.dongdong.DongDongFragment
 import com.rememberall.remembrall.login.SplashActivity
 import com.rememberall.remembrall.login.UserService
@@ -75,8 +73,8 @@ class SettingFragment : Fragment() {
                         call: Call<UserInfoResponse>,
                         response: Response<UserInfoResponse>
                     ) {
-                        if(response.body()?.success.toString() == "true"){
-                            var userInfo = response.body()!!.response!!
+                        if(response.isSuccessful){
+                            var userInfo = response.body()!!
                             var name = userInfo.name
                             email = userInfo.email
                             binding!!.userName.text = name.toString()
@@ -146,21 +144,6 @@ class SettingFragment : Fragment() {
             var dongdongFragment = DongDongFragment()
             mainActivity.replaceFragment(dongdongFragment)
         }
-
-//        val tb=(activity as MainActivity).setSupportActionBar(bindint)
-//        tb?.setDisplayHomeAsUpEnabled(true)
-
-//        binding!!.toolbarSetting.inflateMenu(R.menu.all_toolbar_back)
-//        binding!!.toolbarSetting.setOnMenuItemClickListener{
-//            when(it.itemId){
-//                android.R.id.home->{
-//                    var dongdongFragment = DongDongFragment()
-//                    mainActivity.replaceFragment(dongdongFragment)
-//                    true
-//                }
-//                else -> false
-//            }
-//        }
 
         return binding!!.root
     }
