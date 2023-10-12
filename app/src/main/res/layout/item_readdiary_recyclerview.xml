@@ -12,7 +12,6 @@
             android:orientation="vertical"
             android:paddingVertical="15dp">
 
-
             <LinearLayout
                 android:id="@+id/linear_readdiary_date"
                 android:layout_width="wrap_content"

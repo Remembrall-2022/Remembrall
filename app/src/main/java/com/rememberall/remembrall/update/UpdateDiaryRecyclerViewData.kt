@@ -1,5 +1,6 @@
 package com.rememberall.remembrall.update
 
+import android.net.Uri
 import okhttp3.MultipartBody
 
 data class UpdateDiaryRecyclerViewData(
@@ -9,6 +10,6 @@ data class UpdateDiaryRecyclerViewData(
     val longitude: Double,
     val latitude: Double,
     val userLogImgId: Long,
-    val imgUrl: String,
+    val imgUrl: Uri,
     val comment: String
 )

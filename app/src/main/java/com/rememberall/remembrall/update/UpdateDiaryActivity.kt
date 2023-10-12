@@ -231,8 +231,7 @@ class UpdateDiaryActivity : AppCompatActivity() {
                                     inputStream.copyTo(outputStream)
 
                                     imageUri.add(uri)
-//                            val body = RequestBody.create(MultipartBody.FORM,"")
-//                            val emptyPart = MultipartBody.Part.createFormData("file","",body)
+
                                     val requestBody =
                                         file?.asRequestBody("multipart/form-data".toMediaTypeOrNull())
                                     var image =
@@ -257,8 +256,9 @@ class UpdateDiaryActivity : AppCompatActivity() {
                             }
                         }
                         withContext(Dispatchers.Main) {
-                            binding.recyclerviewUpdatediary.layoutManager=LinearLayoutManager(this@UpdateDiaryActivity, LinearLayoutManager.VERTICAL, false)
-                            writeDiaryRecyclerViewAdapter=WriteDiaryRecyclerViewAdapter(this@UpdateDiaryActivity, writeDiaryRecyclerViewData)
+                            writeDiaryRecyclerViewAdapter.notifyItemInserted(
+                                writeDiaryRecyclerViewData.size
+                            )
 
                             for (idx in 0..writeDiaryRecyclerViewData.size){
                                 Glide.with(this@UpdateDiaryActivity)
@@ -267,10 +267,6 @@ class UpdateDiaryActivity : AppCompatActivity() {
                                     .apply(RequestOptions().override(500,500))
                                     .into(binding.recyclerviewUpdatediary[idx].findViewById(R.id.imageview_addpicture))
                             }
-
-                            writeDiaryRecyclerViewAdapter.notifyItemInserted(
-                                writeDiaryRecyclerViewData.size
-                            )
                         }
                     }
                 }else {
@@ -467,6 +463,8 @@ class UpdateDiaryActivity : AppCompatActivity() {
 
     private fun initReadDiaryRecyclerView() {
         val recyclerViewWriteDiary=binding.recyclerviewUpdatediary
+        recyclerViewWriteDiary.layoutManager=LinearLayoutManager(this@UpdateDiaryActivity, LinearLayoutManager.VERTICAL, false)
+        writeDiaryRecyclerViewAdapter=WriteDiaryRecyclerViewAdapter(this@UpdateDiaryActivity, writeDiaryRecyclerViewData)
 
         val callback = ItemMoveCallbackListener(writeDiaryRecyclerViewAdapter)
         val touchHelper = ItemTouchHelper(callback)

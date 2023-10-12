@@ -12,7 +12,8 @@
         android:id="@+id/toolbar_readdiary"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
-        tools:ignore="MissingConstraints">
+        tools:ignore="MissingConstraints"
+        android:background="@drawable/divider">
 
         <TextView
             android:id="@+id/textview_readdiary_title"
@@ -21,79 +22,103 @@
             android:layout_gravity="center"
             android:text="오늘의 일기"
             android:textColor="#FFFFFF"
-            android:textSize="17sp"
-            android:textStyle="bold" />
+            android:textSize="21sp"
+            android:fontFamily="@font/hakgyoansim_gaeulsopun_b" />
 
     </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout
-        android:id="@+id/linear_readdiary_read"
+        android:id="@+id/cons_readdiary_body"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/gradation_round"
-        android:layout_marginTop="?actionBarSize"
-        android:layout_marginHorizontal="15dp"
-        android:padding="20dp">
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="?attr/actionBarSize">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cons_readdiary_diarytitle"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/writediary_borderline"
-            android:paddingHorizontal="15dp"
-            android:paddingVertical="12dp"
-            android:layout_gravity="top">
+            android:layout_weight="1">
 
-            <TextView
-                android:id="@+id/tv_readdiary_diarytitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="창덕궁 나들이"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:ignore="MissingConstraints" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2022.08.22"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            android:layout_gravity="end"
-            android:layout_marginVertical="10dp"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/readdiary_rectangle_white"
-            android:orientation="vertical"
-            android:paddingHorizontal="20dp"
-            android:paddingVertical="25dp"
-            android:layout_marginHorizontal="10dp">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Q. 오늘 하루는 어땠나요?"
-                android:textColor="@color/point"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="15dp"/>
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="처음으로 창덕궁을 봐서 너무 신기했다!
+                android:orientation="vertical"
+                android:paddingVertical="15dp">
+
+                <LinearLayout
+                    android:id="@+id/linear_todaydiary_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:gravity="center"
+                    android:paddingVertical="8dp"
+                    android:paddingLeft="8dp"
+                    android:layout_marginBottom="9dp">
+
+                    <TextView
+                        android:id="@+id/tv_todaydiary_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2022-08-22"
+                        android:textColor="@color/text_white"
+                        android:textSize="14sp"
+                        android:layout_marginRight="5dp"/>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_calendar"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/creatediary_border_white"
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="20dp"
+                    android:layout_marginBottom="10dp">
+                    <TextView
+                        android:id="@+id/tv_todaydiary_question"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="오늘 하루는 어땠나요?"
+                        android:textColor="@color/text_main"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="15dp"/>
+                    <TextView
+                        android:id="@+id/tv_todaydiary_answer"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="처음으로 창덕궁을 봐서 너무 신기했다!
 다음에는 가족들이랑 같이 오고 싶기도 하고,
 오늘은 사람들이 많았는데 한적할 때의 창덕궁은
 어떤 모습을 가지고 있을지 궁금하기도 하다."
-                android:textColor="#333333"/>
-        </LinearLayout>
+                        android:textColor="@color/text_black"
+                        android:textSize="14sp"
+                        android:lineSpacingMultiplier="1.2"
+                        android:letterSpacing="0.01"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerview_todaydiary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
     </LinearLayout>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floating_todaydiary"
         android:layout_width="wrap_content"
