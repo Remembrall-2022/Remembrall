@@ -47,7 +47,7 @@ class SignUpWithEmailAndSocialActivity : AppCompatActivity() {
 
         // 이메일로 회원가입
         binding.btnSignUpWithEmail.setOnClickListener {
-            val intent = Intent(this, SignUpActivity::class.java)
+            val intent = Intent(this, SignUpWithEmailActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
             startActivity(intent)
             finish()
@@ -155,6 +155,12 @@ class SignUpWithEmailAndSocialActivity : AppCompatActivity() {
                     UserApiClient.instance.loginWithKakaoAccount(this@SignUpWithEmailAndSocialActivity, callback = callback)
                 }
             }
+        }
+        // 뒤로가기
+        binding.btnBack.setOnClickListener {
+            val intent = Intent(this, SignUpLoginActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 }

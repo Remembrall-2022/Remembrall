@@ -25,7 +25,7 @@ import java.io.IOException
 import java.util.Timer
 import kotlin.concurrent.timer
 
-class SignUpActivity : AppCompatActivity() {
+class SignUpWithEmailActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignUpBinding
     var timerTask: Timer? = null
 
@@ -33,12 +33,8 @@ class SignUpActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        var intent = Intent(this, SignUpLoginActivity::class.java)
+        var intent = Intent(this, SignUpWithEmailAndSocialActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-        binding.btnBack.setOnClickListener {
-            startActivity(intent)
-            finish()
-        }
 
         val client = OkHttpClient.Builder()
             .addInterceptor(
@@ -153,9 +149,9 @@ class SignUpActivity : AppCompatActivity() {
                         response: Response<AuthResponse>
                     ) {
                         if (response.isSuccessful) {
-                            Toast.makeText(this@SignUpActivity, "회원가입 성공", Toast.LENGTH_SHORT)
+                            Toast.makeText(this@SignUpWithEmailActivity, "회원가입 성공", Toast.LENGTH_SHORT)
                                 .show()
-                            intent = Intent(this@SignUpActivity, SignUpLoginActivity::class.java)
+                            intent = Intent(this@SignUpWithEmailActivity, SignUpLoginActivity::class.java)
                             startActivity(intent)
                             finish()
                         } else {
@@ -174,6 +170,12 @@ class SignUpActivity : AppCompatActivity() {
                         Log.e("SignUpEmail", "통신 실패")
                     }
                 })
+        }
+
+        // 뒤로가기
+        binding.btnBack.setOnClickListener {
+            startActivity(intent)
+            finish()
         }
     }
     private fun httpLoggingInterceptor(): HttpLoggingInterceptor {

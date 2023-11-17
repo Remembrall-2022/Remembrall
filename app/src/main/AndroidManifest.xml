@@ -50,7 +50,7 @@
             android:name=".user.SignUpLoginActivity"
             android:exported="true" />
         <activity
-            android:name=".user.SignUpActivity"
+            android:name=".user.SignUpWithEmailActivity"
             android:exported="true" />
         <activity
             android:name=".constellation.ConstellationActivity"

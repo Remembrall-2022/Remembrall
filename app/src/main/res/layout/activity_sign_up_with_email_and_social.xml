@@ -37,18 +37,16 @@
             android:id="@+id/btn_sign_up_with_kakao"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginBottom="10dp"
             android:background="@drawable/btn_kakao"
-            android:text="@string/btn_sign_up_with_email"
+            android:text="@string/btn_sign_up_with_kakao"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:layout_marginTop="50dp"/>
-
+            android:layout_marginTop="40dp"/>
         <Button
             android:id="@+id/btn_sign_up_with_email"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="12dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/btn_white"
             android:text="@string/btn_sign_up_with_email"
