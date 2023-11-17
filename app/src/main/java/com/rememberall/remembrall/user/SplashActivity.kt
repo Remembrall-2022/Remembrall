@@ -29,7 +29,7 @@ import java.io.IOException
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_real_splash)
+        setContentView(R.layout.activity_splash)
 
         val sharedManager : SharedManager by lazy { SharedManager(this@SplashActivity) }
         val authToken = sharedManager.getCurrentUser().accessToken

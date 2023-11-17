@@ -13,7 +13,7 @@ import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.user.UserApiClient
 import com.rememberall.remembrall.BuildConfig.SERVER
 import com.rememberall.remembrall.MainActivity
-import com.rememberall.remembrall.databinding.ActivitySplashBinding
+import com.rememberall.remembrall.databinding.ActivitySignUpLoginBinding
 import com.rememberall.remembrall.user.req.KakaoLoginRequest
 import com.rememberall.remembrall.user.res.LoginResponse
 import com.rememberall.remembrall.user.userinfo.LoginData
@@ -27,10 +27,10 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class SignUpLoginActivity : AppCompatActivity() {
-    private lateinit var binding : ActivitySplashBinding
+    private lateinit var binding : ActivitySignUpLoginBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding= ActivitySplashBinding.inflate(layoutInflater)
+        binding= ActivitySignUpLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         var intent = Intent(this, MainActivity::class.java)
