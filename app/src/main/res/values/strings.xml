@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">Remember\n+all</string>
     <string name="btn_start">시작하기</string>
+    <string name="btn_login">로그인하기</string>
+    <string name="btn_sign_up">회원가입</string>
+    <string name="msg_sign_up">아직 리멤브럴 계정이 없으신가요?</string>
+    <string name="title_login">LOGIN</string>
+    <string name="subtitle_sns_login">SNS 계정으로 로그인하기</string>
+    <string name="et_email">이메일</string>
+    <string name="et_password">비밀번호</string>
 </resources>

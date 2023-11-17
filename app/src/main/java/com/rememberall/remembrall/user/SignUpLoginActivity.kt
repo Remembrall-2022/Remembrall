@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.gson.Gson
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
@@ -15,6 +16,8 @@ import com.rememberall.remembrall.BuildConfig.SERVER
 import com.rememberall.remembrall.MainActivity
 import com.rememberall.remembrall.databinding.ActivitySignUpLoginBinding
 import com.rememberall.remembrall.user.req.KakaoLoginRequest
+import com.rememberall.remembrall.user.req.LoginRequest
+import com.rememberall.remembrall.user.res.Error
 import com.rememberall.remembrall.user.res.LoginResponse
 import com.rememberall.remembrall.user.userinfo.LoginData
 import com.rememberall.remembrall.user.userinfo.SharedManager
@@ -25,6 +28,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.IOException
 
 class SignUpLoginActivity : AppCompatActivity() {
     private lateinit var binding : ActivitySignUpLoginBinding
@@ -37,9 +41,11 @@ class SignUpLoginActivity : AppCompatActivity() {
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
 
         val keyHash = Utility.getKeyHash(this)
+
         // 해시 키 찾기
         Log.e("hash key : ", keyHash)
 
+        // 현재 유저 정보
         val sharedManager = SharedManager(this)
 
         val client = OkHttpClient.Builder()
@@ -54,6 +60,51 @@ class SignUpLoginActivity : AppCompatActivity() {
 
         // 로그인 서비스 올리기
         val userService: UserService = retrofit.create(UserService::class.java)
+
+        // 로그인하기
+        binding.btnLogin.setOnClickListener {
+            val email = binding.etEmail.text.toString().trim()
+            val password = binding.etPassword.text.toString().trim()
+
+            userService.loginEmail(LoginRequest(email, password)).enqueue(object: Callback<LoginResponse> {
+                override fun onResponse(
+                    call: Call<LoginResponse>,
+                    response: Response<LoginResponse>
+                ) {
+                    if(response.isSuccessful){
+                        Log.d("Login", "로그인 성공 " + response.code())
+                        val loginData = response.body()!!
+                        val currentUser = LoginData(
+                            grantType = loginData.grantType.toString(),
+                            accessToken = loginData.accessToken.toString(),
+                            refreshToken = loginData.refreshToken.toString()
+                        )
+                        sharedManager.loginCurrentUser(currentUser)
+                        intent =  Intent(this@SignUpLoginActivity, MainActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                        startActivity(intent)
+                        finishAffinity()
+                    }
+                    else {
+                        try {
+                            val body = response.errorBody()!!.string()
+                            val error = Gson().fromJson(body, Error::class.java)
+                            Log.e("Login", "error - body : $body")
+                            binding.tvLoginError.text = error?.errorMessage
+                        } catch (e: IOException) {
+                            e.printStackTrace()
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                    Log.e("Login", "로그인 실패 " + t.toString())
+                    Toast.makeText(applicationContext,"error : 로그인 실패", Toast.LENGTH_SHORT).show()
+                    binding.tvLoginError.text = t.toString()
+                }
+            })
+        }
+
 
         // 카카오계정으로 로그인 공통 callback 구성
         // 카카오톡으로 로그인 할 수 없어 카카오계정으로 로그인할 경우 사용됨
@@ -141,9 +192,9 @@ class SignUpLoginActivity : AppCompatActivity() {
                 UserApiClient.instance.loginWithKakaoAccount(this@SignUpLoginActivity, callback = callback)
             }
         }
-        // 이메일로 로그인
-        binding.btnLoginEmail.setOnClickListener {
-            intent = Intent(this, LoginActivity::class.java)
+        // 뒤로가기
+        binding.btnBack.setOnClickListener {
+            intent = Intent(this, StartActivity::class.java)
             startActivity(intent)
             finish()
         }

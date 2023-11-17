@@ -12,68 +12,101 @@
         android:orientation="vertical"
         android:gravity="center"
         android:layout_marginHorizontal="27dp"
-        android:layout_marginBottom="20dp">
+        android:layout_marginTop="56dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/btn_back"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:background="@drawable/maki_arrow" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/title_login"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:paddingRight="25dp"
+                />
+        </LinearLayout>
         <EditText
             android:id="@+id/et_email"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@drawable/et_round_border"
-            android:hint="email"
+            android:hint="@string/et_email"
             android:inputType="textWebEmailAddress"
-            android:layout_marginVertical="10dp"
+            android:layout_marginTop="40dp"
             android:paddingLeft="10dp" />
-
         <EditText
             android:id="@+id/et_password"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@drawable/et_round_border"
-            android:hint="password"
+            android:hint="@string/et_password"
             android:inputType="textPassword"
-            android:paddingLeft="10dp" />
-
+            android:paddingLeft="10dp"
+            android:layout_marginTop="12dp"/>
+        <TextView
+            android:id="@+id/tv_login_error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:textColor="@color/rememberall_red"
+            android:textSize="12sp"
+            android:layout_marginVertical="5dp"/>
         <Button
             android:id="@+id/btn_login"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/btn_sign_up_round_border"
-            android:drawableLeft="@drawable/signup_resize"
-            android:paddingLeft="14dp"
-            android:text="회원가입"
-            android:textColor="#FFFFFF" />
-
-        <Button
-            android:id="@+id/btnLogin_email"
+            android:background="@drawable/btn_round_border"
+            android:text="@string/btn_login"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:layout_marginTop="30dp"/>
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@drawable/btn_login_round_border"
-            android:drawableLeft="@drawable/email_resize"
-            android:paddingLeft="10dp"
-            android:text="이메일로 계속하기"
+            android:layout_height="wrap_content"
+            android:text="@string/subtitle_sns_login"
+            android:gravity="center"
             android:textColor="@color/black"
-            android:layout_marginBottom="10dp"
-            android:textStyle="bold"/>
-        <Button
-            android:id="@+id/btnLogin_kakao"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/btn_kakao_round_border"
-            android:drawableLeft="@drawable/message_resize"
-            android:paddingLeft="14dp"
-            android:text="카카오로 계속하기"
-            android:textColor="#353535"
-            android:textStyle="bold"/>
-        <Button
+            android:textSize="15sp"
+            android:layout_marginTop="42dp"
+            />
+        <ImageView
+            android:id="@+id/btn_login_kakao"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/btn_kakao_circle"
+            android:layout_marginTop="30dp"
+            />
+        <LinearLayout
             android:id="@+id/btnLogin_sign_up"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/btn_sign_up_round_border"
-            android:drawableLeft="@drawable/signup_resize"
-            android:paddingLeft="14dp"
-            android:text="회원가입"
-            android:textColor="#FFFFFF" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="24dp"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/msg_sign_up"
+                android:textColor="@color/rememberall_purple"
+                android:textSize="13dp"
+                />
+            <Button
+                android:layout_width="66dp"
+                android:layout_height="22dp"
+                android:background="@drawable/btn_sign_up_border"
+                android:text="@string/btn_sign_up"
+                android:textColor="@color/rememberall_purple"
+                android:layout_marginLeft="10dp"/>
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>
