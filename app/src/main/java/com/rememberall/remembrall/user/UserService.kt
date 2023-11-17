@@ -1,7 +1,7 @@
-package com.rememberall.remembrall.login
+package com.rememberall.remembrall.user
 
-import com.rememberall.remembrall.login.req.*
-import com.rememberall.remembrall.login.res.*
+import com.rememberall.remembrall.user.req.*
+import com.rememberall.remembrall.user.res.*
 import retrofit2.Call
 import retrofit2.http.*
 

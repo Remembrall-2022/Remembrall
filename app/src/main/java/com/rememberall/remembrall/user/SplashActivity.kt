@@ -1,4 +1,4 @@
-package com.rememberall.remembrall.login
+package com.rememberall.remembrall.user
 
 import android.content.ContentValues
 import android.content.Intent
@@ -11,12 +11,12 @@ import com.google.gson.Gson
 import com.rememberall.remembrall.BuildConfig.SERVER
 import com.rememberall.remembrall.MainActivity
 import com.rememberall.remembrall.R
-import com.rememberall.remembrall.login.req.ReIssueRequest
-import com.rememberall.remembrall.login.res.Error
-import com.rememberall.remembrall.login.res.LoginResponse
-import com.rememberall.remembrall.login.res.UserInfoResponse
-import com.rememberall.remembrall.login.userinfo.LoginData
-import com.rememberall.remembrall.login.userinfo.SharedManager
+import com.rememberall.remembrall.user.req.ReIssueRequest
+import com.rememberall.remembrall.user.res.Error
+import com.rememberall.remembrall.user.res.LoginResponse
+import com.rememberall.remembrall.user.res.UserInfoResponse
+import com.rememberall.remembrall.user.userinfo.LoginData
+import com.rememberall.remembrall.user.userinfo.SharedManager
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -26,12 +26,12 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 
-class RealSplashActivity : AppCompatActivity() {
+class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_real_splash)
 
-        val sharedManager : SharedManager by lazy { SharedManager(this@RealSplashActivity) }
+        val sharedManager : SharedManager by lazy { SharedManager(this@SplashActivity) }
         val authToken = sharedManager.getCurrentUser().accessToken
         val refreshToken = sharedManager.getCurrentUser().refreshToken
         val client = OkHttpClient.Builder()
@@ -88,7 +88,7 @@ class RealSplashActivity : AppCompatActivity() {
                                             else{ //재발급 X -> splashActivity로 이동
                                                 val body = response.errorBody()!!.string()
                                                 Log.e(ContentValues.TAG, "error - body : $body")
-                                                val intent = Intent(baseContext, SplashActivity::class.java)
+                                                val intent = Intent(baseContext, SignUpLoginActivity::class.java)
                                                 startActivity(intent)
                                                 finish()
                                             }
@@ -114,7 +114,7 @@ class RealSplashActivity : AppCompatActivity() {
 
                 })
             }
-            val intent = Intent(baseContext, SplashActivity::class.java)
+            val intent = Intent(baseContext, StartActivity::class.java)
             startActivity(intent)
             finish()
         }, 2000) // 2초

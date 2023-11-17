@@ -7,7 +7,7 @@ import android.util.Log
 import android.widget.Toast
 import com.rememberall.remembrall.BuildConfig.SERVER
 import com.rememberall.remembrall.databinding.DialogDeleteTriplogBinding
-import com.rememberall.remembrall.login.userinfo.SharedManager
+import com.rememberall.remembrall.user.userinfo.SharedManager
 import com.rememberall.remembrall.read.Triplog.res.DeleteTriplogResponse
 import retrofit2.Call
 import retrofit2.Callback

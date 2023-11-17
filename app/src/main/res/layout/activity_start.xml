@@ -23,39 +23,18 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="@+id/imageView3"
         android:gravity="center"
-        android:layout_marginHorizontal="20dp"
+        android:layout_marginHorizontal="27dp"
         android:layout_marginBottom="20dp">
         <Button
-            android:id="@+id/btnLogin_email"
+            android:id="@+id/btn_start"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@drawable/btn_login_round_border"
-            android:drawableLeft="@drawable/email_resize"
             android:paddingLeft="10dp"
-            android:text="이메일로 계속하기"
+            android:text="@string/btn_start"
             android:textColor="@color/black"
+            android:textSize="14sp"
             android:layout_marginBottom="10dp"
             android:textStyle="bold"/>
-        <Button
-            android:id="@+id/btnLogin_kakao"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/btn_kakao_round_border"
-            android:drawableLeft="@drawable/message_resize"
-            android:paddingLeft="14dp"
-            android:text="카카오로 계속하기"
-            android:textColor="#353535"
-            android:textStyle="bold"/>
-        <Button
-            android:id="@+id/btnLogin_sign_up"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/btn_sign_up_round_border"
-            android:drawableLeft="@drawable/signup_resize"
-            android:paddingLeft="14dp"
-            android:text="회원가입"
-            android:textColor="#FFFFFF" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,7 +15,7 @@ import com.rememberall.remembrall.BuildConfig.SERVER
 import com.rememberall.remembrall.MainActivity
 import com.rememberall.remembrall.R
 import com.rememberall.remembrall.databinding.FragmentReadDiaryListBinding
-import com.rememberall.remembrall.login.userinfo.SharedManager
+import com.rememberall.remembrall.user.userinfo.SharedManager
 import com.rememberall.remembrall.read.Triplog.DeleteTriplogDialog
 import com.rememberall.remembrall.read.Triplog.CreateTriplogDialog
 import com.rememberall.remembrall.read.Triplog.TriplogService

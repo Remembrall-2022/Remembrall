@@ -1,4 +1,4 @@
-package com.rememberall.remembrall.login
+package com.rememberall.remembrall.user
 
 import android.content.Context
 import android.content.Intent
@@ -10,11 +10,11 @@ import com.google.gson.Gson
 import com.rememberall.remembrall.BuildConfig.SERVER
 import com.rememberall.remembrall.MainActivity
 import com.rememberall.remembrall.databinding.ActivityLoginBinding
-import com.rememberall.remembrall.login.req.LoginRequest
-import com.rememberall.remembrall.login.res.Error
-import com.rememberall.remembrall.login.res.LoginResponse
-import com.rememberall.remembrall.login.userinfo.LoginData
-import com.rememberall.remembrall.login.userinfo.SharedManager
+import com.rememberall.remembrall.user.req.LoginRequest
+import com.rememberall.remembrall.user.res.Error
+import com.rememberall.remembrall.user.res.LoginResponse
+import com.rememberall.remembrall.user.userinfo.LoginData
+import com.rememberall.remembrall.user.userinfo.SharedManager
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -33,7 +33,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
         context = this@LoginActivity
 
-        var intent =  Intent(this, SplashActivity::class.java)
+        var intent =  Intent(this, SignUpLoginActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
 
         val client = OkHttpClient.Builder()

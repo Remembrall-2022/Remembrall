@@ -1,4 +1,4 @@
-package com.rememberall.remembrall.login
+package com.rememberall.remembrall.user
 
 import android.content.ContentValues
 import android.content.ContentValues.TAG
@@ -16,14 +16,14 @@ import com.kakao.sdk.user.UserApiClient
 import com.rememberall.remembrall.BuildConfig.SERVER
 import com.rememberall.remembrall.MainActivity
 import com.rememberall.remembrall.databinding.ActivitySignUpBinding
-import com.rememberall.remembrall.login.req.AuthCodeRequest
-import com.rememberall.remembrall.login.req.KakaoLoginRequest
-import com.rememberall.remembrall.login.req.SignUpRequest
-import com.rememberall.remembrall.login.res.AuthResponse
-import com.rememberall.remembrall.login.res.Error
-import com.rememberall.remembrall.login.res.LoginResponse
-import com.rememberall.remembrall.login.userinfo.LoginData
-import com.rememberall.remembrall.login.userinfo.SharedManager
+import com.rememberall.remembrall.user.req.AuthCodeRequest
+import com.rememberall.remembrall.user.req.KakaoLoginRequest
+import com.rememberall.remembrall.user.req.SignUpRequest
+import com.rememberall.remembrall.user.res.AuthResponse
+import com.rememberall.remembrall.user.res.Error
+import com.rememberall.remembrall.user.res.LoginResponse
+import com.rememberall.remembrall.user.userinfo.LoginData
+import com.rememberall.remembrall.user.userinfo.SharedManager
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -43,7 +43,7 @@ class SignUpActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        var intent = Intent(this, SplashActivity::class.java)
+        var intent = Intent(this, SignUpLoginActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
         binding.btnBack.setOnClickListener {
             startActivity(intent)

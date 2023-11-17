@@ -1,4 +1,4 @@
-package com.rememberall.remembrall.login.res
+package com.rememberall.remembrall.user.res
 data class UserInfoResponse(
     val alarmAgree: Boolean?,
     val authType: String?,
