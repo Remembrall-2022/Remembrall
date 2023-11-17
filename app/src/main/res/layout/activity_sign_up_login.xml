@@ -98,7 +98,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/msg_sign_up"
                 android:textColor="@color/rememberall_purple"
-                android:textSize="13dp"
+                android:textSize="13sp"
                 />
             <Button
                 android:layout_width="66dp"

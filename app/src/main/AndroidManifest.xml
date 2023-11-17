@@ -19,6 +19,9 @@
         android:theme="@style/Theme.Remembrall"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".user.SignUpWithEmailAndSocialActivity"
+            android:exported="false" />
+        <activity
             android:name=".user.StartActivity"
             android:exported="false" />
         <activity
@@ -49,9 +52,6 @@
         <activity
             android:name=".user.SignUpActivity"
             android:exported="true" />
-        <activity
-            android:name=".user.LoginActivity"
-            android:exported="false" />
         <activity
             android:name=".constellation.ConstellationActivity"
             android:exported="false" />

@@ -166,7 +166,7 @@ class SignUpLoginActivity : AppCompatActivity() {
                                 response: Response<LoginResponse>
                             ) {
                                 if (response.isSuccessful){
-                                    var loginData = response?.body()!!
+                                    val loginData = response?.body()!!
                                     val currentUser = LoginData(
                                         grantType = loginData.grantType.toString(),
                                         accessToken = loginData.accessToken.toString(),
@@ -200,7 +200,7 @@ class SignUpLoginActivity : AppCompatActivity() {
         }
         // 회원가입
         binding.btnLoginSignUp.setOnClickListener {
-            intent = Intent(this, SignUpActivity::class.java)
+            intent = Intent(this, SignUpWithEmailAndSocialActivity::class.java)
             startActivity(intent)
             finish()
         }

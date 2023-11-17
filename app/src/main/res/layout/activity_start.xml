@@ -30,7 +30,7 @@
             android:id="@+id/btn_start"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@drawable/btn_login_round_border"
+            android:background="@drawable/btn_white"
             android:paddingLeft="10dp"
             android:text="@string/btn_start"
             android:textColor="@color/black"
