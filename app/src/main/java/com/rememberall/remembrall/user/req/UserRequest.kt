@@ -1,4 +1,4 @@
-package com.rememberall.remembrall.login.req
+package com.rememberall.remembrall.user.req
 
 data class LoginRequest (
     var email : String,

@@ -7,9 +7,9 @@ import android.util.Log
 import android.widget.Toast
 import com.rememberall.remembrall.BuildConfig.SERVER
 import com.rememberall.remembrall.databinding.DialogChangeNameBinding
-import com.rememberall.remembrall.login.UserService
-import com.rememberall.remembrall.login.res.UserNameResponse
-import com.rememberall.remembrall.login.userinfo.SharedManager
+import com.rememberall.remembrall.user.UserService
+import com.rememberall.remembrall.user.res.UserNameResponse
+import com.rememberall.remembrall.user.userinfo.SharedManager
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -17,7 +17,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.*
 
 class ChangeNameDialog (
     context: Context

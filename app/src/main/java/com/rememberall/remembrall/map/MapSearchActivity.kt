@@ -7,14 +7,16 @@ import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.location.Location
 import android.location.LocationManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.rememberall.remembrall.BuildConfig.*
 import com.rememberall.remembrall.LoadingDialog
 import com.rememberall.remembrall.R
 import com.rememberall.remembrall.databinding.ActivityMapSearchBinding
@@ -25,8 +27,6 @@ import com.rememberall.remembrall.map.MapSearch.ResultSearchKeyword
 import com.rememberall.remembrall.map.MapSearch.RvMapSearch
 import com.rememberall.remembrall.map.MapSearch.RvMapSearchAdapter
 import com.rememberall.remembrall.write.WriteDiaryActivity
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.rememberall.remembrall.BuildConfig.*
 import com.tickaroo.tikxml.TikXml
 import com.tickaroo.tikxml.retrofit.TikXmlConverterFactory
 import net.daum.mf.map.api.MapPOIItem
@@ -39,8 +39,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import kotlin.collections.ArrayList
-import com.rememberall.remembrall.BuildConfig.TOUR_API_URL
 
 class MapSearchActivity : AppCompatActivity() {
     var mapView: MapView?= null
@@ -82,8 +80,6 @@ class MapSearchActivity : AppCompatActivity() {
         startTracking()
         mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(uLatitude!!, uLongitude!!), 7, true) // 중심점 변경 + 줌 레벨 변경
 
-        // TODO : java.lang.RuntimeException: DaumMap does not support that two or more net.daum.mf.map.api.MapView objects exists at the same time
-
         // 현 위치에 마커 찍기
         val uNowPosition = MapPoint.mapPointWithGeoCoord(uLatitude!!, uLongitude!!)
         val marker = MapPOIItem()
@@ -91,8 +87,8 @@ class MapSearchActivity : AppCompatActivity() {
         marker.mapPoint =uNowPosition
         marker.markerType = MapPOIItem.MarkerType.BluePin
         marker.selectedMarkerType = MapPOIItem.MarkerType.RedPin
-
         mapView.addPOIItem(marker)
+
         mapView.zoomIn(true) // 줌 인
         mapView.zoomOut(true) // 줌 아웃
 
@@ -192,7 +188,6 @@ class MapSearchActivity : AppCompatActivity() {
                     }
                 }
             }
-
             override fun onSlide(bottomSheet: View, slideOffset: Float) {}
         })
 
@@ -230,28 +225,26 @@ class MapSearchActivity : AppCompatActivity() {
             }
         }
 
-        // 키워드 검색 함수
+        // 관광지 검색
         fun searchKeyword(keyword: String){
-            val retrofit_map = Retrofit.Builder()   // Retrofit 구성
+            val retrofit_map = Retrofit.Builder()
                 .baseUrl(MapSearchFragment.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
             val api = retrofit_map.create(KakaoMapApi::class.java)   // 통신 인터페이스를 객체로 생성
             val call = api.getSearchKeyword(MapSearchFragment.API_KEY, keyword)   // 검색 조건 입력
-            // API 서버에 요청
             call.enqueue(object: Callback<ResultSearchKeyword> {
                 override fun onResponse(
                     call: Call<ResultSearchKeyword>,
                     response: Response<ResultSearchKeyword>
                 ) {
-                    // 통신 성공 (검색 결과는 response.body()에 담겨있음)
+                    Log.d("SearchKeyword", "통신 성공")
                     Log.d("SearchKeyword", "Raw: ${response.raw()}")
                     Log.d("SearchKeyword", "Body: ${response.body()}")
                     addItemsAndMarkers(response.body())
                 }
 
                 override fun onFailure(call: Call<ResultSearchKeyword>, t: Throwable) {
-                    // 통신 실패
                     Log.w("SearchKeyword", "통신 실패: ${t.message}")
                 }
             })
@@ -269,9 +262,9 @@ class MapSearchActivity : AppCompatActivity() {
         })
     }
     //현재 유저 위치에 대한 정보
-    @SuppressLint("MissingPermission") // 나중에 user 권한 받을 수 있으면 받기
+    @SuppressLint("MissingPermission") // 나중에 user 권한 받기
     private fun startTracking() {
-        mapView?.currentLocationTrackingMode =MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading  //이 부분
+        mapView?.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading
 
         val lm: LocationManager = this@MapSearchActivity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val userNowLocation: Location? = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
@@ -279,6 +272,9 @@ class MapSearchActivity : AppCompatActivity() {
         //위도 , 경도
         uLatitude = userNowLocation?.latitude
         uLongitude = userNowLocation?.longitude
+
+        Log.d("Location", uLatitude.toString())
+        Log.d("Location", uLongitude.toString())
     }
 
     // 위치추적 중지
@@ -310,7 +306,6 @@ class MapSearchActivity : AppCompatActivity() {
                 finish()
             }
         }
-
         return super.onOptionsItemSelected(item)
     }
 }

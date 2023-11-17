@@ -10,11 +10,11 @@ import android.widget.Toast
 import com.google.gson.Gson
 import com.rememberall.remembrall.BuildConfig.SERVER
 import com.rememberall.remembrall.databinding.DialogChangePasswordBinding
-import com.rememberall.remembrall.login.UserService
-import com.rememberall.remembrall.login.req.AuthCodeRequest
-import com.rememberall.remembrall.login.req.PasswordAuthCodeRequest
-import com.rememberall.remembrall.login.res.AuthResponse
-import com.rememberall.remembrall.login.res.Error
+import com.rememberall.remembrall.user.UserService
+import com.rememberall.remembrall.user.req.AuthCodeRequest
+import com.rememberall.remembrall.user.req.PasswordAuthCodeRequest
+import com.rememberall.remembrall.user.res.AuthResponse
+import com.rememberall.remembrall.user.res.Error
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call

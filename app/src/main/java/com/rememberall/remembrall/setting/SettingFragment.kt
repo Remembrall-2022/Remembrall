@@ -14,10 +14,10 @@ import com.rememberall.remembrall.BuildConfig.SERVER
 import com.rememberall.remembrall.MainActivity
 import com.rememberall.remembrall.databinding.FragmentSettingBinding
 import com.rememberall.remembrall.dongdong.DongDongFragment
-import com.rememberall.remembrall.login.SplashActivity
-import com.rememberall.remembrall.login.UserService
-import com.rememberall.remembrall.login.res.UserInfoResponse
-import com.rememberall.remembrall.login.userinfo.SharedManager
+import com.rememberall.remembrall.user.SignUpLoginActivity
+import com.rememberall.remembrall.user.UserService
+import com.rememberall.remembrall.user.res.UserInfoResponse
+import com.rememberall.remembrall.user.userinfo.SharedManager
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -117,7 +117,7 @@ class SettingFragment : Fragment() {
                     }
                 }
             }
-            var intent =  Intent(mainActivity, SplashActivity::class.java)
+            var intent =  Intent(mainActivity, SignUpLoginActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
             startActivity(intent)
         }

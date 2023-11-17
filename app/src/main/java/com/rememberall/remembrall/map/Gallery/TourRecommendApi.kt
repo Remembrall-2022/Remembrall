@@ -5,7 +5,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface TourRecommendApi {
-    @GET("/B551011/KorService/locationBasedList")
+    @GET("/B551011/KorService1/locationBasedList1")
     fun getTourList(
         @Query("MobileOS") MobileOS: String,
         @Query("MobileApp") MobileApp: String,

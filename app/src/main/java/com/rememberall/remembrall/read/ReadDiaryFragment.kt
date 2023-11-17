@@ -12,7 +12,7 @@ import android.view.ViewGroup
 import com.rememberall.remembrall.GlobalApplication
 import com.rememberall.remembrall.MainActivity
 import com.rememberall.remembrall.databinding.FragmentReadDiaryBinding
-import com.rememberall.remembrall.login.userinfo.SharedManager
+import com.rememberall.remembrall.user.userinfo.SharedManager
 import com.rememberall.remembrall.write.GetQuestionResponse
 import com.rememberall.remembrall.write.WriteDiaryActivity
 import com.rememberall.remembrall.write.WriteDiaryService
@@ -20,7 +20,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
-import java.time.LocalDate
 import java.util.*
 
 class ReadDiaryFragment : Fragment() {

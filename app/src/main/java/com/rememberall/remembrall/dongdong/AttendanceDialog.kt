@@ -7,7 +7,7 @@ import android.widget.Toast
 import com.rememberall.remembrall.BuildConfig.SERVER
 import com.rememberall.remembrall.databinding.DialogAttendanceBinding
 import com.rememberall.remembrall.dongdong.res.AttendanceResponse
-import com.rememberall.remembrall.login.userinfo.SharedManager
+import com.rememberall.remembrall.user.userinfo.SharedManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

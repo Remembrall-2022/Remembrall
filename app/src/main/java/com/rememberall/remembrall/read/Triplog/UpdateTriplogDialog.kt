@@ -10,8 +10,8 @@ import android.widget.Toast
 import com.google.gson.Gson
 import com.rememberall.remembrall.BuildConfig.SERVER
 import com.rememberall.remembrall.databinding.DialogTriplogCreateBinding
-import com.rememberall.remembrall.login.res.Error
-import com.rememberall.remembrall.login.userinfo.SharedManager
+import com.rememberall.remembrall.user.res.Error
+import com.rememberall.remembrall.user.userinfo.SharedManager
 import com.rememberall.remembrall.read.ReadDiaryListRecyclerViewData
 import com.rememberall.remembrall.read.Triplog.req.TriplogRequest
 import com.rememberall.remembrall.read.Triplog.res.CreateTriplogResponse

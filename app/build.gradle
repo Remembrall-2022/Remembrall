@@ -65,6 +65,7 @@ dependencies {
     implementation "com.kakao.sdk:v2-share:2.11.0" // 메시지(카카오톡 공유)
     implementation fileTree(include: ['*.jar'], dir: 'libs') // 카카오 맵
     implementation files('libs/libDaumMapAndroid.jar') // 카카오 맵
+//    implementation 'com.kakao.maps.open:android:2.6.0' // 카카오 맵 v2
     implementation 'androidx.recyclerview:recyclerview:1.1.0' //recyclerview 추가
     implementation 'com.github.bumptech.glide:glide:4.12.0' //glide
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
@@ -84,11 +85,10 @@ dependencies {
     implementation 'com.tickaroo.tikxml:core:0.8.13'
     implementation 'com.tickaroo.tikxml:retrofit-converter:0.8.13'
     kapt 'com.tickaroo.tikxml:processor:0.8.13'
-//    implementation "com.github.wisnukurniawan:date-time-range-picker-android:${version}"
     implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
     implementation("androidx.viewpager2:viewpager2:1.0.0")
-    implementation 'com.android.databinding:viewbinding:7.2.2' //
-    implementation platform('com.google.firebase:firebase-bom:30.4.1') // firebase
+    implementation 'com.android.databinding:viewbinding:7.2.2'
+    implementation platform('com.google.firebase:firebase-bom:30.4.1')
     implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-analytics-ktx'
 }
