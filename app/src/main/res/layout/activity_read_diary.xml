@@ -11,6 +11,7 @@
         android:id="@+id/toolbar_readdiary"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
+        android:background="@drawable/divider"
         tools:ignore="MissingConstraints"
         app:theme="@style/ToolbarTheme">
 
@@ -22,8 +23,8 @@
             android:layout_gravity="center"
             android:text="Rememberall"
             android:textColor="#FFFFFF"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textSize="21sp"
+            android:fontFamily="@font/hakgyoansim_gaeulsopun_b"/>
 
 
     </androidx.appcompat.widget.Toolbar>
@@ -46,6 +47,8 @@
 
     </LinearLayout>
 
+    
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floating_readdiary"
         android:layout_width="wrap_content"
@@ -54,6 +57,7 @@
         android:layout_marginRight="30dp"
         android:contentDescription="submit"
         android:src="@drawable/ic_add"
+        android:tint="@color/rememberall_purple"
         app:backgroundTint="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>

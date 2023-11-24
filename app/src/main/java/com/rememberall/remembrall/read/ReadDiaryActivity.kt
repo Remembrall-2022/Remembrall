@@ -55,6 +55,8 @@ class ReadDiaryActivity : AppCompatActivity() {
     private fun initialize(){
         readDiaryRecyclerViewData= arrayListOf()
         viewPagerData= arrayListOf()
+
+        binding.textviewReaddiaryTitle.text=title
     }
 
     private fun initReadDiaryRecyclerView() {
@@ -149,7 +151,7 @@ class ReadDiaryActivity : AppCompatActivity() {
                             }
                         }
 //                        readDiaryRecyclerViewData.addAll(list)
-                        viewPagerData.add(ViewPagerData(title, date ,question,answer,list))
+                        viewPagerData.add(ViewPagerData(date ,question,answer,list))
                     }
 //                    readDiaryRecyclerViewAdapter.notifyItemInserted(readDiaryRecyclerViewData.size)
                     viewPagerAdapter.notifyDataSetChanged()

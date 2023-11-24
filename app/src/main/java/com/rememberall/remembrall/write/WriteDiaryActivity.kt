@@ -60,9 +60,9 @@ class WriteDiaryActivity() : AppCompatActivity() {
     private lateinit var imagePath: String
     private var pos=0
     private lateinit var date: LocalDate
-    private var diaryId: Long=1
+    private var diaryId: Long=0
     private lateinit var question: String
-    private var questionId: Long=1
+    private var questionId: Long=0
     private var selectDiary=false
 
     private var placeName = ""
@@ -141,11 +141,13 @@ class WriteDiaryActivity() : AppCompatActivity() {
         val tripId = intent.getLongExtra("triplogId", 0)
         if(tripId != 0L)
             diaryId=tripId
-        val title=intent.getStringExtra("title").toString()
-        if(title!=null){
-            binding.tvDiaryTitle.text = title
+        val extitle=intent.getStringExtra("title")
+        if(extitle != null){
+            binding.tvDiaryTitle.text = extitle
             selectDiary=true
         }
+
+        Log.e("new diary","$tripId , $extitle")
 
         binding.tvWritediaryQuestion.text=question
 
@@ -238,7 +240,7 @@ class WriteDiaryActivity() : AppCompatActivity() {
         }
 
         binding.linearWritediaryEdit.setOnClickListener{
-            if(binding.tvWritediaryEdit.text.toString()=="경로 수정하기") {
+            if(binding.tvWritediaryEdit.text.toString()=="수정") {
                 val size = writeDiaryRecyclerViewData.size - 1
                 //edit 버튼 눌렀을 때
                 Log.d("수정할 때 list 사이즈", "${writeDiaryRecyclerViewData.size}")

@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.view.WindowManager
 import androidx.recyclerview.widget.GridLayoutManager
 import com.rememberall.remembrall.databinding.DialogDiaryListBinding
 import com.rememberall.remembrall.read.ReadDiaryListRecyclerViewData
@@ -30,6 +31,12 @@ class DiaryListDialog (
         binding = DialogDiaryListBinding.inflate(layoutInflater)
         initViews()
         setContentView(binding.root)
+
+        val layoutParams = WindowManager.LayoutParams()
+        layoutParams.copyFrom(window?.attributes)
+        layoutParams.width = (context.resources.displayMetrics.widthPixels * 0.9).toInt()
+        layoutParams.height = (context.resources.displayMetrics.heightPixels * 0.8).toInt()
+        window?.attributes = layoutParams
     }
 
     private fun initViews(){
@@ -43,6 +50,7 @@ class DiaryListDialog (
             cancel()
         }
         Log.e("questionData", "${readDiaryListRecyclerViewAdapter.itemCount}")
+
     }
 
     private fun httpLoggingInterceptor(): HttpLoggingInterceptor {

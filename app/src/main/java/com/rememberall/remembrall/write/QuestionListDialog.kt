@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.view.WindowManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rememberall.remembrall.databinding.DialogQuestionListBinding
 import java.util.ArrayList
@@ -29,6 +30,12 @@ class QuestionListDialog (
         binding = DialogQuestionListBinding.inflate(layoutInflater)
         initViews()
         setContentView(binding.root)
+
+        val layoutParams = WindowManager.LayoutParams()
+        layoutParams.copyFrom(window?.attributes)
+        layoutParams.width = (context.resources.displayMetrics.widthPixels * 0.9).toInt()
+        layoutParams.height = (context.resources.displayMetrics.heightPixels * 0.8).toInt()
+        window?.attributes = layoutParams
     }
 
     private fun initViews(){

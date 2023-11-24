@@ -5,8 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".read.ReadDiaryFragment"
-    android:background="@drawable/main_background"
-    android:paddingBottom="15dp">
+    android:background="@drawable/gradient_bg">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_readdiary"
@@ -19,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="기록하기"
+            android:text=""
             android:textColor="#FFFFFF"
             android:textSize="17sp"
             android:textStyle="bold" />
@@ -31,71 +30,32 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/gradation_round"
         android:layout_marginTop="?actionBarSize"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:padding="15dp">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center">
+        android:paddingHorizontal="24dp">
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            >
+            android:layout_marginTop="140dp"
+            android:layout_marginBottom="60dp"
+            android:gravity="center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="오늘 여행은 어땠나요?\n\n당신만의 별을 그려주세요!"
+                    android:textAlignment="center"
+                    android:textColor="@color/text_white"
+                    android:textSize="26sp"
+                    android:fontFamily="@font/hakgyoansim_gaeulsopun_b"
+                    tools:ignore="MissingConstraints" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="오늘 여행은 어땠나요?\n\n당신만의 별을 그려주세요!"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                android:textStyle="bold|italic"
-                android:layout_marginTop="10dp"
-                tools:ignore="MissingConstraints" />
         </LinearLayout>
-</LinearLayout>
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1.5">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="110dp"
             android:background="@drawable/creatediary_white"
-            android:layout_marginRight="30dp"
-            android:layout_marginLeft="30dp">
-
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:src="@drawable/ic_quotes1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="35dp"
-                android:paddingBottom="35dp"
-                android:paddingRight="15dp"
-                android:paddingLeft="15dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+            android:padding="30dp"
+            android:gravity="center">
 
                 <TextView
                     android:id="@+id/textview_creatediary_question"
@@ -103,50 +63,31 @@
                     android:layout_height="wrap_content"
                     android:text="오늘은 점심으로 무엇을 드셨나요?"
                     android:textAlignment="center"
-                    android:textColor="#333333"
+                    android:textColor="@color/text_white"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="MissingConstraints"></TextView>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:src="@drawable/ic_quotes2"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
 
         <LinearLayout
             android:id="@+id/linearylayout_readdiary_write"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
             android:gravity="center"
             android:background="@drawable/creatediary_border_white"
-            android:layout_marginTop="50dp"
-            android:paddingRight="15dp"
-            android:paddingLeft="15dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
+            android:layout_marginTop="65dp"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="8dp"
             android:layout_gravity="center">
 
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_brush"
-                ></ImageView>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="기록하러 가기"
-                android:textColor="@color/point"
+                android:textColor="@color/text_black"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:layout_marginLeft="3dp"                           >
@@ -154,7 +95,6 @@
             </TextView>
         </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
 
     <!-- 오늘의 일기를 작성했을 경우       -->
     <LinearLayout
