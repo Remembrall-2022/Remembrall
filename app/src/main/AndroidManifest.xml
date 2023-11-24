@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.rememberall.remembrall">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -18,7 +19,13 @@
         android:theme="@style/Theme.Remembrall"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".login.RealSplashActivity"
+            android:name=".user.SignUpWithEmailAndSocialActivity"
+            android:exported="false" />
+        <activity
+            android:name=".user.StartActivity"
+            android:exported="false" />
+        <activity
+            android:name=".user.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,14 +47,11 @@
             android:name=".write.WriteDiaryActivity"
             android:exported="false" />
         <activity
-            android:name=".login.SplashActivity"
+            android:name=".user.SignUpLoginActivity"
             android:exported="true" />
         <activity
-            android:name=".login.SignUpActivity"
+            android:name=".user.SignUpWithEmailActivity"
             android:exported="true" />
-        <activity
-            android:name=".login.LoginActivity"
-            android:exported="false" />
         <activity
             android:name=".constellation.ConstellationActivity"
             android:exported="false" />

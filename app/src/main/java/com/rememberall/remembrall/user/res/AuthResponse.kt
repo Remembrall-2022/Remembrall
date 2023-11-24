@@ -1,9 +1,8 @@
-package com.rememberall.remembrall.login.res
+package com.rememberall.remembrall.user.res
 
 data class AuthResponse(
-    val error: Error?,
     val response: AuthCodeResponse,
-    val success: Boolean
+    val error: Error?
 )
 
 data class AuthCodeResponse(

@@ -7,14 +7,14 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import com.google.gson.Gson
 import com.rememberall.remembrall.BuildConfig.SERVER
 import com.rememberall.remembrall.databinding.DialogChangePasswordBinding
-import com.rememberall.remembrall.login.UserService
-import com.rememberall.remembrall.login.req.AuthCodeRequest
-import com.rememberall.remembrall.login.req.PasswordAuthCodeRequest
-import com.rememberall.remembrall.login.res.AuthResponse
-import com.rememberall.remembrall.login.res.LoginResponse
-import com.google.gson.Gson
+import com.rememberall.remembrall.user.UserService
+import com.rememberall.remembrall.user.req.AuthCodeRequest
+import com.rememberall.remembrall.user.req.PasswordAuthCodeRequest
+import com.rememberall.remembrall.user.res.AuthResponse
+import com.rememberall.remembrall.user.res.Error
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -23,7 +23,6 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
-import java.util.*
 
 class ChangePasswordDialog (
     context: Context, email: String
@@ -57,7 +56,7 @@ class ChangePasswordDialog (
                 ) {
                     val authCodeRes = response.body()
                     Log.d("SendAuthCode", response.body().toString())
-                    if (authCodeRes?.success.toString() == "true"){
+                    if (response.isSuccessful){
                         Log.d("SendAuthCode", authCodeRes?.response?.message.toString())
                         binding.llTimer.visibility = View.VISIBLE
 //                        var time = 300000
@@ -81,9 +80,9 @@ class ChangePasswordDialog (
                     else {
                         try {
                             val body = response.errorBody()!!.string()
-                            val error = Gson().fromJson(body, LoginResponse::class.java)
+                            val error = Gson().fromJson(body, Error::class.java)
                             Log.e(ContentValues.TAG, "error - body : $body")
-                            binding.tvError.text = error.error?.errorMessage
+                            binding.tvError.text = error?.errorMessage
                         } catch (e: IOException) {
                             e.printStackTrace()
                         }
@@ -106,7 +105,7 @@ class ChangePasswordDialog (
                     response: Response<AuthResponse>
                 ) {
                     val authRes = response.body()
-                    if (authRes?.success.toString() == "true") {
+                    if (response.isSuccessful) {
                         userService.changePassword(newPassword)
                             .enqueue(object : Callback<AuthResponse> {
                                 override fun onResponse(
@@ -115,10 +114,10 @@ class ChangePasswordDialog (
                                 ) {
                                     val authCodeRes = response.body()
                                     Log.d("changePassword", authCodeRes.toString())
-                                    if (authCodeRes?.success.toString() == "true") {
-                                        Toast.makeText(context, "비밀번호가 변경되었습니다", Toast.LENGTH_SHORT).show()
-                                        dismiss()
-                                    }
+//                                    if (authCodeRes?.success.toString() == "true") {
+//                                        Toast.makeText(context, "비밀번호가 변경되었습니다", Toast.LENGTH_SHORT).show()
+//                                        dismiss()
+//                                    }
                                 }
                                 override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
                                     Log.e("changePassword", "통신 실패")
@@ -127,9 +126,9 @@ class ChangePasswordDialog (
                     } else {
                         try {
                             val body = response.errorBody()!!.string()
-                            val error = Gson().fromJson(body, LoginResponse::class.java)
+                            val error = Gson().fromJson(body, Error::class.java)
                             Log.e(ContentValues.TAG, "error - body : $body")
-                            binding.tvError.text = error.error?.errorMessage
+                            binding.tvError.text = error?.errorMessage
                         } catch (e: IOException) {
                             e.printStackTrace()
                         }

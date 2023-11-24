@@ -3,14 +3,11 @@ package com.rememberall.remembrall.read
 import android.app.Dialog
 import android.content.ContentValues
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.widget.Toast
 import com.rememberall.remembrall.databinding.DialogDeleteDatelogBinding
-import com.rememberall.remembrall.login.userinfo.SharedManager
-import com.rememberall.remembrall.read.Triplog.DeleteTriplogDialog
+import com.rememberall.remembrall.user.userinfo.SharedManager
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback

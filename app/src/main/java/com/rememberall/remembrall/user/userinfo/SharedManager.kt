@@ -1,9 +1,9 @@
-package com.rememberall.remembrall.login.userinfo
+package com.rememberall.remembrall.user.userinfo
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.rememberall.remembrall.login.userinfo.PreferenceHelper.set
-import com.rememberall.remembrall.login.userinfo.PreferenceHelper.get
+import com.rememberall.remembrall.user.userinfo.PreferenceHelper.set
+import com.rememberall.remembrall.user.userinfo.PreferenceHelper.get
 
 class LoginData(
     val grantType : String?,

@@ -9,10 +9,10 @@ import android.util.Log
 import android.widget.Toast
 import com.rememberall.remembrall.BuildConfig.SERVER
 import com.rememberall.remembrall.databinding.DialogSignOutBinding
-import com.rememberall.remembrall.login.SplashActivity
-import com.rememberall.remembrall.login.UserService
-import com.rememberall.remembrall.login.res.AuthResponse
-import com.rememberall.remembrall.login.userinfo.SharedManager
+import com.rememberall.remembrall.user.SignUpLoginActivity
+import com.rememberall.remembrall.user.UserService
+import com.rememberall.remembrall.user.res.AuthResponse
+import com.rememberall.remembrall.user.userinfo.SharedManager
 import com.kakao.sdk.user.UserApiClient
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -55,7 +55,7 @@ class SignOutDialog (
                     response: Response<AuthResponse>
                 ) {
                     Log.e("Signout", response.body().toString())
-                    if (response.body()?.success.toString() == "true") {
+                    if (response.isSuccessful) {
                         Toast.makeText(context, "회원 탈퇴 성공", Toast.LENGTH_SHORT).show()
                         UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
                             if (error != null) {
@@ -71,14 +71,14 @@ class SignOutDialog (
                                         Log.e(TAG, "연결 끊기 실패", error)
                                     } else {
                                         Log.i(TAG, "연결 끊기 성공. SDK에서 토큰 삭제 됨")
-                                        var intent = Intent(context, SplashActivity::class.java)
+                                        var intent = Intent(context, SignUpLoginActivity::class.java)
                                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
                                         context.startActivity(intent)
                                         dismiss()
                                     }
                                 }
                             }
-                            var intent = Intent(context,SplashActivity::class.java)
+                            var intent = Intent(context,SignUpLoginActivity::class.java)
                             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
                             context.startActivity(intent)
                             dismiss()

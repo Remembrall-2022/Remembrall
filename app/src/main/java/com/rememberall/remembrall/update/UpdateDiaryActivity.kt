@@ -13,7 +13,6 @@ import android.provider.MediaStore
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
 import android.util.Log
-import android.view.Menu
 import android.view.MenuItem
 import android.view.PixelCopy.request
 import android.view.View
@@ -31,10 +30,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.rememberall.remembrall.CommonResponse
 import com.rememberall.remembrall.MainActivity
-import com.rememberall.remembrall.PreferenceUtil
 import com.rememberall.remembrall.R
 import com.rememberall.remembrall.databinding.ActivityUpdateDiaryBinding
-import com.rememberall.remembrall.login.userinfo.SharedManager
+import com.rememberall.remembrall.user.userinfo.SharedManager
 import com.rememberall.remembrall.map.MapSearchActivity
 import com.rememberall.remembrall.read.*
 import com.rememberall.remembrall.write.*
@@ -45,7 +43,6 @@ import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject

@@ -54,7 +54,9 @@
         android:layout_height="match_parent"
         android:layout_marginHorizontal="30dp"
         android:layout_marginTop="100dp"
-        android:background="@drawable/main_round_border"/>
+        android:background="@drawable/main_round_border">
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

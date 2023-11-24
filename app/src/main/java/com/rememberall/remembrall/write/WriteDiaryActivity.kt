@@ -21,12 +21,11 @@ import androidx.recyclerview.widget.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.rememberall.remembrall.databinding.ActivityWriteDiaryBinding
-import com.rememberall.remembrall.BuildConfig.SERVER
 import com.rememberall.remembrall.CommonResponse
 import com.rememberall.remembrall.GlobalApplication
 import com.rememberall.remembrall.PreferenceUtil
 import com.rememberall.remembrall.R
-import com.rememberall.remembrall.login.userinfo.SharedManager
+import com.rememberall.remembrall.user.userinfo.SharedManager
 import com.rememberall.remembrall.map.MapSearchActivity
 import com.rememberall.remembrall.read.ReadDiaryListRecyclerViewData
 import com.rememberall.remembrall.read.Triplog.TriplogService
@@ -41,8 +40,6 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat

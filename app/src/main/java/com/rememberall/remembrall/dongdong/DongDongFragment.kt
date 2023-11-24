@@ -12,7 +12,7 @@ import com.rememberall.remembrall.BuildConfig.SERVER
 import com.rememberall.remembrall.MainActivity
 import com.rememberall.remembrall.databinding.FragmentDongDongBinding
 import com.rememberall.remembrall.dongdong.res.DongDongResponse
-import com.rememberall.remembrall.login.userinfo.SharedManager
+import com.rememberall.remembrall.user.userinfo.SharedManager
 import com.rememberall.remembrall.setting.SettingFragment
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

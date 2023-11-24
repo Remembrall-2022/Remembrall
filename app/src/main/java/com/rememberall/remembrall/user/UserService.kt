@@ -1,7 +1,7 @@
-package com.rememberall.remembrall.login
+package com.rememberall.remembrall.user
 
-import com.rememberall.remembrall.login.req.*
-import com.rememberall.remembrall.login.res.*
+import com.rememberall.remembrall.user.req.*
+import com.rememberall.remembrall.user.res.*
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -11,7 +11,7 @@ interface UserService {
     @Headers("Content-Type: application/json")
     fun loginEmail(
         @Body loginRequest: LoginRequest
-    ) : Call<LoginV2Response>
+    ) : Call<LoginResponse>
 
     @POST("/signup/email")
     fun signUpEmail(
