@@ -28,4 +28,6 @@
     <color name="toolbar_divider">#DEDEDE</color>
 
     <color name="edittext_border">#DEDEDE</color>
+
+    <color name="question_divider">#DEDEDE</color>
 </resources>
