@@ -6,7 +6,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import com.rememberall.remembrall.BuildConfig.SERVER
-import com.rememberall.remembrall.login.userinfo.SharedManager
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException

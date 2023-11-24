@@ -19,7 +19,7 @@ import com.rememberall.remembrall.GlobalApplication
 import com.rememberall.remembrall.MainActivity
 import com.rememberall.remembrall.R
 import com.rememberall.remembrall.databinding.FragmentReadTodayDiaryBinding
-import com.rememberall.remembrall.login.userinfo.SharedManager
+import com.rememberall.remembrall.user.userinfo.SharedManager
 import com.rememberall.remembrall.write.WriteDiaryActivity
 import com.rememberall.remembrall.write.WriteDiaryRecyclerViewData
 import kotlinx.coroutines.Dispatchers
