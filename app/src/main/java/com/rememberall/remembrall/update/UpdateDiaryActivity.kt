@@ -15,12 +15,14 @@ import android.text.style.UnderlineSpan
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.PixelCopy.request
 import android.view.View
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
+import androidx.core.view.size
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -60,8 +62,8 @@ import java.util.*
 
 class UpdateDiaryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUpdateDiaryBinding
-    private lateinit var writeDiaryRecyclerViewData: ArrayList<WriteDiaryRecyclerViewData>
-    private lateinit var writeDiaryRecyclerViewAdapter: WriteDiaryRecyclerViewAdapter
+    private lateinit var updateDiaryRecyclerViewData: ArrayList<UpdateDiaryRecyclerViewData>
+    private lateinit var updateDiaryRecyclerViewAdapter: UpdateDiaryRecyclerViewAdapter
     private lateinit var questionRecyclerViewData: ArrayList<QuestionRecyclerViewData>
     private lateinit var questionRecyclerViewAdapter: QuestionRecyclerViewAdapter
     private lateinit var touchHelper: ItemTouchHelper
@@ -75,7 +77,9 @@ class UpdateDiaryActivity : AppCompatActivity() {
     private lateinit var title: String
     private lateinit var question: String
     private var questionId: Long=1
-    private var imageUri= arrayListOf<Uri>()
+    private var placeCnt=0
+    private var imageUriList= arrayListOf<Uri>()    //보여주는 용
+    private var imageChanged=arrayListOf<Boolean>() //사진을 수정했는지
 
     private lateinit var formdata: MultipartBody.Part
 
@@ -91,8 +95,11 @@ class UpdateDiaryActivity : AppCompatActivity() {
             x =  result.data?.getDoubleExtra("x",0.0)
             y =  result.data?.getDoubleExtra("y", 0.0)
             Log.e("placeName", placeName)
-            writeDiaryRecyclerViewData.add(WriteDiaryRecyclerViewData(placeName, "", "", MultipartBody.Part.createFormData("file", ""),x!!,y!!))
-            writeDiaryRecyclerViewAdapter.notifyItemInserted(writeDiaryRecyclerViewData.size)
+
+            val body = RequestBody.create(MultipartBody.FORM,"")
+            updateDiaryRecyclerViewData.add(UpdateDiaryRecyclerViewData(-1,-1,placeName,"", x!!,y!!,-1, "","", MultipartBody.Part.createFormData("file", "", body)))
+            updateDiaryRecyclerViewAdapter.notifyItemInserted(updateDiaryRecyclerViewData.size)
+            imageChanged.add(false)
         }
     }
 
@@ -114,10 +121,11 @@ class UpdateDiaryActivity : AppCompatActivity() {
                 val renameFile= File(imageFile.parent,"${time}.jpg")
                 val requestBody=imageFile.asRequestBody("img/*".toMediaTypeOrNull())
 
-                writeDiaryRecyclerViewData[pos].image=renameFile.name
-                writeDiaryRecyclerViewData[pos].imgFile=
+                updateDiaryRecyclerViewData[pos].image=renameFile.name
+                updateDiaryRecyclerViewData[pos].imgFile=
                     MultipartBody.Part.createFormData("file", renameFile.name, requestBody)
                 imagePath = getRealPathFromURI(it)
+                imageUriList[pos]=it
                 Log.d("imageFile", "${imageFile}")
 //                Log.d("src", "${src}")
                 Log.d("renameFile", "${renameFile}")
@@ -131,6 +139,7 @@ class UpdateDiaryActivity : AppCompatActivity() {
                     .apply(RequestOptions().override(500,500))
                     .into(binding.recyclerviewUpdatediary[pos].findViewById(R.id.imageview_addpicture))
 
+                imageChanged[pos]=true
                 binding.recyclerviewUpdatediary[pos].findViewById<ImageView>(R.id.imageview_addpicture).adjustViewBounds=true
             }
         }
@@ -198,9 +207,11 @@ class UpdateDiaryActivity : AppCompatActivity() {
                     binding.tvUpdatediaryQuestion.text=question
                     binding.edUpdatediaryAnswer.setText(answer)
 
+                    showLoading(true)
                     lifecycleScope.launch {
                         withContext(Dispatchers.IO) {
                             if (placeLogList != null) {
+                                placeCnt=placeLogList.size
                                 for (placeLog in placeLogList) {
                                     var placeLogId = placeLog.placeLogId
                                     var placeLogIndex = placeLog.placeLogIndex
@@ -230,7 +241,8 @@ class UpdateDiaryActivity : AppCompatActivity() {
                                     val outputStream = FileOutputStream(file)
                                     inputStream.copyTo(outputStream)
 
-                                    imageUri.add(uri)
+                                    imageUriList.add(uri)
+                                    imageChanged.add(false)
 
                                     val requestBody =
                                         file?.asRequestBody("multipart/form-data".toMediaTypeOrNull())
@@ -242,32 +254,45 @@ class UpdateDiaryActivity : AppCompatActivity() {
                                         )
                                     Log.e("imgFile", "$image")
 
-                                    writeDiaryRecyclerViewData.add(
-                                        WriteDiaryRecyclerViewData(
+                                    updateDiaryRecyclerViewData.add(
+                                        UpdateDiaryRecyclerViewData(
+                                            placeLogId,
+                                            placeLogIndex,
+                                            name,
                                             address,
-                                            file.name,
-                                            comment,
-                                            image,
                                             longitude,
-                                            latitude
+                                            latitude,
+                                            userLogImgId,
+                                            comment,
+                                            file.name,
+                                            image
                                         )
                                     )
+//                                    writeDiaryRecyclerViewData.add(
+//                                        WriteDiaryRecyclerViewData(
+//                                            address,
+//                                            file.name,
+//                                            comment,
+//                                            image,
+//                                            longitude,
+//                                            latitude
+//                                        )
+//                                    )
                                 }
                             }
                         }
                         withContext(Dispatchers.Main) {
-                            writeDiaryRecyclerViewAdapter.notifyItemInserted(
-                                writeDiaryRecyclerViewData.size
-                            )
-
-                            for (idx in 0..writeDiaryRecyclerViewData.size){
-                                Glide.with(this@UpdateDiaryActivity)
-                                    .load(imageUri[idx])
-                                    .fitCenter()
-                                    .apply(RequestOptions().override(500,500))
-                                    .into(binding.recyclerviewUpdatediary[idx].findViewById(R.id.imageview_addpicture))
+                            binding.recyclerviewUpdatediary.apply{
+                                layoutManager=LinearLayoutManager(this@UpdateDiaryActivity, LinearLayoutManager.VERTICAL, false)
+                                adapter=UpdateDiaryRecyclerViewAdapter(this@UpdateDiaryActivity, updateDiaryRecyclerViewData, imageUriList)
                             }
+
+//                            writeDiaryRecyclerViewAdapter.notifyItemInserted(writeDiaryRecyclerViewData.size)
+
+//                            Log.e("data size", "${binding.recyclerviewUpdatediary.size}")
+
                         }
+                        showLoading(false)
                     }
                 }else {
                     try {
@@ -341,71 +366,145 @@ class UpdateDiaryActivity : AppCompatActivity() {
             })
         }
 
-        //일기 작성 완료
+        //일기 수정 완료
         binding.btnUpdatediaryComplete.setOnClickListener{
             val sharedManager : SharedManager by lazy { SharedManager(this@UpdateDiaryActivity) }
             var authToken = sharedManager.getCurrentUser().accessToken
             var date=binding.tvUpdatediaryDate.text.toString()
             var answer=binding.edUpdatediaryAnswer.text.toString()
-//            var weather=WriteDiaryRequest.Weather("맑음", 25)
-//            lateinit var placeInfo: WriteDiaryRequest.PlaceLogList.PlaceInfo
-            var placeLogList: ArrayList<JSONObject> = arrayListOf()
+            var weatherInfo=UpdateDateLog.Weather("맑음", 25)
+            var placeLogList: ArrayList<UpdatePlaceLogList> = arrayListOf()
+
             var imgList: ArrayList<MultipartBody.Part> = arrayListOf()
-            Log.e("size", "${writeDiaryRecyclerViewData.size}")
-            for(i in 0..(writeDiaryRecyclerViewData.size-1)){
+
+            Log.e("size", "${updateDiaryRecyclerViewData.size}")
+            for(i in 0..(updateDiaryRecyclerViewData.size-1)){
                 Log.e("for", "${i}")
+                var placeLogId=updateDiaryRecyclerViewData[i].placeLogId
+                var placeLogIndex=updateDiaryRecyclerViewData[i].placeLogIndex
                 var name=binding.recyclerviewUpdatediary[i].findViewById<TextView>(R.id.tv_addplace_place).text.toString()
-                var address="주소"
-                var longitude=142.42324
-                var latitude=32.23
+                var address=updateDiaryRecyclerViewData[i].address
+                var longitude=updateDiaryRecyclerViewData[i].longitude
+                var latitude=updateDiaryRecyclerViewData[i].latitude
                 var comment=binding.recyclerviewUpdatediary[i].findViewById<EditText>(R.id.et_addplace_coment).text.toString()
-//                placeInfo=WriteDiaryRequest.PlaceLogList.PlaceInfo(i, name, address, longitude, latitude)
-                placeLogList.add(JSONObject("{\"placeInfo\":{\"placeId\":${i+1},\"name\":\"${name}\",\"address\":\"${address}\",\"longitude\":${longitude},\"latitude\":${latitude}},\"comment\":\"${comment}\",\"imgName\":\"${writeDiaryRecyclerViewData[i].image}\"}"))
-                imgList.add(writeDiaryRecyclerViewData[i].imgFile)
-            }
-//            var writeDiaryRequest=WriteDiaryRequest(date,
-//                weather,questionId, answer, placeLogList)
-            val jsonObject= JSONObject("{\"date\":\"${date}\", \"weatherInfo\":{\"weather\": \"맑음\",\"degree\" : 25},\"questionId\":\"${questionId}\",\"answer\":\"${answer}\", \"placeLogList\":${placeLogList}}")
-            val mediaType = "application/json".toMediaType()
-            val jsonBody=jsonObject.toString().toRequestBody(mediaType)
 
-            WriteDiaryService.getRetrofitSaveDiary(authToken!!, 13, jsonBody, imgList).enqueue(object:
-                Callback<CommonResponse> {
-                override fun onResponse(
-                    call: Call<CommonResponse>,
-                    response: Response<CommonResponse>
-                ) {
+                var placeInfo=UpdatePlaceLogList.Place(name, address, longitude, latitude)
+                val body = RequestBody.create(MultipartBody.FORM,"")
+                val emptyPart = MultipartBody.Part.createFormData("file","",body)
 
-                    if(response.isSuccessful){
-                        Log.e("question", response.toString())
-                        Log.e("question", response.body().toString())
-                    }else {
-                        try {
-                            val body = response.errorBody()!!.string()
-                            Log.e(ContentValues.TAG, "body : $body")
-                        } catch (e: IOException) {
-                            e.printStackTrace()
+                //장소 추가
+                if(placeLogId==-1){
+                    var jsonObject = JSONObject("{\"placeInfo\":{\"name\":\"${name}\",\"address\":\"${address}\",\"longitude\":${longitude},\"latitude\":${latitude}},\"comment\":\"${comment}\",\"imgName\":\"${updateDiaryRecyclerViewData[i].image}\"}")
+                    var file = updateDiaryRecyclerViewData[i].imgFile
+                    val mediaType = "application/json".toMediaType()
+                    val jsonBody=jsonObject.toString().toRequestBody(mediaType)
+
+                    UpdateDiaryService.getRetrofitPostAddPlaceLog(authToken!!, datelogId, jsonBody, file).enqueue(object: Callback<CommonResponse>{
+                        override fun onResponse(
+                            call: Call<CommonResponse>,
+                            response: Response<CommonResponse>
+                        ) {
+                            if(response.isSuccessful){
+                                Log.e("question", response.toString())
+                                Log.e("question", response.body().toString())
+                            }else {
+                                try {
+                                    val body = response.errorBody()!!.string()
+                                    Log.e(ContentValues.TAG, "body : $body")
+                                } catch (e: IOException) {
+                                    e.printStackTrace()
+                                }
+                            }
+
+                            Log.d("add placeLog", "성공")
                         }
-                    }
-                    MainActivity.prefs.setString("writediary","true")
-                    Log.d("writediary", MainActivity.prefs.getString("writediary","작성 실패"))
-                    finish()
+
+                        override fun onFailure(call: Call<CommonResponse>, t: Throwable) {
+                            Log.e("TAG", "실패원인: {$t}")
+                        }
+                    })
                 }
 
-                override fun onFailure(call: Call<CommonResponse>, t: Throwable) {
-                    Log.e("TAG", "실패원인: {$t}")
-                }
-            })
-        }
+                placeLogList.add(UpdatePlaceLogList(placeLogId,placeLogIndex, placeInfo, comment))
+            }
+
+            //사진 수정
+////            var imageFileList=arrayListOf<MultipartBody.Part>()
+////            for (i in 0..(updateDiaryRecyclerViewData.size-1)){
+////                imageFileList.add(updateDiaryRecyclerViewData[i].imgFile)
+////            }
+////
+////            for(i in 0..(imageChanged.size-1)) {
+////                if(imageChanged[i]==true) {
+////                    UpdateDiaryService.getRetrofitUpdateImage(authToken!!, updateDiaryRecyclerViewData[i].userLogImgId, imageFileList[i]).enqueue(object: Callback<CommonResponse>{
+////                        override fun onResponse(
+////                            call: Call<CommonResponse>,
+////                            response: Response<CommonResponse>
+////                        ) {
+////                            if(response.isSuccessful){
+////                                Log.e("question", response.toString())
+////                                Log.e("question", response.body().toString())
+////                            }else {
+////                                try {
+////                                    val body = response.errorBody()!!.string()
+////                                    Log.e(ContentValues.TAG, "body : $body")
+////                                } catch (e: IOException) {
+////                                    e.printStackTrace()
+////                                }
+////                            }
+////
+////                            Log.d("updateImage", "성공")
+////                        }
+////
+////                        override fun onFailure(call: Call<CommonResponse>, t: Throwable) {
+////                            Log.e("TAG", "실패원인: {$t}")
+////                        }
+////                    })
+////                }
+////            }
+//
+//            var updateLogList=UpdateDateLog(date,weatherInfo,questionId,answer,placeLogList)
+//            //글만 수정
+//            UpdateDiaryService.getRetrofitUpdateDateLog(authToken!!, datelogId).enqueue(object:
+//                Callback<CommonResponse> {
+//                override fun onResponse(
+//                    call: Call<CommonResponse>,
+//                    response: Response<CommonResponse>
+//                ) {
+//
+//                    if(response.isSuccessful){
+//                        Log.e("question", response.toString())
+//                        Log.e("question", response.body().toString())
+//                    }else {
+//                        try {
+//                            val body = response.errorBody()!!.string()
+//                            Log.e(ContentValues.TAG, "body : $body")
+//                        } catch (e: IOException) {
+//                            e.printStackTrace()
+//                        }
+//                    }
+//
+//                    Log.d("updateDiary", "성공")
+//                    finish()
+//                }
+//
+//                override fun onFailure(call: Call<CommonResponse>, t: Throwable) {
+//                    Log.e("TAG", "실패원인: {$t}")
+//                }
+//            })
+//
+//        }
     }
+
 
     private fun clickRecyclerViewItem(){
         //리사이클러뷰 아이템 클릭
-        writeDiaryRecyclerViewAdapter.setItemClickListener(object: WriteDiaryRecyclerViewAdapter.OnItemClickListener{
+        updateDiaryRecyclerViewAdapter.setItemClickListener(object: UpdateDiaryRecyclerViewAdapter.OnItemClickListener{
             override fun imageViewOnClick(v: View, position: Int) {
                 pos=position
                 selectGallery()
             }
+
             override fun dropViewOnClck(v: View, position: Int) {
                 if(binding.recyclerviewUpdatediary[position].findViewById<View?>(R.id.linear_addplace_bottom).visibility== View.VISIBLE){
                     binding.recyclerviewUpdatediary[position].findViewById<View?>(R.id.linear_addplace_bottom).visibility=
@@ -418,10 +517,46 @@ class UpdateDiaryActivity : AppCompatActivity() {
                     binding.recyclerviewUpdatediary[position].findViewById<ImageView>(R.id.imageview_addplace_drop).setImageResource(R.drawable.ic_drop_up)
                 }
             }
+
+            //관광지별 일기 삭제
             override fun deleteViewOnClck(v: View, position: Int) {
                 Log.d("삭제 위치", "${position}")
-                writeDiaryRecyclerViewData.removeAt(position)
-                writeDiaryRecyclerViewAdapter.notifyItemRemoved(position)
+
+                //placeLogId=-1이면 서버에 없는 일기이므로 api 통신x
+                if(updateDiaryRecyclerViewData[position].placeLogId!=-1){
+                    val sharedManager : SharedManager by lazy { SharedManager(this@UpdateDiaryActivity) }
+                    var authToken = sharedManager.getCurrentUser().accessToken
+                    var placeLogId=updateDiaryRecyclerViewData[position].placeLogId
+                    UpdateDiaryService.getRetrofitDeletePlaceLog(authToken!!, placeLogId).enqueue(object: Callback<CommonResponse>{
+                        override fun onResponse(
+                            call: Call<CommonResponse>,
+                            response: Response<CommonResponse>
+                        ) {
+                            if(response.isSuccessful){
+                                Log.e("question", response.toString())
+                                Log.e("question", response.body().toString())
+                            }else {
+                                try {
+                                    val body = response.errorBody()!!.string()
+                                    Log.e(ContentValues.TAG, "body : $body")
+                                } catch (e: IOException) {
+                                    e.printStackTrace()
+                                }
+                            }
+
+                            Log.d("delete placeLog", "성공")
+                        }
+
+                        override fun onFailure(call: Call<CommonResponse>, t: Throwable) {
+                            Log.e("TAG", "실패원인: {$t}")
+                        }
+                    })
+                }
+
+                updateDiaryRecyclerViewData.removeAt(position)
+                updateDiaryRecyclerViewAdapter.notifyItemRemoved(position)
+                imageUriList.removeAt(position)
+                imageChanged.removeAt(position)
 
                 binding.recyclerviewUpdatediary[position].findViewById<LinearLayout>(R.id.linear_addplace_edit).visibility =
                     View.GONE
@@ -431,7 +566,7 @@ class UpdateDiaryActivity : AppCompatActivity() {
                     View.VISIBLE
                 binding.recyclerviewUpdatediary[position].findViewById<ImageView>(R.id.imageview_addplace_drop).setImageResource(R.drawable.ic_drop_up)
 
-                Log.d("리스트 삭제 후 사이즈", "${writeDiaryRecyclerViewData.size}")
+                Log.d("리스트 삭제 후 사이즈", "${updateDiaryRecyclerViewData.size}")
                 Toast.makeText(binding.root.context, "삭제되었습니다", Toast.LENGTH_SHORT).show()
             }
             override fun transferViewOnClck(v: View, position: Int) {
@@ -444,8 +579,9 @@ class UpdateDiaryActivity : AppCompatActivity() {
     }
 
     private fun initalize() {
-        writeDiaryRecyclerViewData = arrayListOf()
         questionRecyclerViewData= arrayListOf()
+        updateDiaryRecyclerViewData=arrayListOf()
+
         var today=Calendar.getInstance()
         var year=today.get(Calendar.YEAR)
         var month= today.get(Calendar.MONTH)+1
@@ -462,17 +598,17 @@ class UpdateDiaryActivity : AppCompatActivity() {
     }
 
     private fun initReadDiaryRecyclerView() {
-        val recyclerViewWriteDiary=binding.recyclerviewUpdatediary
-        recyclerViewWriteDiary.layoutManager=LinearLayoutManager(this@UpdateDiaryActivity, LinearLayoutManager.VERTICAL, false)
-        writeDiaryRecyclerViewAdapter=WriteDiaryRecyclerViewAdapter(this@UpdateDiaryActivity, writeDiaryRecyclerViewData)
+        val recyclerViewUpdateDiary=binding.recyclerviewUpdatediary
+        recyclerViewUpdateDiary.layoutManager=LinearLayoutManager(this@UpdateDiaryActivity, LinearLayoutManager.VERTICAL, false)
+        updateDiaryRecyclerViewAdapter=UpdateDiaryRecyclerViewAdapter(this@UpdateDiaryActivity, updateDiaryRecyclerViewData, imageUriList)
 
-        val callback = ItemMoveCallbackListener(writeDiaryRecyclerViewAdapter)
+        val callback = ItemMoveCallbackListener(updateDiaryRecyclerViewAdapter)
         val touchHelper = ItemTouchHelper(callback)
-        touchHelper.attachToRecyclerView(recyclerViewWriteDiary)
+        touchHelper.attachToRecyclerView(recyclerViewUpdateDiary)
 
-        recyclerViewWriteDiary.adapter=writeDiaryRecyclerViewAdapter
+        recyclerViewUpdateDiary.adapter=updateDiaryRecyclerViewAdapter
 
-        writeDiaryRecyclerViewAdapter.startDrag(object : WriteDiaryRecyclerViewAdapter.OnStartDragListener {
+        updateDiaryRecyclerViewAdapter.startDrag(object : UpdateDiaryRecyclerViewAdapter.OnStartDragListener {
             override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
                 touchHelper.startDrag(viewHolder)
             }
@@ -561,5 +697,16 @@ class UpdateDiaryActivity : AppCompatActivity() {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun showLoading(isShow: Boolean){
+        if(isShow==true) {
+            binding.progressbarUpdate.visibility = View.VISIBLE
+            binding.linearUpdatediaryComplete.isClickable=false
+        }
+        else {
+            binding.progressbarUpdate.visibility = View.GONE
+            binding.linearUpdatediaryComplete.isClickable=true
+        }
     }
 }

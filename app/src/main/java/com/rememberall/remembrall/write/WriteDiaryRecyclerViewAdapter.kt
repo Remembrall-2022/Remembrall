@@ -10,7 +10,10 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.get
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.rememberall.remembrall.R
 import java.util.*
 import kotlin.collections.ArrayList
@@ -68,12 +71,6 @@ class WriteDiaryRecyclerViewAdapter(
 
             place.text=data.place
             coment.setText(data.comment)
-//            if(data.image==""){
-//                image.adjustViewBounds=false
-//            }
-//            else {
-//                image.adjustViewBounds = true
-//            }
 
         }
     }

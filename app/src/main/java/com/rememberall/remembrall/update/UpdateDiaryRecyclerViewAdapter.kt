@@ -1,6 +1,7 @@
 package com.rememberall.remembrall.update
 
 import android.content.Context
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -11,6 +12,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.rememberall.remembrall.R
 import com.rememberall.remembrall.write.ItemMoveCallbackListener
 import com.rememberall.remembrall.write.WriteDiaryRecyclerViewAdapter
@@ -20,7 +23,8 @@ import kotlin.collections.ArrayList
 
 class UpdateDiaryRecyclerViewAdapter(
     private val context: Context,
-    private val datalist: ArrayList<UpdateDiaryRecyclerViewData>
+    private val datalist: ArrayList<UpdateDiaryRecyclerViewData>,
+    private val imageUri: ArrayList<Uri>
 ): RecyclerView.Adapter<UpdateDiaryRecyclerViewAdapter.ViewHolder>(), ItemMoveCallbackListener.OnItemMoveListener{
     private lateinit var updateDiaryRecyclerViewAdapter: UpdateDiaryRecyclerViewAdapter
     private lateinit var dragListener: OnStartDragListener
@@ -57,18 +61,15 @@ class UpdateDiaryRecyclerViewAdapter(
                 itemClickListener.transferViewOnClck(it, adapterPosition)
             }
         }
-        //    iconTextView.setOnClickListener { v ->
-        //                onItemClickListener.iconTextViewOnClick(
-//                    v,
-//                    adapterPosition
-//                )
-//            }
-        fun bind(data: UpdateDiaryRecyclerViewData){
-//            Glide.with(this.itemView)
-//                .load(data.image)
-//                .into(image)
 
-//            place.text=data.place
+        fun bind(data: UpdateDiaryRecyclerViewData, uri: Uri){
+            Glide.with(context)
+                .load(uri)
+                .fitCenter()
+                .apply(RequestOptions().override(500, 500))
+                .into(image)
+
+            place.text=data.name
             coment.setText(data.comment)
 //            if(data.image==""){
 //                image.adjustViewBounds=false
@@ -91,7 +92,7 @@ class UpdateDiaryRecyclerViewAdapter(
     //recyclerview가 viewholder를 가져와 데이터 연결할때 호출
     //적절한 데이터를 가져와서 그 데이터를 사용하여 뷰홀더의 레이아웃 채움
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(datalist[position])
+        holder.bind(datalist[position], imageUri[position])
         holder.itemView.findViewById<ImageView>(R.id.imageview_addplace_transfer).setOnTouchListener{ view, event->
             if (event.action == MotionEvent.ACTION_DOWN) {
                 dragListener.onStartDrag(holder)
