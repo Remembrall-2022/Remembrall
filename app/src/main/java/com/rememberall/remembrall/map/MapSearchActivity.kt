@@ -1,12 +1,15 @@
 package com.rememberall.remembrall.map
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.drawable.ColorDrawable
 import android.location.Location
 import android.location.LocationManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -14,6 +17,8 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.rememberall.remembrall.BuildConfig.*
@@ -42,9 +47,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class MapSearchActivity : AppCompatActivity() {
     var mapView: MapView?= null
-    var uLatitude: Double ?= null
-    var uLongitude: Double ?= null
+    var uLatitude: Double ?= 37.5642135
+    var uLongitude: Double ?= 127.0016985
     var binding : ActivityMapSearchBinding ?= null
+    private val LOCATION_PERMISSION_REQUEST_CODE = 123
 
     // 검색결과 recyclerView
     var mapSearchItemList = ArrayList<RvMapSearch>()
@@ -77,8 +83,11 @@ class MapSearchActivity : AppCompatActivity() {
         binding!!.clKakaoMapView.addView(mapView)
         binding!!.clKakaoMapView.clipToOutline=true
 
-        startTracking()
-        mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(uLatitude!!, uLongitude!!), 7, true) // 중심점 변경 + 줌 레벨 변경
+        checkLocationPermission()
+
+        if (mapView != null) {
+            mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(uLatitude!!, uLongitude!!), 7, true) // 중심점 변경 + 줌 레벨 변경
+        }
 
         // 현 위치에 마커 찍기
         val uNowPosition = MapPoint.mapPointWithGeoCoord(uLatitude!!, uLongitude!!)
@@ -92,7 +101,7 @@ class MapSearchActivity : AppCompatActivity() {
         mapView.zoomIn(true) // 줌 인
         mapView.zoomOut(true) // 줌 아웃
 
-        val rv = binding!!.bottomsheetMapSearchView.rvMapSearch
+        val rv = binding?.bottomsheetMapSearchView?.rvMapSearch
         Log.e(ContentValues.TAG, rv.toString())
         rv?.layoutManager = LinearLayoutManager(this@MapSearchActivity)
         rvMapSearchAdapter = RvMapSearchAdapter(this@MapSearchActivity)
@@ -155,14 +164,14 @@ class MapSearchActivity : AppCompatActivity() {
                             mapSearchItemList.add(searchItem)
                             rvMapSearchAdapter.notifyDataSetChanged()
                         }
-                        loadingDialog!!.dismiss()
                     }
+                    loadingDialog!!.dismiss()
                 }
                 override fun onFailure(call: Call<TourRecommendResponse>, t: Throwable) {
                     Log.e("responseRecommendPlace", "관광지 추천 실패")
+                    loadingDialog!!.dismiss()
                 }
             })
-        loadingDialog!!.dismiss()
         rvMapSearchAdapter.setDataList(mapSearchItemList)
 
         val bottomSheet : View = binding!!.llBottomsheet
@@ -262,24 +271,32 @@ class MapSearchActivity : AppCompatActivity() {
         })
     }
     //현재 유저 위치에 대한 정보
-    @SuppressLint("MissingPermission") // 나중에 user 권한 받기
+    @SuppressLint("MissingPermission")
     private fun startTracking() {
-        mapView?.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading
+        if (mapView != null) {
+            mapView?.currentLocationTrackingMode =
+                MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading
 
-        val lm: LocationManager = this@MapSearchActivity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        val userNowLocation: Location? = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+            val lm: LocationManager =
+                this@MapSearchActivity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            val userNowLocation: Location? =
+                lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
 
-        //위도 , 경도
-        uLatitude = userNowLocation?.latitude
-        uLongitude = userNowLocation?.longitude
+            //위도 , 경도
+            uLatitude = userNowLocation?.latitude
+            uLongitude = userNowLocation?.longitude
 
-        Log.d("Location", uLatitude.toString())
-        Log.d("Location", uLongitude.toString())
+            Log.d("Location", uLatitude.toString())
+            Log.d("Location", uLongitude.toString())
+        }
     }
 
     // 위치추적 중지
     private fun stopTracking() {
-        mapView?.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOff
+        if (mapView != null) {
+            mapView?.currentLocationTrackingMode =
+                MapView.CurrentLocationTrackingMode.TrackingModeOff
+        }
     }
 
     override fun onBackPressed() {
@@ -307,5 +324,51 @@ class MapSearchActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+    // 위치 권한 확인 및 요청
+    private fun checkLocationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                    LOCATION_PERMISSION_REQUEST_CODE
+                )
+            } else {
+                // 이미 권한이 허용되어 있음
+                startTracking()
+            }
+        } else {
+            // 안드로이드 버전이 M 이하일 경우에는 권한 요청 없이 진행
+            startTracking()
+        }
+    }
+
+    // 권한 요청 결과 처리
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            LOCATION_PERMISSION_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // 권한이 허용되었음
+                    startTracking()
+                } else {
+                    // 권한이 거부되었음
+                    Toast.makeText(
+                        this,
+                        "위치 권한이 거부되어 현재 위치를 사용할 수 없습니다.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
     }
 }
