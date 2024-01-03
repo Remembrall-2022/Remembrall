@@ -74,7 +74,7 @@ class DeleteDateLogDialog(
             })
         }
 
-        binding.btnDatelogClose.setOnClickListener {
+        binding.btnClose.setOnClickListener {
             cancel()
         }
 
