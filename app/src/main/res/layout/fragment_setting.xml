@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
-        android:src="@drawable/main_background"
+        android:src="@drawable/gradient_bg"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,36 +62,22 @@
         android:scaleType="fitXY"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/gradation_round"
         android:layout_marginHorizontal="15dp"
         android:layout_marginTop="60dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="65dp"
-        android:layout_marginRight="50dp"
-        android:gravity="right">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/ic_bookmark"
-            app:layout_constraintTop_toTopOf="@id/background" />
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="70dp"
         android:layout_marginHorizontal="30dp">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:background="@drawable/writediary_borderline">
+            android:layout_height="100dp">
             <ImageView
                 android:layout_width="60dp"
                 android:layout_height="60dp"
@@ -102,7 +88,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginLeft="20dp">
                 <TextView
                     android:id="@+id/user_name"
@@ -110,7 +96,8 @@
                     android:layout_height="wrap_content"
                     android:text="이름"
                     android:textColor="@color/white"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    android:textSize="20sp"/>
                 <TextView
                     android:id="@+id/user_email"
                     android:layout_width="match_parent"
@@ -129,26 +116,21 @@
             android:text="Log out"
             android:textColor="@color/white" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/white"
-            android:layout_marginVertical="10dp"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="회원 정보"
             android:textColor="@color/white"
-            android:textSize="12sp"
+            android:textSize="16sp"
             android:textStyle="bold"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:layout_marginLeft="5dp"/>
 
         <Button
             android:id="@+id/btn_change_name"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@drawable/btn_setting_round_border"
+            android:background="@drawable/btn_round_border"
             android:text="회원 이름 수정"
             android:textColor="@color/white"
             android:layout_marginTop="10dp"/>
@@ -156,25 +138,19 @@
             android:id="@+id/btn_change_password"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@drawable/btn_setting_round_border"
+            android:background="@drawable/btn_round_border"
             android:text="비밀번호 수정"
             android:textColor="@color/white"
             android:layout_marginTop="10dp"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/white"
-            android:layout_marginVertical="10dp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="회원 탈퇴"
             android:textColor="@color/white"
-            android:textSize="12sp"
+            android:textSize="16sp"
             android:textStyle="bold"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:layout_marginLeft="5dp"/>
         <Button
             android:id="@+id/btn_signout"
@@ -184,7 +160,7 @@
             android:textColor="@color/white"
             android:layout_marginTop="10dp"
             android:layout_gravity="center"
-            android:background="@drawable/btn_setting_round_border"/>
+            android:background="@drawable/btn_round_border"/>
 
     </LinearLayout>
 
