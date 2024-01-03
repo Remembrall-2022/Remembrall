@@ -5,18 +5,14 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import com.rememberall.remembrall.BuildConfig.SERVER
+import com.rememberall.remembrall.ApiClient
 import com.rememberall.remembrall.databinding.DialogChangeNameBinding
 import com.rememberall.remembrall.user.UserService
 import com.rememberall.remembrall.user.res.UserNameResponse
 import com.rememberall.remembrall.user.userinfo.SharedManager
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class ChangeNameDialog (
     context: Context
@@ -24,16 +20,7 @@ class ChangeNameDialog (
     private lateinit var binding: DialogChangeNameBinding
     private lateinit var onClickListener: OnDialogClickListener
 
-    val client = OkHttpClient.Builder()
-        .addInterceptor(httpLoggingInterceptor()).build()
-
-    var retrofit = Retrofit.Builder()
-        .baseUrl(SERVER)
-        .addConverterFactory(GsonConverterFactory.create())
-        .client(client)
-        .build()
-
-    var userService : UserService = retrofit.create(UserService::class.java)
+    var userService : UserService = ApiClient.create(UserService::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,15 +70,5 @@ class ChangeNameDialog (
     interface OnDialogClickListener
     {
         fun onClicked(name: String)
-    }
-
-    private fun httpLoggingInterceptor(): HttpLoggingInterceptor {
-        val interceptor = HttpLoggingInterceptor { message ->
-            Log.e(
-                "HttpLogging:",
-                message + ""
-            )
-        }
-        return interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
     }
 }

@@ -1,12 +1,15 @@
 package com.rememberall.remembrall.map
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.drawable.ColorDrawable
 import android.location.Location
 import android.location.LocationManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -14,11 +17,15 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.rememberall.remembrall.BuildConfig.*
 import com.rememberall.remembrall.LoadingDialog
+import com.rememberall.remembrall.MapApiClient
 import com.rememberall.remembrall.R
+import com.rememberall.remembrall.RecommendPlaceApiClient
 import com.rememberall.remembrall.databinding.ActivityMapSearchBinding
 import com.rememberall.remembrall.map.Gallery.TourRecommendApi
 import com.rememberall.remembrall.map.Gallery.TourRecommendResponse
@@ -27,32 +34,22 @@ import com.rememberall.remembrall.map.MapSearch.ResultSearchKeyword
 import com.rememberall.remembrall.map.MapSearch.RvMapSearch
 import com.rememberall.remembrall.map.MapSearch.RvMapSearchAdapter
 import com.rememberall.remembrall.write.WriteDiaryActivity
-import com.tickaroo.tikxml.TikXml
-import com.tickaroo.tikxml.retrofit.TikXmlConverterFactory
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class MapSearchActivity : AppCompatActivity() {
     var mapView: MapView?= null
-    var uLatitude: Double ?= null
-    var uLongitude: Double ?= null
+    var uLatitude: Double ?= 37.5642135
+    var uLongitude: Double ?= 127.0016985
     var binding : ActivityMapSearchBinding ?= null
+    private val LOCATION_PERMISSION_REQUEST_CODE = 123
 
     // 검색결과 recyclerView
     var mapSearchItemList = ArrayList<RvMapSearch>()
-
-    companion object {
-        const val BASE_URL = KAKAO_MAP_URL
-        const val API_KEY = KAKAO_MAP_KEY
-    }
 
     lateinit var rvMapSearchAdapter : RvMapSearchAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,8 +57,8 @@ class MapSearchActivity : AppCompatActivity() {
 
         binding = ActivityMapSearchBinding.inflate(layoutInflater)
         setContentView(binding!!.root)
-
         setSupportActionBar(binding!!.toolbarMapsearch)
+
         val tb=supportActionBar!!
         tb.setDisplayShowTitleEnabled(false)
         tb.setDisplayHomeAsUpEnabled(true)
@@ -77,8 +74,12 @@ class MapSearchActivity : AppCompatActivity() {
         binding!!.clKakaoMapView.addView(mapView)
         binding!!.clKakaoMapView.clipToOutline=true
 
-        startTracking()
-        mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(uLatitude!!, uLongitude!!), 7, true) // 중심점 변경 + 줌 레벨 변경
+        // 위치 permission check
+        checkLocationPermission()
+
+        if (mapView != null) {
+            mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(uLatitude!!, uLongitude!!), 7, true) // 중심점 변경 + 줌 레벨 변경
+        }
 
         // 현 위치에 마커 찍기
         val uNowPosition = MapPoint.mapPointWithGeoCoord(uLatitude!!, uLongitude!!)
@@ -92,7 +93,7 @@ class MapSearchActivity : AppCompatActivity() {
         mapView.zoomIn(true) // 줌 인
         mapView.zoomOut(true) // 줌 아웃
 
-        val rv = binding!!.bottomsheetMapSearchView.rvMapSearch
+        val rv = binding?.bottomsheetMapSearchView?.rvMapSearch
         Log.e(ContentValues.TAG, rv.toString())
         rv?.layoutManager = LinearLayoutManager(this@MapSearchActivity)
         rvMapSearchAdapter = RvMapSearchAdapter(this@MapSearchActivity)
@@ -119,23 +120,9 @@ class MapSearchActivity : AppCompatActivity() {
                 finish()
             }
         })
-        val client = OkHttpClient.Builder()
-            .addInterceptor(
-                httpLoggingInterceptor()
-            )
-            .build()
 
-        val parser = TikXml.Builder().exceptionOnUnreadXml(false).build()
-
-        val retrofit_recommend = Retrofit.Builder()   // Retrofit 구성
-            .baseUrl(TOUR_API_URL)
-            .addConverterFactory(TikXmlConverterFactory.create(parser))
-            .client(client)
-            .build()
-
-        val recommendPlace = retrofit_recommend.create(TourRecommendApi::class.java)
-
-        recommendPlace.getTourList("AND", "AppTest", getString(R.string.TOUR_API_DECODING_KEY),uLongitude.toString(), uLatitude.toString(), "20000")
+        val recommendPlaceApi = RecommendPlaceApiClient.create(TourRecommendApi::class.java)
+        recommendPlaceApi.getTourList("AND", "AppTest", getString(R.string.TOUR_API_DECODING_KEY),uLongitude.toString(), uLatitude.toString(), "20000")
             .enqueue(object : Callback<TourRecommendResponse> {
                 override fun onResponse(
                     call: Call<TourRecommendResponse>,
@@ -155,14 +142,14 @@ class MapSearchActivity : AppCompatActivity() {
                             mapSearchItemList.add(searchItem)
                             rvMapSearchAdapter.notifyDataSetChanged()
                         }
-                        loadingDialog!!.dismiss()
                     }
+                    loadingDialog!!.dismiss()
                 }
                 override fun onFailure(call: Call<TourRecommendResponse>, t: Throwable) {
                     Log.e("responseRecommendPlace", "관광지 추천 실패")
+                    loadingDialog!!.dismiss()
                 }
             })
-        loadingDialog!!.dismiss()
         rvMapSearchAdapter.setDataList(mapSearchItemList)
 
         val bottomSheet : View = binding!!.llBottomsheet
@@ -227,12 +214,8 @@ class MapSearchActivity : AppCompatActivity() {
 
         // 관광지 검색
         fun searchKeyword(keyword: String){
-            val retrofit_map = Retrofit.Builder()
-                .baseUrl(MapSearchFragment.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-            val api = retrofit_map.create(KakaoMapApi::class.java)   // 통신 인터페이스를 객체로 생성
-            val call = api.getSearchKeyword(MapSearchFragment.API_KEY, keyword)   // 검색 조건 입력
+            val api = MapApiClient.create(KakaoMapApi::class.java)
+            val call = api.getSearchKeyword(KAKAO_MAP_KEY, keyword)   // 검색 조건 입력
             call.enqueue(object: Callback<ResultSearchKeyword> {
                 override fun onResponse(
                     call: Call<ResultSearchKeyword>,
@@ -262,24 +245,79 @@ class MapSearchActivity : AppCompatActivity() {
         })
     }
     //현재 유저 위치에 대한 정보
-    @SuppressLint("MissingPermission") // 나중에 user 권한 받기
+    @SuppressLint("MissingPermission")
     private fun startTracking() {
-        mapView?.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading
+        if (mapView != null) {
+            mapView?.currentLocationTrackingMode =
+                MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading
 
-        val lm: LocationManager = this@MapSearchActivity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        val userNowLocation: Location? = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+            val lm: LocationManager =
+                this@MapSearchActivity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            val userNowLocation: Location? =
+                lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
 
-        //위도 , 경도
-        uLatitude = userNowLocation?.latitude
-        uLongitude = userNowLocation?.longitude
+            //위도 , 경도
+            uLatitude = userNowLocation?.latitude
+            uLongitude = userNowLocation?.longitude
 
-        Log.d("Location", uLatitude.toString())
-        Log.d("Location", uLongitude.toString())
+            Log.d("Location", uLatitude.toString())
+            Log.d("Location", uLongitude.toString())
+        }
     }
 
     // 위치추적 중지
     private fun stopTracking() {
-        mapView?.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOff
+        if (mapView != null) {
+            mapView?.currentLocationTrackingMode =
+                MapView.CurrentLocationTrackingMode.TrackingModeOff
+        }
+    }
+
+    // 위치 권한 확인 및 요청
+    private fun checkLocationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                    LOCATION_PERMISSION_REQUEST_CODE
+                )
+            } else {
+                // 이미 권한이 허용되어 있음
+                startTracking()
+            }
+        } else {
+            // 안드로이드 버전이 M 이하일 경우에는 권한 요청 없이 진행
+            startTracking()
+        }
+    }
+
+    // 권한 요청 결과 처리
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            LOCATION_PERMISSION_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // 권한이 허용되었음
+                    startTracking()
+                } else {
+                    // 권한이 거부되었음
+                    Toast.makeText(
+                        this,
+                        "위치 권한이 거부되어 현재 위치를 사용할 수 없습니다.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
     }
 
     override fun onBackPressed() {
@@ -290,16 +328,6 @@ class MapSearchActivity : AppCompatActivity() {
         super.onDestroy()
         mapView = null
     }
-    fun httpLoggingInterceptor(): HttpLoggingInterceptor {
-        val interceptor = HttpLoggingInterceptor { message ->
-            Log.e(
-                "HttpLogging:",
-                message + ""
-            )
-        }
-        return interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {	//뒤로가기 버튼이 작동하도록
         when (item.itemId) {
             android.R.id.home -> {

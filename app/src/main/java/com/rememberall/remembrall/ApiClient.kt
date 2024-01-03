@@ -1,14 +1,15 @@
 package com.rememberall.remembrall
 
+import com.rememberall.remembrall.BuildConfig.KAKAO_MAP_URL
+import com.rememberall.remembrall.BuildConfig.SERVER
+import com.rememberall.remembrall.BuildConfig.TOUR_API_URL
+import com.tickaroo.tikxml.TikXml
+import com.tickaroo.tikxml.retrofit.TikXmlConverterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
-import com.rememberall.remembrall.BuildConfig.SERVER
-import okhttp3.Interceptor
-import okhttp3.Response
-import java.io.IOException
 
 object ApiClient {
     private const val BASE_URL =
@@ -49,4 +50,55 @@ object ApiClient {
 //            proceed(newRequest)
 //        }
 //    }
+}
+
+object MapApiClient {
+    private const val BASE_URL = KAKAO_MAP_URL
+
+    private val client = OkHttpClient.Builder()
+//        .addInterceptor(AppInterceptor())
+        .addInterceptor(
+            HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC)
+                .setLevel(HttpLoggingInterceptor.Level.BODY)
+                .setLevel(HttpLoggingInterceptor.Level.HEADERS)
+        )
+        .build()
+
+    // 레트로핏 객체 생성.
+    var retrofit = Retrofit.Builder()
+        .baseUrl(BASE_URL)
+        .addConverterFactory(ScalarsConverterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create())
+        .client(client)
+        .build()
+
+    //리트로핏 객체 생성
+    fun <T> create(service: Class<T>): T {
+        return retrofit.create(service)
+    }
+}
+
+object RecommendPlaceApiClient {
+    private const val BASE_URL = TOUR_API_URL
+    val parser = TikXml.Builder().exceptionOnUnreadXml(false).build()
+
+    private val client = OkHttpClient.Builder()
+        .addInterceptor(
+            HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC)
+                .setLevel(HttpLoggingInterceptor.Level.BODY)
+                .setLevel(HttpLoggingInterceptor.Level.HEADERS)
+        )
+        .build()
+
+    // 레트로핏 객체 생성.
+    var retrofit = Retrofit.Builder()
+        .baseUrl(BASE_URL)
+        .addConverterFactory(TikXmlConverterFactory.create(parser))
+        .client(client)
+        .build()
+
+    //리트로핏 객체 생성
+    fun <T> create(service: Class<T>): T {
+        return retrofit.create(service)
+    }
 }
