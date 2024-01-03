@@ -12,7 +12,7 @@ import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.user.UserApiClient
-import com.rememberall.remembrall.BuildConfig.SERVER
+import com.rememberall.remembrall.ApiClient
 import com.rememberall.remembrall.MainActivity
 import com.rememberall.remembrall.databinding.ActivitySignUpLoginBinding
 import com.rememberall.remembrall.user.req.KakaoLoginRequest
@@ -21,13 +21,9 @@ import com.rememberall.remembrall.user.res.Error
 import com.rememberall.remembrall.user.res.LoginResponse
 import com.rememberall.remembrall.user.userinfo.LoginData
 import com.rememberall.remembrall.user.userinfo.SharedManager
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 
 class SignUpLoginActivity : AppCompatActivity() {
@@ -48,18 +44,8 @@ class SignUpLoginActivity : AppCompatActivity() {
         // 현재 유저 정보
         val sharedManager = SharedManager(this)
 
-        val client = OkHttpClient.Builder()
-            .addInterceptor(httpLoggingInterceptor()).build()
-
-        // 레트로핏 객체 생성.
-        val retrofit = Retrofit.Builder()
-            .baseUrl(SERVER)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(client)
-            .build()
-
         // 로그인 서비스 올리기
-        val userService: UserService = retrofit.create(UserService::class.java)
+        val userService: UserService = ApiClient.create(UserService::class.java)
 
         // 로그인하기
         binding.btnLogin.setOnClickListener {
@@ -104,7 +90,6 @@ class SignUpLoginActivity : AppCompatActivity() {
                 }
             })
         }
-
 
         // 카카오계정으로 로그인 공통 callback 구성
         // 카카오톡으로 로그인 할 수 없어 카카오계정으로 로그인할 경우 사용됨
@@ -204,14 +189,5 @@ class SignUpLoginActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
-    }
-    private fun httpLoggingInterceptor(): HttpLoggingInterceptor {
-        val interceptor = HttpLoggingInterceptor { message ->
-            Log.e(
-                "HttpLogging:",
-                message + ""
-            )
-        }
-        return interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
     }
 }

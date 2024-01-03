@@ -23,7 +23,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.rememberall.remembrall.BuildConfig.*
 import com.rememberall.remembrall.LoadingDialog
+import com.rememberall.remembrall.MapApiClient
 import com.rememberall.remembrall.R
+import com.rememberall.remembrall.RecommendPlaceApiClient
 import com.rememberall.remembrall.databinding.ActivityMapSearchBinding
 import com.rememberall.remembrall.map.Gallery.TourRecommendApi
 import com.rememberall.remembrall.map.Gallery.TourRecommendResponse
@@ -32,18 +34,12 @@ import com.rememberall.remembrall.map.MapSearch.ResultSearchKeyword
 import com.rememberall.remembrall.map.MapSearch.RvMapSearch
 import com.rememberall.remembrall.map.MapSearch.RvMapSearchAdapter
 import com.rememberall.remembrall.write.WriteDiaryActivity
-import com.tickaroo.tikxml.TikXml
-import com.tickaroo.tikxml.retrofit.TikXmlConverterFactory
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class MapSearchActivity : AppCompatActivity() {
     var mapView: MapView?= null
@@ -55,19 +51,14 @@ class MapSearchActivity : AppCompatActivity() {
     // 검색결과 recyclerView
     var mapSearchItemList = ArrayList<RvMapSearch>()
 
-    companion object {
-        const val BASE_URL = KAKAO_MAP_URL
-        const val API_KEY = KAKAO_MAP_KEY
-    }
-
     lateinit var rvMapSearchAdapter : RvMapSearchAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMapSearchBinding.inflate(layoutInflater)
         setContentView(binding!!.root)
-
         setSupportActionBar(binding!!.toolbarMapsearch)
+
         val tb=supportActionBar!!
         tb.setDisplayShowTitleEnabled(false)
         tb.setDisplayHomeAsUpEnabled(true)
@@ -83,6 +74,7 @@ class MapSearchActivity : AppCompatActivity() {
         binding!!.clKakaoMapView.addView(mapView)
         binding!!.clKakaoMapView.clipToOutline=true
 
+        // 위치 permission check
         checkLocationPermission()
 
         if (mapView != null) {
@@ -128,23 +120,9 @@ class MapSearchActivity : AppCompatActivity() {
                 finish()
             }
         })
-        val client = OkHttpClient.Builder()
-            .addInterceptor(
-                httpLoggingInterceptor()
-            )
-            .build()
 
-        val parser = TikXml.Builder().exceptionOnUnreadXml(false).build()
-
-        val retrofit_recommend = Retrofit.Builder()   // Retrofit 구성
-            .baseUrl(TOUR_API_URL)
-            .addConverterFactory(TikXmlConverterFactory.create(parser))
-            .client(client)
-            .build()
-
-        val recommendPlace = retrofit_recommend.create(TourRecommendApi::class.java)
-
-        recommendPlace.getTourList("AND", "AppTest", getString(R.string.TOUR_API_DECODING_KEY),uLongitude.toString(), uLatitude.toString(), "20000")
+        val recommendPlaceApi = RecommendPlaceApiClient.create(TourRecommendApi::class.java)
+        recommendPlaceApi.getTourList("AND", "AppTest", getString(R.string.TOUR_API_DECODING_KEY),uLongitude.toString(), uLatitude.toString(), "20000")
             .enqueue(object : Callback<TourRecommendResponse> {
                 override fun onResponse(
                     call: Call<TourRecommendResponse>,
@@ -236,12 +214,8 @@ class MapSearchActivity : AppCompatActivity() {
 
         // 관광지 검색
         fun searchKeyword(keyword: String){
-            val retrofit_map = Retrofit.Builder()
-                .baseUrl(MapSearchFragment.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-            val api = retrofit_map.create(KakaoMapApi::class.java)   // 통신 인터페이스를 객체로 생성
-            val call = api.getSearchKeyword(MapSearchFragment.API_KEY, keyword)   // 검색 조건 입력
+            val api = MapApiClient.create(KakaoMapApi::class.java)
+            val call = api.getSearchKeyword(KAKAO_MAP_KEY, keyword)   // 검색 조건 입력
             call.enqueue(object: Callback<ResultSearchKeyword> {
                 override fun onResponse(
                     call: Call<ResultSearchKeyword>,
@@ -299,32 +273,6 @@ class MapSearchActivity : AppCompatActivity() {
         }
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        mapView = null
-    }
-    override fun onDestroy() {
-        super.onDestroy()
-        mapView = null
-    }
-    fun httpLoggingInterceptor(): HttpLoggingInterceptor {
-        val interceptor = HttpLoggingInterceptor { message ->
-            Log.e(
-                "HttpLogging:",
-                message + ""
-            )
-        }
-        return interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {	//뒤로가기 버튼이 작동하도록
-        when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
     // 위치 권한 확인 및 요청
     private fun checkLocationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -370,5 +318,22 @@ class MapSearchActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        mapView = null
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        mapView = null
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {	//뒤로가기 버튼이 작동하도록
+        when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

@@ -7,20 +7,16 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
-import com.rememberall.remembrall.BuildConfig.SERVER
+import com.rememberall.remembrall.ApiClient
 import com.rememberall.remembrall.databinding.ActivitySignUpBinding
 import com.rememberall.remembrall.user.req.AuthCodeRequest
 import com.rememberall.remembrall.user.req.SignUpRequest
 import com.rememberall.remembrall.user.res.AuthResponse
 import com.rememberall.remembrall.user.res.Error
 import com.rememberall.remembrall.user.userinfo.SharedManager
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 import java.util.Timer
 import kotlin.concurrent.timer
@@ -36,21 +32,8 @@ class SignUpWithEmailActivity : AppCompatActivity() {
         var intent = Intent(this, SignUpWithEmailAndSocialActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
 
-        val client = OkHttpClient.Builder()
-            .addInterceptor(
-                httpLoggingInterceptor()
-            )
-            .build()
-
-        // 레트로핏 객체 생성.
-        val retrofit = Retrofit.Builder()
-            .baseUrl(SERVER)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(client)
-            .build()
-
         // user 서비스 올리기
-        val userService: UserService = retrofit.create(UserService::class.java)
+        val userService: UserService = ApiClient.create(UserService::class.java)
 
         // 현재 유저 정보
         val sharedManager = SharedManager(this)
@@ -177,15 +160,6 @@ class SignUpWithEmailActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
-    }
-    private fun httpLoggingInterceptor(): HttpLoggingInterceptor {
-        val interceptor = HttpLoggingInterceptor { message ->
-            Log.e(
-                "HttpLogging:",
-                message + ""
-            )
-        }
-        return interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
     }
 
     override fun onDestroy() {

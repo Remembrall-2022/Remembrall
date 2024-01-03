@@ -11,7 +11,7 @@ import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
-import com.rememberall.remembrall.BuildConfig
+import com.rememberall.remembrall.ApiClient
 import com.rememberall.remembrall.MainActivity
 import com.rememberall.remembrall.databinding.ActivitySignUpWithEmailAndSocialBinding
 import com.rememberall.remembrall.user.req.KakaoLoginRequest
@@ -22,8 +22,6 @@ import com.rememberall.remembrall.user.userinfo.SharedManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 
 class SignUpWithEmailAndSocialActivity : AppCompatActivity() {
@@ -33,14 +31,8 @@ class SignUpWithEmailAndSocialActivity : AppCompatActivity() {
         binding = ActivitySignUpWithEmailAndSocialBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // 레트로핏 객체 생성.
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BuildConfig.SERVER)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
         // user 서비스 올리기
-        val userService: UserService = retrofit.create(UserService::class.java)
+        val userService: UserService = ApiClient.create(UserService::class.java)
 
         // 현재 유저 정보
         val sharedManager = SharedManager(this)
