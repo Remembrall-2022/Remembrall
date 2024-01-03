@@ -4,46 +4,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingHorizontal="12dp"
-    android:paddingVertical="12dp">
+    android:paddingHorizontal="19dp"
+    android:paddingVertical="24dp">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginTop="20dp"
         android:orientation="horizontal"
-        android:layout_marginHorizontal="20dp">
-
+        android:layout_marginBottom="15dp"
+        android:layout_marginHorizontal="5dp">
         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="탈퇴하기"
+            android:textColor="@color/text_black"
+            android:textSize="17dp"
+            android:textStyle="bold"
+            android:layout_weight="1"/>
+
+        <ImageButton
+            android:id="@+id/btn_close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="탈퇴하기"
-            android:textColor="@color/rememberall_red"
-            android:textSize="24dp"
-            android:textStyle="bold" />
-
-        <LinearLayout
-            android:id="@+id/btn_close"
-            android:layout_width="80dp"
-            android:layout_height="match_parent"
-            android:gravity="right"
-            >
-            <ImageButton
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:background="@drawable/close" />
-        </LinearLayout>
+            android:background="@drawable/ic_close" />
     </LinearLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text=" 정말 탈퇴하시겠습니까?"
-        android:textColor="@color/rememberall_red"
-        android:textSize="16dp"
-        android:layout_marginHorizontal="20dp"
-        android:textStyle="bold"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -51,7 +34,6 @@
         android:text=" 회원 탈퇴 시 보유 포인트, 경험치 및 작성했던 모든 일기장과 일기가 삭제됩니다."
         android:textColor="@color/black"
         android:textSize="16dp"
-        android:layout_marginHorizontal="20dp"
         android:layout_marginTop="5dp"/>
     <!--    <LinearLayout-->
     <!--        android:layout_width="match_parent"-->
